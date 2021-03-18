@@ -9,19 +9,13 @@ cwd = os.getcwd()
 
 os.chdir("/home/ubuntu/Desktop/Diplom/ветер_факт")
 
-os.listdir(".")
-
 file = 'USDD_2015_01 (1).xlsx'
 x1 = pd.ExcelFile(file)
-print(x1.sheet_names)
 df1 = x1.parse('USDD_2015_01', usecols=[0, 1, 2, 3, 4, 7])
 
 data = df1.values.tolist()
-lengthData = len(data)
 
-for i in range(lengthData):
-    for j in range(5):
-        data[i][j] = int(data[i][j])
+lengthData = len(data)
 
 for i in range(lengthData):
     data[i][0] = str(data[i][0])+'-'+str(data[i][1])+'-'+str(data[i][2])+'-'+str(data[i][3])+':'+str(data[i][4])
@@ -43,8 +37,8 @@ for i in range(lengthData):
 plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d-%H:%M'))
 plt.gca().xaxis.set_major_locator(mdates.DayLocator())
 plt.xlabel('Date')
-plt.ylabel('Wind Direction (degrees)')
-plt.title('Wind direction (degrees)')
-plt.scatter(x_data, y_data, label = 'data')
+plt.ylabel('Wind speed (m/s)')
+plt.title('Wind Speed (m/s)')
+plt.scatter(x_data, y_data, label='data')
 plt.gcf().autofmt_xdate()
 plt.show()

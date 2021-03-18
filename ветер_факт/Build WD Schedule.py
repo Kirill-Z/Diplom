@@ -1,7 +1,6 @@
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
 from matplotlib import dates
 import datetime as dt
 
@@ -34,11 +33,11 @@ for i in range(lengthData):  # Получившийся список с дато
     x_data.append(dt.datetime.strptime(data_for_delete[i], '%Y-%m-%d-%H:%M'))
     y_data.append(data[i][1])
 
-plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d-%H:%M'))
-plt.gca().xaxis.set_major_locator(mdates.DayLocator())
+plt.gca().xaxis.set_major_formatter(fmt)
+plt.gca().xaxis.set_major_locator(dates.DayLocator())
 plt.xlabel('Date')
-plt.ylabel('Wind Direction (degrees)')
-plt.title('Wind direction (degrees)')
+plt.ylabel('Wind direction (degrees)')
+plt.title('Wind Direction (degrees)')
 plt.scatter(x_data, y_data, label='data')
 plt.gcf().autofmt_xdate()  # Для красивой подписи даты и времени на графике
 plt.show()
