@@ -14,7 +14,7 @@ os.listdir(".")
 file = 'USDD_2015_01 (1).xlsx'
 x1 = pd.ExcelFile(file)
 print(x1.sheet_names)
-df1 = x1.parse('USDD_2015_01', usecols=[0, 1, 2, 3, 4, 6, 7, 8])
+df1 = x1.parse('USDD_2015_01', usecols=[0, 1, 2, 3, 4, 7])
 
 data = df1.values.tolist()
 lengthData = len(data)
@@ -31,8 +31,6 @@ for i in range(lengthData):
     del data[i][1]
 
 fmt = dates.DateFormatter('%Y-%m-%d-%H:%M')
-
-fig, ax = plt.subplots()
 
 data_for_delete = []
 x_data = []
