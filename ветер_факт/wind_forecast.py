@@ -1,6 +1,10 @@
 import pandas as pd
 import os
 import re
+import matplotlib.pyplot as plt
+from matplotlib import dates
+import datetime as dt
+import plotting
 
 PATH = "/media/kirill/e61c7b4d-3c04-47cc-aabb-23d698198ced/home/kirill/Downloads/Data/gfc/part_of_directory_2016/"
 
@@ -163,8 +167,8 @@ if value == '1':
             calculation_of_the_year_based_on_month()
             reference_num += 1
 
-    print(speed_wind)
-    print(len(speed_wind))
+
+    #print(len(speed_wind))
     write_data_to_a_file(speed_wind, my_file)
 
 elif value == '2':
@@ -197,6 +201,41 @@ elif value == '2':
             calculation_of_the_year_based_on_month()
             reference_num += 1
 
-    print(speed_wind)
-    print(len(speed_wind))
+    #print(speed_wind)
+    #print(len(speed_wind))
     write_data_to_a_file(speed_wind, my_file)
+
+speed_wind_with_lead_time_on_this_day = []
+for i in range(len(speed_wind)):
+    file_name = speed_wind[i][0][11:]
+    print(file_name)
+    if int(file_name) <= 21:
+        speed_wind_with_lead_time_on_this_day.append(speed_wind[i])
+
+data = speed_wind_with_lead_time_on_this_day
+lengthData = len(data)
+
+for i in range(lengthData):
+    data[i][0] = str(data[i][1])+'-'+str(data[i][2])+'-'+str(data[i][3])+'-'+str(data[i][4])
+    del data[i][4]
+    del data[i][3]
+    del data[i][2]
+    del data[i][1]
+
+fmt = dates.DateFormatter('%Y-%m-%d-%H')
+
+data_for_delete = []
+x_data = []
+y_data = []
+
+for i in range(lengthData):
+    x_data.append(dt.datetime.strptime(data[i][0], '%Y-%m-%d-%H'))
+    y_data.append(data[i][2])
+plt.gca().xaxis.set_major_formatter(fmt)
+plt.gca().xaxis.set_major_locator(dates.DayLocator())
+plt.xlabel('Date')
+plt.ylabel('Wind Speed')
+plt.title('Wind Speed')
+plt.scatter(x_data, y_data, label='data')
+plt.gcf().autofmt_xdate()
+plt.show()
