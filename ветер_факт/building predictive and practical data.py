@@ -13,6 +13,10 @@ if value == '1':
 elif value == '2':
     speed_wind_practical = practical_wind_forecast.main_area()
     plotting.plotting_wind_speed(speed_wind_practical, '%Y-%m-%d-%H:%M', 1, 'r', 'Прогноз для диапазона времени (+-30 мин)')
+elif value == '3':
+    speed_wind_practical = practical_wind_forecast.main_area_with_every_minute()
+    plotting.plotting_wind_speed(speed_wind_practical, '%Y-%m-%d-%H:%M', 1, 'r',
+                                 'Прогноз для диапазона времени (+-30 мин)')
 
 plt.show()
 
