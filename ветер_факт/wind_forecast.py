@@ -29,7 +29,10 @@ def main():
         return low_point_number_in_gfc, top_point_number_in_gfc
 
     def adding_information(get_data, num_item):
-        correct_data = [data_from_file[num_item][0], data_from_file[num_item][1], get_data]
+        correct_data = [data_from_file[num_item][0], data_from_file[num_item][1]]
+        speed_data = get_data
+        for i in range(0, len(speed_data)):
+            correct_data.append(speed_data[i])
         return correct_data
 
     # Obtaining data on the direction of wind speed
@@ -40,10 +43,11 @@ def main():
                 return correct_data
 
     def getting_need_data_for_area(low_points_to_calculate, top_points_to_calculate, num_item):
+        correct_data = []
         for j in range(0, len(data_from_file[num_item])):
             if low_points_to_calculate < j < top_points_to_calculate:
-                correct_data = (data_from_file[num_item][j])
-                return correct_data
+                correct_data.append(data_from_file[num_item][j])
+        return correct_data
 
     def adding_data_to_the_speed_list(list_correct_data):
         wind_data = [file, file[slice(0, 4)], int(file[slice(4, 6)]), int(file[slice(6, 8)]), int(file[slice(11, 13)]),
@@ -52,6 +56,8 @@ def main():
 
     def calculation_wind_speed(correct_data_VGRD, correct_data_UGRD):
         speed = adding_data_to_the_speed_list(correct_data_VGRD)
+        print(correct_data_UGRD)
+        print(correct_data_VGRD)
         for j in range(2, len(correct_data_VGRD)):
             speed.append(((float(correct_data_UGRD[j]) ** 2) +
                           (float(correct_data_VGRD[j]) ** 2)) ** (1 / 2))
@@ -61,10 +67,13 @@ def main():
 
     def calculation_of_the_average_speed_in_the_range(speed):
         num_of_points = 0
+        #print()
+        #print(speed)
         for i in range(7, len(speed)):
             speed[6] += speed[i]
             num_of_points += 1
-        speed[6] /= num_of_points
+        #print(num_of_points)
+        speed[6] /= (num_of_points + 1)
         return speed[6]
 
     def calculates_the_day_based_on_the_lead_time():
@@ -109,7 +118,7 @@ def main():
 
         write_file.close()
         return print('End of writing to file')
- 
+
     reference_num = 0
     speed_wind = []
     value = input("If you need to calculate a point, press 1, if you need to calculate an area, press 2: ")
@@ -164,12 +173,12 @@ def main():
                         if data_from_file[i][0] == '04':
                             correct_data_UGRD = calc_for_area(
                                 getting_need_data_for_area(low_point_number, top_point_number, num_rows))
+
                         if data_from_file[i][0] == '05':
                             correct_data_VGRD = calc_for_area(
                                 getting_need_data_for_area(low_point_number, top_point_number, num_rows))
 
                     num_rows += 1
-
                 speed_wind.append(calculation_wind_speed(correct_data_VGRD, correct_data_UGRD))
 
                 calculates_the_day_based_on_the_lead_time()
@@ -177,8 +186,6 @@ def main():
                 calculation_of_the_year_based_on_month()
                 reference_num += 1
 
-        # print(speed_wind)
-        # print(len(speed_wind))
         write_data_to_a_file(speed_wind, my_file)
 
     speed_wind_with_lead_time_on_this_day = []
@@ -188,7 +195,3 @@ def main():
             speed_wind_with_lead_time_on_this_day.append(speed_wind[i])
 
     return speed_wind_with_lead_time_on_this_day
-
-
-
-
