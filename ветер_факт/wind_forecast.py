@@ -4,7 +4,7 @@ import re
 
 
 def main():
-    PATH = "/media/kirill/e61c7b4d-3c04-47cc-aabb-23d698198ced/home/kirill/Downloads/Data/gfc/part_of_directory_2016/"
+    PATH = "/media/kirill/e61c7b4d-3c04-47cc-aabb-23d698198ced/home/kirill/Downloads/Data/gfc/2016/"
 
     # Calculation of the point number based on the specified coordinates
     def calculation_of_the_point_number():
@@ -31,8 +31,12 @@ def main():
     def adding_information(get_data, num_item):
         correct_data = [data_from_file[num_item][0], data_from_file[num_item][1]]
         speed_data = get_data
-        for i in range(0, len(speed_data)):
-            correct_data.append(speed_data[i])
+        if len(speed_data) > 2:
+
+            for i in range(0, len(speed_data)):
+                correct_data.append(speed_data[i])
+        else:
+            correct_data.append(speed_data)
         return correct_data
 
     # Obtaining data on the direction of wind speed
@@ -40,7 +44,7 @@ def main():
         for j in range(0, len(data_from_file[num_item])):
             if j == point_to_calculate:
                 correct_data = data_from_file[num_item][j]
-                return correct_data
+        return correct_data
 
     def getting_need_data_for_area(low_points_to_calculate, top_points_to_calculate, num_item):
         correct_data = []
@@ -56,8 +60,6 @@ def main():
 
     def calculation_wind_speed(correct_data_VGRD, correct_data_UGRD):
         speed = adding_data_to_the_speed_list(correct_data_VGRD)
-        print(correct_data_UGRD)
-        print(correct_data_VGRD)
         for j in range(2, len(correct_data_VGRD)):
             speed.append(((float(correct_data_UGRD[j]) ** 2) +
                           (float(correct_data_VGRD[j]) ** 2)) ** (1 / 2))
@@ -67,13 +69,12 @@ def main():
 
     def calculation_of_the_average_speed_in_the_range(speed):
         num_of_points = 0
-        #print()
-        #print(speed)
         for i in range(7, len(speed)):
             speed[6] += speed[i]
             num_of_points += 1
-        #print(num_of_points)
         speed[6] /= (num_of_points + 1)
+        for i in range(len(speed) - 1, 6, -1):
+            del speed[i]
         return speed[6]
 
     def calculates_the_day_based_on_the_lead_time():
@@ -124,11 +125,11 @@ def main():
     value = input("If you need to calculate a point, press 1, if you need to calculate an area, press 2: ")
 
     if value == '1':
-        my_file = open(PATH + 'data_out_for_Tolmachevo_point_01_2016', 'w')
-        my_file.write('File name     |   Year |Month |  Day |Lead Time|Level|         Wind Speed\n')
+        #my_file = open(PATH + 'data_out_for_Tolmachevo_point_01_2016', 'w')
+        #my_file.write('File name     |   Year |Month |  Day |Lead Time|Level|         Wind Speed\n')
         points_to_calculate = calculation_of_the_point_number() + 1
         for file in sorted(os.listdir(PATH)):
-            if re.match('\d{10}_\d{2}', file):
+            if re.match('\d{10}_([0,1][0-9]|21)', file):
                 current_file = PATH + file
                 file_reader = pd.read_csv(current_file, sep='/s', skiprows=1, header=None, engine='python')
                 data_from_file = file_reader.values.tolist()
@@ -152,16 +153,16 @@ def main():
                 calculation_of_the_year_based_on_month()
                 reference_num += 1
 
-        write_data_to_a_file(speed_wind, my_file)
+        #write_data_to_a_file(speed_wind, my_file)
 
     elif value == '2':
-        my_file = open(PATH + 'data_for_points_around_Tolmachevo_01_2016 ', 'w')
-        my_file.write('File name     |   Year |Month |  Day |Lead Time|Level|         Wind Speed\n')
+        #my_file = open(PATH + 'data_for_points_around_Tolmachevo_01_2016 ', 'w')
+        #my_file.write('File name     |   Year |Month |  Day |Lead Time|Level|         Wind Speed\n')
         low_point_number, top_point_number = calculation_of_the_area_of_points()
         low_point_number += 1
         top_point_number += 1
         for file in sorted(os.listdir(PATH)):
-            if re.match('\d{10}_\d{2}', file):
+            if re.match('\d{10}_([0,1][0-9]|21)', file):
                 current_file = PATH + file
                 file_reader = pd.read_csv(current_file, sep='/s', skiprows=1, header=None, engine='python')
                 data_from_file = file_reader.values.tolist()
@@ -186,7 +187,7 @@ def main():
                 calculation_of_the_year_based_on_month()
                 reference_num += 1
 
-        write_data_to_a_file(speed_wind, my_file)
+        #write_data_to_a_file(speed_wind, my_file)
 
     speed_wind_with_lead_time_on_this_day = []
     for i in range(len(speed_wind)):
@@ -195,3 +196,5 @@ def main():
             speed_wind_with_lead_time_on_this_day.append(speed_wind[i])
 
     return speed_wind_with_lead_time_on_this_day
+
+
