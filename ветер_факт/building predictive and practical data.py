@@ -4,7 +4,7 @@ import plotting
 import matplotlib.pyplot as plt
 
 speed_wind_predictive = wind_forecast.main()
-plotting.plotting_wind_speed(speed_wind_predictive, '%Y-%m-%d-%H', 2, 'b', 'GFS')
+plotting.plotting_wind_speed(speed_wind_predictive, '%Y-%m-%d-%H', 1, 'b', 'GFS')
 
 value = input("Practical data: If you need to calculate a point, press 1, if you need to calculate an area, "
               "press 2 or 3: ")
@@ -20,13 +20,18 @@ elif value == '3':
     plotting.plotting_wind_speed(speed_wind_practical, '%Y-%m-%d-%H:%M', 1, 'r',
                                  'АВ-6, Наблюдение для диапазона времени (+-30 мин), учитывая каждую минуту')
 
-
 diff = []
+print(len(speed_wind_predictive))
+print(len(speed_wind_practical))
 for i in range(0, len(speed_wind_predictive)):
     diff1 = []
     diff1.append(speed_wind_practical[i][0])
-    for j in range(2, len(speed_wind_predictive[i])):
-         diff1.append(speed_wind_practical[i][j-1] - speed_wind_predictive[i][j])
+    for j in range(1, len(speed_wind_predictive[i])):
+        if speed_wind_predictive[i][j] >= 9999:
+            print(speed_wind_predictive[i])
+            continue
+        else:
+            diff1.append(speed_wind_practical[i][j] - speed_wind_predictive[i][j])
     diff.append(diff1)
 
 
@@ -62,22 +67,26 @@ for i in range(0, len(diff)):
 
 average_diff_winter = 0
 for i in range(0, len(diff_winter)):
-    average_diff_winter += diff_winter[i][1]
+    if len(diff_winter[i]) > 1:
+        average_diff_winter += diff_winter[i][1]
 average_diff_winter = average_diff_winter / len(diff_winter)
 
 average_diff_spring = 0
 for i in range(0, len(diff_spring)):
-    average_diff_spring += diff_spring[i][1]
+    if len(diff_spring[i]) > 1:
+        average_diff_spring += diff_spring[i][1]
 average_diff_spring = average_diff_spring / len(diff_spring)
 
 average_diff_summer = 0
 for i in range(0, len(diff_summer)):
-    average_diff_summer += diff_summer[i][1]
+    if len(diff_summer[i]) > 1:
+        average_diff_summer += diff_summer[i][1]
 average_diff_summer = average_diff_summer / len(diff_summer)
 
 average_diff_autumn = 0
 for i in range(0, len(diff_autumn)):
-    average_diff_autumn += diff_autumn[i][1]
+    if len(diff_autumn[i]) > 1:
+        average_diff_autumn += diff_autumn[i][1]
 average_diff_autumn = average_diff_autumn / len(diff_autumn)
 
 print('Средняя разность за зимний период:')

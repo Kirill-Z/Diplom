@@ -11,15 +11,20 @@ def plotting_wind_speed(data, data_format, num_param, color, label):
         del data[i][3]
         del data[i][2]
         del data[i][1]
-
+    print(data)
     fmt = dates.DateFormatter(data_format)
 
     x_data = []
     y_data = []
 
     for i in range(lengthData):
-        x_data.append(dt.datetime.strptime(data[i][0], data_format))
-        y_data.append(data[i][num_param])
+        if data[i][1] >= 9999:
+            print(data[i])
+            continue
+        else:
+            x_data.append(dt.datetime.strptime(data[i][0], data_format))
+            y_data.append(data[i][num_param])
+
     plt.gca().xaxis.set_major_formatter(fmt)
     plt.gca().xaxis.set_major_locator(dates.DayLocator())
     plt.xlabel('Date')

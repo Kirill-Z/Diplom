@@ -53,29 +53,29 @@ def main():
                 correct_data.append(data_from_file[num_item][j])
         return correct_data
 
-    def adding_data_to_the_speed_list(list_correct_data):
-        wind_data = [file, file[slice(0, 4)], int(file[slice(4, 6)]), int(file[slice(6, 8)]), int(file[slice(11, 13)]),
-                     list_correct_data[1]]
+    def adding_data_to_the_speed_list():
+        # Adding file name, year, month, day, time
+        wind_data = [file, file[slice(0, 4)], int(file[slice(4, 6)]), int(file[slice(6, 8)]), int(file[slice(11, 13)])]
         return wind_data
 
     def calculation_wind_speed(correct_data_VGRD, correct_data_UGRD):
-        speed = adding_data_to_the_speed_list(correct_data_VGRD)
+        speed = adding_data_to_the_speed_list()
         for j in range(2, len(correct_data_VGRD)):
             speed.append(((float(correct_data_UGRD[j]) ** 2) +
                           (float(correct_data_VGRD[j]) ** 2)) ** (1 / 2))
-        if len(speed) > 7:
-            speed[6] = calculation_of_the_average_speed_in_the_range(speed)
+        if len(speed) > 6:
+            speed[5] = calculation_of_the_average_speed_in_the_range(speed)
         return speed
 
     def calculation_of_the_average_speed_in_the_range(speed):
         num_of_points = 0
-        for i in range(7, len(speed)):
-            speed[6] += speed[i]
+        for i in range(6, len(speed)):
+            speed[5] += speed[i]
             num_of_points += 1
-        speed[6] /= (num_of_points + 1)
-        for i in range(len(speed) - 1, 6, -1):
+        speed[5] /= (num_of_points + 1)
+        for i in range(len(speed) - 1, 5, -1):
             del speed[i]
-        return speed[6]
+        return speed[5]
 
     def calculates_the_day_based_on_the_lead_time():
         hours_in_a_day = {1: 24, 2: 48, 3: 72, 4: 96}
@@ -196,5 +196,3 @@ def main():
             speed_wind_with_lead_time_on_this_day.append(speed_wind[i])
 
     return speed_wind_with_lead_time_on_this_day
-
-
