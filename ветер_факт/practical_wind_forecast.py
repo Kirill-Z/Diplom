@@ -3,34 +3,36 @@ import os
 import re
 import plotting
 
+PATH = "/media/kirill/e61c7b4d-3c04-47cc-aabb-23d698198ced/home/kirill/Downloads/Data/АВ6_Толмачево/2016/"
+
+
+def add_data_to_the_speed_list(data, i):
+    speed_wind = []
+    speed_wind.append(file[2:])
+    speed_wind.append(file[2:6])
+    speed_wind.append(file[6:8])
+    speed_wind.append(file[8:10])
+    speed_wind.append(data[i][0])
+    speed_wind.append(data[i][2])
+    return speed_wind
+
+
+def write_data_to_a_file(speed_wind, my_file):
+    for i in range(0, len(speed_wind)):
+        for j in range(0, len(speed_wind[i])):
+            if len(str(speed_wind[i][j])) == 1:
+                my_file.write(str(speed_wind[i][j]) + '  |  ')
+            elif len(str(speed_wind[i][j])) == 3:
+                my_file.write(str(speed_wind[i][j]) + '|   ')
+            else:
+                my_file.write(str(speed_wind[i][j]) + ' |  ')
+        my_file.write('\n')
+
+    my_file.close()
+    return print('The end write in file')
+
 
 def main():
-    PATH = "/media/kirill/e61c7b4d-3c04-47cc-aabb-23d698198ced/home/kirill/Downloads/Data/АВ6_Толмачево/2016/"
-
-    def add_data_to_the_speed_list(data, i):
-        speed_wind = []
-        speed_wind.append(file[2:])
-        speed_wind.append(file[2:6])
-        speed_wind.append(file[6:8])
-        speed_wind.append(file[8:10])
-        speed_wind.append(data[i][0])
-        speed_wind.append(data[i][2])
-        return speed_wind
-
-    def write_data_to_a_file(speed_wind, my_file):
-        for i in range(0, len(speed_wind)):
-            for j in range(0, len(speed_wind[i])):
-                if len(str(speed_wind[i][j])) == 1:
-                    my_file.write(str(speed_wind[i][j]) + '  |  ')
-                elif len(str(speed_wind[i][j])) == 3:
-                    my_file.write(str(speed_wind[i][j]) + '|   ')
-                else:
-                    my_file.write(str(speed_wind[i][j]) + ' |  ')
-            my_file.write('\n')
-
-        my_file.close()
-        return print('The end write in file')
-
     #my_file = open(PATH + 'data_practical_wind_01_2016.csv', 'w')
     #my_file.write('File name    |  Year |Month| Day |  Time  |Speed|\n')
     speed_wind = []
@@ -60,32 +62,6 @@ def main():
 
 
 def main_area():
-    def add_data_to_the_speed_list(data, i):
-        speed_wind = []
-        speed_wind.append(file[2:])
-        speed_wind.append(file[2:6])
-        speed_wind.append(file[6:8])
-        speed_wind.append(file[8:10])
-        speed_wind.append(data[i][0])  # Time
-        speed_wind.append(data[i][2])  # Speed
-        return speed_wind
-
-    def write_data_to_a_file(speed_wind, my_file):
-        for i in range(0, len(speed_wind)):
-            for j in range(0, len(speed_wind[i])):
-                if len(str(speed_wind[i][j])) == 1:
-                    my_file.write(str(speed_wind[i][j]) + '  |  ')
-                elif len(str(speed_wind[i][j])) == 3:
-                    my_file.write(str(speed_wind[i][j]) + '|   ')
-                else:
-                    my_file.write(str(speed_wind[i][j]) + ' |  ')
-            my_file.write('\n')
-
-        my_file.close()
-        return print('The end write in file')
-
-    PATH = "/media/kirill/e61c7b4d-3c04-47cc-aabb-23d698198ced/home/kirill/Downloads/Data/АВ6_Толмачево/2016/"
-
     #my_file = open(PATH + 'data_practical_wind_01_2016_area.csv', 'w')
     #y_file.write('File name    |  Year |Month| Day |  Time  |Speed|\n')
     speed_wind = []
@@ -133,34 +109,6 @@ def main_area():
 
 
 def main_area_with_every_minute():
-
-
-    def add_data_to_the_speed_list(data, i):
-        speed_wind = []
-        speed_wind.append(file[2:])
-        speed_wind.append(file[2:6])
-        speed_wind.append(file[6:8])
-        speed_wind.append(file[8:10])
-        speed_wind.append(data[i][0])  # Time
-        speed_wind.append(data[i][2])  # Speed
-        return speed_wind
-
-    def write_data_to_a_file(speed_wind, my_file):
-        for i in range(0, len(speed_wind)):
-            for j in range(0, len(speed_wind[i])):
-                if len(str(speed_wind[i][j])) == 1:
-                    my_file.write(str(speed_wind[i][j]) + '  |  ')
-                elif len(str(speed_wind[i][j])) == 3:
-                    my_file.write(str(speed_wind[i][j]) + '|   ')
-                else:
-                    my_file.write(str(speed_wind[i][j]) + ' |  ')
-            my_file.write('\n')
-
-        my_file.close()
-        return print('The end write in file')
-
-    PATH = "/media/kirill/e61c7b4d-3c04-47cc-aabb-23d698198ced/home/kirill/Downloads/Data/АВ6_Толмачево/2016/"
-
     #my_file = open(PATH + 'data_practical_wind_01_2016_every_minute_area.csv', 'w')
     #my_file.write('File name    |  Year |Month| Day |  Time  |Speed|\n')
     speed_wind = []
