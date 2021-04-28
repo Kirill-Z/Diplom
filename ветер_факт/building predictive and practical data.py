@@ -2,6 +2,7 @@ import wind_forecast
 import practical_wind_forecast
 import plotting
 import matplotlib.pyplot as plt
+import math
 
 speed_wind_predictive = wind_forecast.main()
 plotting.plotting_wind_speed(speed_wind_predictive, '%Y-%m-%d-%H', 1, 'b', 'GFS')
@@ -21,20 +22,14 @@ elif value == '3':
                                  'АВ-6, Наблюдение для диапазона времени (+-30 мин), учитывая каждую минуту')
 
 diff = []
-print(len(speed_wind_predictive))
-print(len(speed_wind_practical))
 for i in range(0, len(speed_wind_predictive)):
-    diff1 = []
-    diff1.append(speed_wind_practical[i][0])
+    diff1 = [speed_wind_practical[i][0]]
     for j in range(1, len(speed_wind_predictive[i])):
-        if speed_wind_predictive[i][j] >= 9999:
-            print(speed_wind_predictive[i])
+        if speed_wind_predictive[i][j] >= 9999 or math.isnan(speed_wind_practical[i][j]):
             continue
         else:
             diff1.append(speed_wind_practical[i][j] - speed_wind_predictive[i][j])
     diff.append(diff1)
-
-
 diff_winter = []
 diff_spring = []
 diff_summer = []
@@ -55,6 +50,8 @@ for i in range(0, len(diff)):
         diff_spring.append(diff[i])
     elif diff[i][0][5:7] == '05':
         diff_spring.append(diff[i])
+    elif diff[i][0][5:7] == '06':
+        diff_summer.append(diff[i])
     elif diff[i][0][5:7] == '07':
         diff_summer.append(diff[i])
     elif diff[i][0][5:7] == '08':

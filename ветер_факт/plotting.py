@@ -11,7 +11,6 @@ def plotting_wind_speed(data, data_format, num_param, color, label):
         del data[i][3]
         del data[i][2]
         del data[i][1]
-    print(data)
     fmt = dates.DateFormatter(data_format)
 
     x_data = []
@@ -19,7 +18,6 @@ def plotting_wind_speed(data, data_format, num_param, color, label):
 
     for i in range(lengthData):
         if data[i][1] >= 9999:
-            print(data[i])
             continue
         else:
             x_data.append(dt.datetime.strptime(data[i][0], data_format))
