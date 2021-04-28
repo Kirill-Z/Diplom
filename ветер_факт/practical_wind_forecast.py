@@ -58,6 +58,7 @@ def main():
 
     return speed_wind
 
+
 def main_area():
     def add_data_to_the_speed_list(data, i):
         speed_wind = []
