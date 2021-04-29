@@ -5,11 +5,45 @@ import plotting
 
 PATH = "/media/kirill/e61c7b4d-3c04-47cc-aabb-23d698198ced/home/kirill/Downloads/Data/АВ6_Толмачево/2016/"
 
+<<<<<<< HEAD
 
 def add_data_to_the_speed_list(file, data, i):
     speed_wind = [file[2:], file[2:6], file[6:8], file[8:10], data[i][0], data[i][2]]
     return speed_wind
 
+=======
+
+def add_data_to_the_speed_list(data, i):
+    speed_wind = []
+    speed_wind.append(file[2:])
+    speed_wind.append(file[2:6])
+    speed_wind.append(file[6:8])
+    speed_wind.append(file[8:10])
+    speed_wind.append(data[i][0])
+    speed_wind.append(data[i][2])
+    return speed_wind
+
+
+def write_data_to_a_file(speed_wind, my_file):
+    for i in range(0, len(speed_wind)):
+        for j in range(0, len(speed_wind[i])):
+            if len(str(speed_wind[i][j])) == 1:
+                my_file.write(str(speed_wind[i][j]) + '  |  ')
+            elif len(str(speed_wind[i][j])) == 3:
+                my_file.write(str(speed_wind[i][j]) + '|   ')
+            else:
+                my_file.write(str(speed_wind[i][j]) + ' |  ')
+        my_file.write('\n')
+
+    my_file.close()
+    return print('The end write in file')
+
+
+def main():
+    #my_file = open(PATH + 'data_practical_wind_01_2016.csv', 'w')
+    #my_file.write('File name    |  Year |Month| Day |  Time  |Speed|\n')
+    speed_wind = []
+>>>>>>> f1d921aa7900e70cd287e60d4ad7df4e69a42bf2
 
 def write_data_to_a_file(speed_wind):
     my_file = open(PATH + 'data_practical_wind_01_2016.csv', 'w')
@@ -44,6 +78,7 @@ def calc_hour_by_hour(file, data_from_file, speed_wind):
     return speed_wind
 
 
+<<<<<<< HEAD
 def calc_time_range(file, data_from_file, speed_wind, num_record):
     hour_time = 0
     data_for_next_time = 0
@@ -85,6 +120,13 @@ def calc_for_a_range_with_every_minute(file, data_from_file, speed_wind, num_rec
     data_area = []
     speed_area = []
     for i in range(0, len(data_from_file)):
+=======
+def main_area():
+    #my_file = open(PATH + 'data_practical_wind_01_2016_area.csv', 'w')
+    #y_file.write('File name    |  Year |Month| Day |  Time  |Speed|\n')
+    speed_wind = []
+    num_record = 0
+>>>>>>> f1d921aa7900e70cd287e60d4ad7df4e69a42bf2
 
         hour = data_from_file[i][0][0] + data_from_file[i][0][1]
         minute = data_from_file[i][0][3] + data_from_file[i][0][4]
@@ -98,6 +140,7 @@ def calc_for_a_range_with_every_minute(file, data_from_file, speed_wind, num_rec
                 if data_for_next_time != 0:
                     speed_wind[num_record - 1].append(speed_for_next_time)
 
+<<<<<<< HEAD
                 if len(data_area) != 0:
                     for j in range(0, len(data_area)):
                         speed_wind[num_record - 1].append(speed_area[j])
@@ -128,6 +171,11 @@ def calc_for_a_range_with_every_minute(file, data_from_file, speed_wind, num_rec
 
 
 def main(value: str):
+=======
+def main_area_with_every_minute():
+    #my_file = open(PATH + 'data_practical_wind_01_2016_every_minute_area.csv', 'w')
+    #my_file.write('File name    |  Year |Month| Day |  Time  |Speed|\n')
+>>>>>>> f1d921aa7900e70cd287e60d4ad7df4e69a42bf2
     speed_wind = []
     num_record = 0
     for dirs in sorted(os.listdir(PATH)):
