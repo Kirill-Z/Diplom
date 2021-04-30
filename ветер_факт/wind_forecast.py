@@ -2,7 +2,7 @@ import pandas as pd
 import os
 import re
 
-PATH = "/media/kirill/e61c7b4d-3c04-47cc-aabb-23d698198ced/home/kirill/Downloads/Data/gfc/part_of_directory_2016/"
+PATH = "/media/kirill/e61c7b4d-3c04-47cc-aabb-23d698198ced/home/kirill/Downloads/Data/gfc/2016/"
 
 
 # Calculation of the point number based on the specified coordinates
@@ -135,6 +135,20 @@ def write_data_to_a_file(speed, write_file, name_file):
     return print('End of writing to file')
 
 
+def write_list_in_file(write_file, list_data):
+    my_file = open(PATH + write_file, 'w')
+    print(list_data)
+    for i in range(0, len(list_data)):
+        for j in range(0, len(list_data[i])):
+            for k in range(0, len(list_data[i][j])):
+                if k == (len(list_data[i][j]) - 1):
+                    my_file.write(str(list_data[i][j][k]))
+                else:
+                    my_file.write(str(list_data[i][j][k]) + ';')
+            my_file.write('\n')
+    my_file.close()
+    return print('End of writing list in file')
+
 def choice_speed_data_with_lead_time(speed_wind):
     speed_wind_with_lead_time_on_this_day = []
     for i in range(len(speed_wind)):
@@ -249,7 +263,6 @@ def main_for_difference_lead_time(value):
     lead_time_78_hours = []
 
     if value == '1':
-        print('any')
         points_to_calculate = calculation_of_the_point_number() + 1
         for file in sorted(os.listdir(PATH)):
             if re.match('\d{10}_\d{2}', file):
@@ -336,7 +349,7 @@ def main_for_difference_lead_time(value):
                 lead_time_75_hours.append(speed_wind[i])
             if lead_time == '78':
                 lead_time_78_hours.append(speed_wind[i])
-        print('lead_time_0_hours')
+        '''print('lead_time_0_hours')
         print(lead_time_0_hours)
         print('lead_time_3_hours')
         print(lead_time_3_hours)
@@ -389,7 +402,7 @@ def main_for_difference_lead_time(value):
         print('lead_time_75_hours')
         print(lead_time_75_hours)
         print('lead_time_78_hours')
-        print(lead_time_78_hours)
+        print(lead_time_78_hours)'''
         speed_wind_with_lead_time = [lead_time_0_hours, lead_time_3_hours, lead_time_6_hours, lead_time_9_hours,
                                      lead_time_12_hours, lead_time_15_hours, lead_time_18_hours, lead_time_21_hours,
                                      lead_time_24_hours, lead_time_27_hours, lead_time_30_hours, lead_time_33_hours,
@@ -417,6 +430,7 @@ def main_for_difference_lead_time(value):
                                                                                          low_point_number,
                                                                                          top_point_number, num_rows),
                                                               num_rows)
-
+    #print(speed_wind_with_lead_time)
+    write_list_in_file('list_data', speed_wind_with_lead_time)
     return speed_wind_with_lead_time
 #main_for_difference_lead_time('1')
