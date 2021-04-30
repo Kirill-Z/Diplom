@@ -8,7 +8,7 @@ import practical_wind_forecast
 #speed_wind_predictive = wind_forecast.main_for_difference_lead_time('1')
 # elif value == '2':
 #    speed_wind_predictive = wind_forecast.main(value)#
-current_file = "/media/kirill/e61c7b4d-3c04-47cc-aabb-23d698198ced/home/kirill/Downloads/Data/gfc/part_of_directory_2016/list_data"
+current_file = "/media/kirill/e61c7b4d-3c04-47cc-aabb-23d698198ced/home/kirill/Downloads/Data/gfc/2016/list_data"
 file_reader = pd.read_csv(current_file, sep=';', header=None, engine='python')
 print(file_reader)
 speed_wind_predictive_true = []
@@ -53,30 +53,39 @@ speed_wind_predictive_true.append(write_in_speed_predictive('78'))
 
 
 
-print(speed_wind_predictive_true)
+#print(speed_wind_predictive_true)
 speed_wind_practical = practical_wind_forecast.main('1')
 #print("speed_practical")
-#print(speed_wind_practical)
+#print(len(speed_wind_practical))
 #print("practical_end")
 
 
 def calc_diff(lead_time, diff_num_lead_time):
     if speed_wind_predictive_true[i][j][0][11:13] == lead_time:
-        #print(i)
-        #print(j)
-        #print(speed_wind_predictive[i][j][3])
+
+
+        #if j > len(speed_wind_practical[i + j * 8])
+        #print(speed_wind_predictive_true[i][j][3])
         #print(speed_wind_predictive[i][j][0])
         #print(speed_wind_practical[i + j * 8][3])
-        if speed_wind_predictive_true[i][j][3] == int(speed_wind_practical[i + j * 8][3]):
-            diff_num_lead_time.append(speed_wind_predictive_true[i][j][0])
-            #print(speed_wind_practical[i + j * 8])
-            #print(speed_wind_predictive[i][j])
-            #print(speed_wind_practical[i + j * 8][5])
-            #print(" - ")
-            #print(speed_wind_predictive[i][j][5])
-            diff_num_lead_time.append(
-                float(speed_wind_practical[i + j * 8][5]) - float(speed_wind_predictive_true[i][j][5]))
-            #print(diff_num_lead_time)
+        #print('i')
+        #print(i)
+        #print('j')
+        #print(j)
+        print(i + j * 8)
+        if i + j * 8 < (len(speed_wind_practical) - 1):
+            if speed_wind_predictive_true[i][j][3] == int(speed_wind_practical[i + j * 8][3]):
+
+                #diff_num_lead_time.append(speed_wind_predictive_true[i][j][0])
+                #print(speed_wind_practical[i + j * 8])
+                #print(speed_wind_predictive[i][j])
+                #print(speed_wind_practical[i + j * 8][5])
+                #print(" - ")
+                #print(speed_wind_predictive[i][j][5])
+                diff_num_lead_time.append(
+                    float(speed_wind_practical[i + j * 8][5]) - float(speed_wind_predictive_true[i][j][5]))
+                #print(diff_num_lead_time)
+
     return diff_num_lead_time
 
 
@@ -148,6 +157,33 @@ def calc_the_average_diff_for_the_lead_time(diff_lead_time):
     #print(average_diff)
     return average_diff
 
+print(diff_0_lead_time )
+print(diff_3_lead_time )
+print(diff_6_lead_time )
+print(diff_9_lead_time )
+print(diff_12_lead_time)
+print(diff_15_lead_time)
+print(diff_18_lead_time)
+print(diff_21_lead_time)
+print(diff_24_lead_time)
+print(diff_27_lead_time)
+print(diff_30_lead_time)
+print(diff_33_lead_time)
+print(diff_36_lead_time)
+print(diff_39_lead_time)
+print(diff_42_lead_time)
+print(diff_45_lead_time)
+print(diff_48_lead_time)
+print(diff_51_lead_time)
+print(diff_54_lead_time)
+print(diff_57_lead_time)
+print(diff_60_lead_time)
+print(diff_63_lead_time)
+print(diff_66_lead_time)
+print(diff_69_lead_time)
+print(diff_72_lead_time)
+print(diff_75_lead_time)
+print(diff_78_lead_time)
 
 average_diff_0 = calc_the_average_diff_for_the_lead_time(diff_0_lead_time)
 average_diff_3 = calc_the_average_diff_for_the_lead_time(diff_3_lead_time)
@@ -176,6 +212,7 @@ average_diff_69 = calc_the_average_diff_for_the_lead_time(diff_69_lead_time)
 average_diff_72 = calc_the_average_diff_for_the_lead_time(diff_72_lead_time)
 average_diff_75 = calc_the_average_diff_for_the_lead_time(diff_75_lead_time)
 average_diff_78 = calc_the_average_diff_for_the_lead_time(diff_78_lead_time)
+
 
 print('Средняя разность для заблаговременности 0 часов:')
 print(average_diff_0)
