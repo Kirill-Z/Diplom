@@ -2,7 +2,7 @@ import pandas as pd
 import os
 import re
 
-PATH = "/media/kirill/e61c7b4d-3c04-47cc-aabb-23d698198ced/home/kirill/Downloads/Data/gfc/2016/"
+PATH = "/home/kirill/Downloads/Data/gfs/2016/"
 
 
 # Calculation of the point number based on the specified coordinates

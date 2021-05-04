@@ -5,10 +5,10 @@ import practical_wind_forecast
 
 #value = input("Forecast data: If you need to calculate a point, press 1, if you need to calculate an area, press 2: ")
 #if value == '1':
-#speed_wind_predictive = wind_forecast.main_for_difference_lead_time('1')
+#    speed_wind_predictive = wind_forecast.main_for_difference_lead_time('1')
 # elif value == '2':
 #    speed_wind_predictive = wind_forecast.main(value)#
-current_file = "/media/kirill/e61c7b4d-3c04-47cc-aabb-23d698198ced/home/kirill/Downloads/Data/gfc/2016/list_data"
+current_file = "/home/kirill/Downloads/Data/gfs/2016/list_data"
 file_reader = pd.read_csv(current_file, sep=';', header=None, engine='python')
 print(file_reader)
 speed_wind_predictive_true = []
