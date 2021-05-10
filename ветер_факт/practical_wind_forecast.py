@@ -118,7 +118,6 @@ def main(value: str):
         for file in sorted(os.listdir(PATH + dirs)):
             if re.match('av*', file):
                 currentFile = PATH + dirs + '/' + file
-                print(currentFile)
                 file_reader = pd.read_csv(currentFile, sep=';', header=None, engine='python')
                 data_from_file = file_reader.values.tolist()
                 if value == '1':
