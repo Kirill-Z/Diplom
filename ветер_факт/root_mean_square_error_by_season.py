@@ -23,7 +23,7 @@ def calc_the_average_diff_for_the_season(diff_season):
     for i in range(0, len(diff_season)):
         if len(diff_season[i]) > 1:
             average_diff += diff_season[i][1]
-    average_diff = average_diff / len(diff_season)
+    average_diff = math.sqrt(average_diff / len(diff_season))
     return average_diff
 
 def get_need_data(data):

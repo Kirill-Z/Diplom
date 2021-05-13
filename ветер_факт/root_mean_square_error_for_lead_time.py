@@ -29,7 +29,7 @@ def calc_the_average_diff_for_the_lead_time(diff_lead_time):
     for i in range(1, len(diff_lead_time), 2):
         average_diff += diff_lead_time[i]
 
-    average_diff = average_diff / len(diff_lead_time)
+    average_diff = math.sqrt(average_diff / len(diff_lead_time))
     return average_diff
 
 
