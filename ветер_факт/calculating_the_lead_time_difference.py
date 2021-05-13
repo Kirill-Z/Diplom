@@ -1,3 +1,4 @@
+import math
 import pandas as pd
 import wind_forecast
 import practical_wind_forecast
@@ -15,8 +16,11 @@ def calc_diff(lead_time, diff_num_lead_time):
     if speed_wind_predictive_true[i][j][0][11:13] == lead_time:
         if i + j * 8 < (len(speed_wind_practical) - 1):
             if speed_wind_predictive_true[i][j][3] == int(speed_wind_practical[i + j * 8][3]):
-                diff_num_lead_time.append(
-                    float(speed_wind_practical[i + j * 8][5]) - float(speed_wind_predictive_true[i][j][5]))
+                if float(speed_wind_predictive_true[i][j][5]) >= 9999 or math.isnan(float(speed_wind_practical[i + j * 8][5])):
+                    pass
+                else:
+                    diff_num_lead_time.append(
+                        float(speed_wind_practical[i + j * 8][5]) - float(speed_wind_predictive_true[i][j][5]))
 
     return diff_num_lead_time
 
@@ -25,7 +29,7 @@ def calc_the_average_diff_for_the_lead_time(diff_lead_time):
     average_diff: int = 0
     for i in range(1, len(diff_lead_time), 2):
         average_diff += diff_lead_time[i]
-    average_diff = average_diff / (len(diff_lead_time) / 2)
+    average_diff = average_diff / len(diff_lead_time)
     return average_diff
 
 
@@ -44,8 +48,9 @@ file_reader = pd.read_csv(current_file, sep=';', header=None, engine='python')
 speed_wind_predictive_true = []
 speed_wind_predictive = file_reader.values.tolist()
 
-speed_wind_practical = practical_wind_forecast.main('1')
-
+speed_wind_practical = practical_wind_forecast.main('3')
+#print(speed_wind_predictive)
+#print(speed_wind_practical)
 lead_time = ('00', '03', '06', '09', '12', '15', '18', '21', '24', '27', '30', '33', '36', '39', '42', '45', '48', '51',
              '54', '57', '60', '63', '66', '69', '72', '75', '78')
 
