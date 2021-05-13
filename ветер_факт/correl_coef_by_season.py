@@ -46,6 +46,41 @@ def calc_correl_coef():
     return correl_coef
 
 
+def distribution_by_month():
+    diff_winter = []
+    diff_spring = []
+    diff_summer = []
+    diff_autumn = []
+
+    for i in range(0, len(diff)):
+        month = diff[i][0][5:7]
+        diff_value = diff[i]
+        if month == '11':
+            diff_winter.append(diff_value)
+        if month == '12':
+            diff_winter.append(diff_value)
+        if month == '01':
+            diff_winter.append(diff_value)
+        if month == '02':
+            diff_winter.append(diff_value)
+        if month == '03':
+            diff_winter.append(diff_value)
+        if month == '04':
+            diff_spring.append(diff_value)
+        if month == '05':
+            diff_spring.append(diff_value)
+        if month == '06':
+            diff_summer.append(diff_value)
+        if month == '07':
+            diff_summer.append(diff_value)
+        if month == '08':
+            diff_summer.append(diff_value)
+        if month == '09':
+            diff_autumn.append(diff_value)
+        if month == '10':
+            diff_autumn.append(diff_value)
+
+
 def get_need_data(data):
     for i in range(len(data)):
         data[i][0] = str(data[i][1]) + '-' + str(data[i][2]) + '-' + str(data[i][3]) + '-' + str(data[i][4])
@@ -57,6 +92,8 @@ def get_need_data(data):
 def main(speed_wind_predictive, speed_wind_practical):
     get_need_data(speed_wind_predictive)
     get_need_data(speed_wind_practical)
+    print(speed_wind_predictive)
+    print(speed_wind_practical)
     diff = []
     diff = calc_correl_coef()
     diff_winter = []
