@@ -2,7 +2,7 @@ import pandas as pd
 import os
 import re
 
-PATH = "/media/kirill/e61c7b4d-3c04-47cc-aabb-23d698198ced/home/kirill/Downloads/Data/АВ6_Толмачево/2016/"
+PATH = "/home/kirill/Downloads/Data/АВ6_Толмачево/2016/"
 
 
 def add_data_to_the_speed_list(file, data, i):
@@ -127,3 +127,5 @@ def main(value: str):
                 if value == '3':
                     speed_wind = calc_for_a_range_with_every_minute(file, data_from_file, speed_wind, num_record)
     return speed_wind
+
+main('1')
