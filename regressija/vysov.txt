@@ -1,0 +1,3 @@
+              call NORM (1,NVIB,NDAY,MH,MH,X,X1r,XC,SX)
+              call CORA (1,NVIB,NDAY,MH,MH,X1r,Z)
+              call REGA (MH,MH,XC,SX,Z,B,F,R,A,RR,KGA)
