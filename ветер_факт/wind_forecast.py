@@ -138,6 +138,100 @@ def write_data_to_a_file(speed, write_file, name_file):
     return print('End of writing to file')
 
 
+def splitting_speed_by_lead_time(speed_wind):
+    lead_time_0_hours = []
+    lead_time_3_hours = []
+    lead_time_6_hours = []
+    lead_time_9_hours = []
+    lead_time_12_hours = []
+    lead_time_15_hours = []
+    lead_time_18_hours = []
+    lead_time_21_hours = []
+    lead_time_24_hours = []
+    lead_time_27_hours = []
+    lead_time_30_hours = []
+    lead_time_33_hours = []
+    lead_time_36_hours = []
+    lead_time_39_hours = []
+    lead_time_42_hours = []
+    lead_time_45_hours = []
+    lead_time_48_hours = []
+    lead_time_51_hours = []
+    lead_time_54_hours = []
+    lead_time_57_hours = []
+    lead_time_60_hours = []
+    lead_time_63_hours = []
+    lead_time_66_hours = []
+    lead_time_69_hours = []
+    lead_time_72_hours = []
+    lead_time_75_hours = []
+    lead_time_78_hours = []
+    for i in range(0, len(speed_wind)):
+        lead_time = speed_wind[i][0][11:13]
+        if lead_time == '00':
+            lead_time_0_hours.append(speed_wind[i])
+        if lead_time == '03':
+            lead_time_3_hours.append(speed_wind[i])
+        if lead_time == '06':
+            lead_time_6_hours.append(speed_wind[i])
+        if lead_time == '09':
+            lead_time_9_hours.append(speed_wind[i])
+        if lead_time == '12':
+            lead_time_12_hours.append(speed_wind[i])
+        if lead_time == '15':
+            lead_time_15_hours.append(speed_wind[i])
+        if lead_time == '18':
+            lead_time_18_hours.append(speed_wind[i])
+        if lead_time == '21':
+            lead_time_21_hours.append(speed_wind[i])
+        if lead_time == '24':
+            lead_time_24_hours.append(speed_wind[i])
+        if lead_time == '27':
+            lead_time_27_hours.append(speed_wind[i])
+        if lead_time == '30':
+            lead_time_30_hours.append(speed_wind[i])
+        if lead_time == '33':
+            lead_time_33_hours.append(speed_wind[i])
+        if lead_time == '36':
+            lead_time_36_hours.append(speed_wind[i])
+        if lead_time == '39':
+            lead_time_39_hours.append(speed_wind[i])
+        if lead_time == '42':
+            lead_time_42_hours.append(speed_wind[i])
+        if lead_time == '45':
+            lead_time_45_hours.append(speed_wind[i])
+        if lead_time == '48':
+            lead_time_48_hours.append(speed_wind[i])
+        if lead_time == '51':
+            lead_time_51_hours.append(speed_wind[i])
+        if lead_time == '54':
+            lead_time_54_hours.append(speed_wind[i])
+        if lead_time == '57':
+            lead_time_57_hours.append(speed_wind[i])
+        if lead_time == '60':
+            lead_time_60_hours.append(speed_wind[i])
+        if lead_time == '63':
+            lead_time_63_hours.append(speed_wind[i])
+        if lead_time == '66':
+            lead_time_66_hours.append(speed_wind[i])
+        if lead_time == '69':
+            lead_time_69_hours.append(speed_wind[i])
+        if lead_time == '72':
+            lead_time_72_hours.append(speed_wind[i])
+        if lead_time == '75':
+            lead_time_75_hours.append(speed_wind[i])
+        if lead_time == '78':
+            lead_time_78_hours.append(speed_wind[i])
+
+    speed_wind_with_lead_time = [lead_time_0_hours, lead_time_3_hours, lead_time_6_hours, lead_time_9_hours,
+                                 lead_time_12_hours, lead_time_15_hours, lead_time_18_hours, lead_time_21_hours,
+                                 lead_time_24_hours, lead_time_27_hours, lead_time_30_hours, lead_time_33_hours,
+                                 lead_time_36_hours, lead_time_39_hours, lead_time_42_hours, lead_time_45_hours,
+                                 lead_time_48_hours, lead_time_51_hours, lead_time_54_hours, lead_time_57_hours,
+                                 lead_time_60_hours, lead_time_63_hours, lead_time_66_hours, lead_time_69_hours,
+                                 lead_time_72_hours, lead_time_75_hours, lead_time_78_hours]
+    return speed_wind_with_lead_time
+
 def write_list_in_file(write_file, list_data):
     my_file = open(PATH + write_file, 'w')
     print(list_data)
@@ -237,34 +331,6 @@ def main(value):
 def main_for_difference_lead_time(value):
     reference_num = 0
     speed_wind = []
-    lead_time_0_hours = []
-    lead_time_3_hours = []
-    lead_time_6_hours = []
-    lead_time_9_hours = []
-    lead_time_12_hours = []
-    lead_time_15_hours = []
-    lead_time_18_hours = []
-    lead_time_21_hours = []
-    lead_time_24_hours = []
-    lead_time_27_hours = []
-    lead_time_30_hours = []
-    lead_time_33_hours = []
-    lead_time_36_hours = []
-    lead_time_39_hours = []
-    lead_time_42_hours = []
-    lead_time_45_hours = []
-    lead_time_48_hours = []
-    lead_time_51_hours = []
-    lead_time_54_hours = []
-    lead_time_57_hours = []
-    lead_time_60_hours = []
-    lead_time_63_hours = []
-    lead_time_66_hours = []
-    lead_time_69_hours = []
-    lead_time_72_hours = []
-    lead_time_75_hours = []
-    lead_time_78_hours = []
-
     if value == '1':
         points_to_calculate = calculation_of_the_point_number() + 1
         for file in sorted(os.listdir(PATH)):
@@ -295,71 +361,7 @@ def main_for_difference_lead_time(value):
                 calculates_month_based_on_day(speed_wind, reference_num)
                 calculation_of_the_year_based_on_month(speed_wind, reference_num)
                 reference_num += 1
-
-        for i in range(0, len(speed_wind)):
-            lead_time = speed_wind[i][0][11:13]
-            if lead_time == '00':
-                lead_time_0_hours.append(speed_wind[i])
-            if lead_time == '03':
-                lead_time_3_hours.append(speed_wind[i])
-            if lead_time == '06':
-                lead_time_6_hours.append(speed_wind[i])
-            if lead_time == '09':
-                lead_time_9_hours.append(speed_wind[i])
-            if lead_time == '12':
-                lead_time_12_hours.append(speed_wind[i])
-            if lead_time == '15':
-                lead_time_15_hours.append(speed_wind[i])
-            if lead_time == '18':
-                lead_time_18_hours.append(speed_wind[i])
-            if lead_time == '21':
-                lead_time_21_hours.append(speed_wind[i])
-            if lead_time == '24':
-                lead_time_24_hours.append(speed_wind[i])
-            if lead_time == '27':
-                lead_time_27_hours.append(speed_wind[i])
-            if lead_time == '30':
-                lead_time_30_hours.append(speed_wind[i])
-            if lead_time == '33':
-                lead_time_33_hours.append(speed_wind[i])
-            if lead_time == '36':
-                lead_time_36_hours.append(speed_wind[i])
-            if lead_time == '39':
-                lead_time_39_hours.append(speed_wind[i])
-            if lead_time == '42':
-                lead_time_42_hours.append(speed_wind[i])
-            if lead_time == '45':
-                lead_time_45_hours.append(speed_wind[i])
-            if lead_time == '48':
-                lead_time_48_hours.append(speed_wind[i])
-            if lead_time == '51':
-                lead_time_51_hours.append(speed_wind[i])
-            if lead_time == '54':
-                lead_time_54_hours.append(speed_wind[i])
-            if lead_time == '57':
-                lead_time_57_hours.append(speed_wind[i])
-            if lead_time == '60':
-                lead_time_60_hours.append(speed_wind[i])
-            if lead_time == '63':
-                lead_time_63_hours.append(speed_wind[i])
-            if lead_time == '66':
-                lead_time_66_hours.append(speed_wind[i])
-            if lead_time == '69':
-                lead_time_69_hours.append(speed_wind[i])
-            if lead_time == '72':
-                lead_time_72_hours.append(speed_wind[i])
-            if lead_time == '75':
-                lead_time_75_hours.append(speed_wind[i])
-            if lead_time == '78':
-                lead_time_78_hours.append(speed_wind[i])
-
-        speed_wind_with_lead_time = [lead_time_0_hours, lead_time_3_hours, lead_time_6_hours, lead_time_9_hours,
-                                     lead_time_12_hours, lead_time_15_hours, lead_time_18_hours, lead_time_21_hours,
-                                     lead_time_24_hours, lead_time_27_hours, lead_time_30_hours, lead_time_33_hours,
-                                     lead_time_36_hours, lead_time_39_hours, lead_time_42_hours, lead_time_45_hours,
-                                     lead_time_48_hours, lead_time_51_hours, lead_time_54_hours, lead_time_57_hours,
-                                     lead_time_60_hours, lead_time_63_hours, lead_time_66_hours, lead_time_69_hours,
-                                     lead_time_72_hours, lead_time_75_hours, lead_time_78_hours]
+        speed_wind_with_lead_time = splitting_speed_by_lead_time(speed_wind)
     elif value == '2':
         low_point_number, top_point_number = calculation_of_the_area_of_points()
         low_point_number += 1
@@ -394,73 +396,7 @@ def main_for_difference_lead_time(value):
                 calculates_month_based_on_day(speed_wind, reference_num)
                 calculation_of_the_year_based_on_month(speed_wind, reference_num)
                 reference_num += 1
-
-        for i in range(0, len(speed_wind)):
-            lead_time = speed_wind[i][0][11:13]
-            if lead_time == '00':
-                lead_time_0_hours.append(speed_wind[i])
-            if lead_time == '03':
-                lead_time_3_hours.append(speed_wind[i])
-            if lead_time == '06':
-                lead_time_6_hours.append(speed_wind[i])
-            if lead_time == '09':
-                lead_time_9_hours.append(speed_wind[i])
-            if lead_time == '12':
-                lead_time_12_hours.append(speed_wind[i])
-            if lead_time == '15':
-                lead_time_15_hours.append(speed_wind[i])
-            if lead_time == '18':
-                lead_time_18_hours.append(speed_wind[i])
-            if lead_time == '21':
-                lead_time_21_hours.append(speed_wind[i])
-            if lead_time == '24':
-                lead_time_24_hours.append(speed_wind[i])
-            if lead_time == '27':
-                lead_time_27_hours.append(speed_wind[i])
-            if lead_time == '30':
-                lead_time_30_hours.append(speed_wind[i])
-            if lead_time == '33':
-                lead_time_33_hours.append(speed_wind[i])
-            if lead_time == '36':
-                lead_time_36_hours.append(speed_wind[i])
-            if lead_time == '39':
-                lead_time_39_hours.append(speed_wind[i])
-            if lead_time == '42':
-                lead_time_42_hours.append(speed_wind[i])
-            if lead_time == '45':
-                lead_time_45_hours.append(speed_wind[i])
-            if lead_time == '48':
-                lead_time_48_hours.append(speed_wind[i])
-            if lead_time == '51':
-                lead_time_51_hours.append(speed_wind[i])
-            if lead_time == '54':
-                lead_time_54_hours.append(speed_wind[i])
-            if lead_time == '57':
-                lead_time_57_hours.append(speed_wind[i])
-            if lead_time == '60':
-                lead_time_60_hours.append(speed_wind[i])
-            if lead_time == '63':
-                lead_time_63_hours.append(speed_wind[i])
-            if lead_time == '66':
-                lead_time_66_hours.append(speed_wind[i])
-            if lead_time == '69':
-                lead_time_69_hours.append(speed_wind[i])
-            if lead_time == '72':
-                lead_time_72_hours.append(speed_wind[i])
-            if lead_time == '75':
-                lead_time_75_hours.append(speed_wind[i])
-            if lead_time == '78':
-                lead_time_78_hours.append(speed_wind[i])
-
-        speed_wind_with_lead_time = [lead_time_0_hours, lead_time_3_hours, lead_time_6_hours, lead_time_9_hours,
-                                     lead_time_12_hours, lead_time_15_hours, lead_time_18_hours, lead_time_21_hours,
-                                     lead_time_24_hours, lead_time_27_hours, lead_time_30_hours, lead_time_33_hours,
-                                     lead_time_36_hours, lead_time_39_hours, lead_time_42_hours, lead_time_45_hours,
-                                     lead_time_48_hours, lead_time_51_hours, lead_time_54_hours, lead_time_57_hours,
-                                     lead_time_60_hours, lead_time_63_hours, lead_time_66_hours, lead_time_69_hours,
-                                     lead_time_72_hours, lead_time_75_hours, lead_time_78_hours]
-
-
+        speed_wind_with_lead_time = splitting_speed_by_lead_time(speed_wind)
     write_list_in_file('list_data', speed_wind_with_lead_time)
     return speed_wind_with_lead_time
 #main_for_difference_lead_time('1')
