@@ -395,5 +395,6 @@ def main_for_difference_lead_time(value):
                 reference_num += 1
         speed_wind_with_lead_time = splitting_speed_by_lead_time(speed_wind)
     write_list_in_file('list_data', speed_wind_with_lead_time)
+
     return speed_wind_with_lead_time
 #main_for_difference_lead_time('1')
