@@ -23,5 +23,4 @@ def calc_abs(diff_lead_time):
 
 
 def print_average_diff(hour: str, average_diff):
-    print('Абсолютная погрешность для заблаговременности ' + hour)
-    print(average_diff)
+    print(f'Абсолютная погрешность для заблаговременности {hour}' + f': {average_diff}')

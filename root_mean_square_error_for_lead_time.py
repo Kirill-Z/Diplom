@@ -23,5 +23,4 @@ def calc_rmse(diff_lead_time):
 
 
 def print_rmse(hour: str, average_diff):
-    print('Среднеквадратичная ошибка для заблаговременности ' + hour)
-    print(average_diff)
+    print(f'Среднеквадратичная ошибка для заблаговременности {hour}' + f': {average_diff}')

@@ -24,5 +24,4 @@ def calc_the_average_diff(diff_lead_time):
 
 
 def print_average_diff(hour: str, average_diff):
-    print('Средняя разность для заблаговременности ' + hour)
-    print(average_diff)
+    print(f'Средняя разность для заблаговременности {hour}' + f': {average_diff}')
