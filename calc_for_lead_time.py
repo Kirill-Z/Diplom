@@ -4,7 +4,7 @@ import practical_wind_forecast
 import difference_for_lead_time as difference
 import abs_error_for_lead_time as abs
 import root_mean_square_error_for_lead_time as rmse
-
+import correl_coef_for_lead_time as correl
 
 def write_in_speed_predictive(lead_time: str, speed_wind_predictive):
     local_speed_wind = []
@@ -448,7 +448,64 @@ def main():
             rmse.print_rmse('75 часов', rmse_75)
             rmse.print_rmse('78 часов', rmse_78)
     if estimate == 4:
-        pass
+        lead_time_predictive = [
+            lead_time_0_predictive, lead_time_3_predictive, lead_time_6_predictive, lead_time_9_predictive,
+            lead_time_12_predictive, lead_time_15_predictive, lead_time_18_predictive, lead_time_21_predictive,
+            lead_time_24_predictive, lead_time_27_predictive, lead_time_30_predictive, lead_time_33_predictive,
+            lead_time_36_predictive, lead_time_39_predictive, lead_time_42_predictive, lead_time_45_predictive,
+            lead_time_48_predictive, lead_time_51_predictive, lead_time_54_predictive, lead_time_57_predictive,
+            lead_time_60_predictive, lead_time_63_predictive, lead_time_66_predictive, lead_time_69_predictive,
+            lead_time_72_predictive, lead_time_75_predictive, lead_time_78_predictive] = correl.separation_data_by_lead_time(speed_wind_predictive_true)
 
+        lead_time_practical = [
+            lead_time_0_practical, lead_time_3_practical, lead_time_6_practical, lead_time_9_practical,
+            lead_time_12_practical, lead_time_15_practical, lead_time_18_practical, lead_time_21_practical] = correl.separation_data_by_lead_time_practical(speed_wind_practical)
+
+        #  0:8
+        #  8:16
+        #  16:24
+        #  24:27
+        a = 0
+        b = 8
+        for i, j in zip(lead_time_predictive[0:8], lead_time_practical):
+            pass
+        for i, j in zip(lead_time_predictive[8:16], lead_time_practical):
+            pass
+        for i, j in zip(lead_time_predictive[16:24], lead_time_practical):
+            pass
+        for i, j in zip(lead_time_predictive[24:27], lead_time_practical):
+            pass
+            #correl.calc_correl_coef(i, lead_time_0_practical)
+
+
+        '''
+        correl.calc_correl_coef(lead_time_0_predictive, lead_time_0_practical)
+        correl.calc_correl_coef(lead_time_3_predictive, lead_time_3_practical)
+        correl.calc_correl_coef(lead_time_6_predictive, lead_time_6_practical)
+        correl.calc_correl_coef(lead_time_9_predictive, lead_time_9_practical)
+        correl.calc_correl_coef(lead_time_12_predictive, lead_time_12_practical) 
+        correl.calc_correl_coef(lead_time_15_predictive, lead_time_15_practical) 
+        correl.calc_correl_coef(lead_time_18_predictive, lead_time_18_practical)
+        correl.calc_correl_coef(lead_time_21_predictive, lead_time_21_practical)
+        correl.calc_correl_coef(lead_time_24_predictive, lead_time_0_practical) 
+        correl.calc_correl_coef(lead_time_27_predictive, lead_time__practical) 
+        correl.calc_correl_coef(lead_time_30_predictive, lead_time__practical) 
+        correl.calc_correl_coef(lead_time_33_predictive, lead_time__practical)
+        correl.calc_correl_coef(lead_time_36_predictive, lead_time__practical) 
+        correl.calc_correl_coef(lead_time_39_predictive, lead_time__practical)
+        correl.calc_correl_coef(lead_time_42_predictive, lead_time__practical) 
+        correl.calc_correl_coef(lead_time_45_predictive, lead_time__practical)
+        correl.calc_correl_coef(lead_time_48_predictive, lead_time__practical) 
+        correl.calc_correl_coef(lead_time_51_predictive, lead_time__practical) 
+        correl.calc_correl_coef(lead_time_54_predictive, lead_time__practical) 
+        correl.calc_correl_coef(lead_time_57_predictive, lead_time__practical)
+        correl.calc_correl_coef(lead_time_60_predictive, lead_time_60_practical) 
+        correl.calc_correl_coef(lead_time_63_predictive, lead_time_63_practical) 
+        correl.calc_correl_coef(lead_time_66_predictive, lead_time_66_practical) 
+        correl.calc_correl_coef(lead_time_69_predictive, lead_time_69_practical)
+        correl.calc_correl_coef(lead_time_72_predictive, lead_time_72_practical) 
+        correl.calc_correl_coef(lead_time_75_predictive, lead_time_75_practical) 
+        correl.calc_correl_coef(lead_time_78_predictive, lead_time_78_practical)
+        '''
 
 main()
