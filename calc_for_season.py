@@ -113,6 +113,7 @@ def test_for_emptiness(diff, calc_func):
         diff_season = calc_func
     return diff_season
 
+
 def main():
     speed_wind_predictive = get_forecast_data()
     speed_wind_practical = get_observation_data()
@@ -136,10 +137,10 @@ def main():
         average_diff_summer = test_for_emptiness(diff_summer, different.calc_the_average_diff(diff_summer))
         average_diff_autumn = test_for_emptiness(diff_autumn, different.calc_the_average_diff(diff_autumn))
 
-        print(f'Средняя разность за зимний период: {average_diff_winter}')
+        print(f'Средняя разность за зимний период:    {average_diff_winter}')
         print(f'Средняя  разность за весенний период: {average_diff_spring}')
-        print(f'Средняя  разность за летний период: {average_diff_summer}')
-        print(f'Средняя  разность за осениий период: {average_diff_autumn}')
+        print(f'Средняя  разность за летний период:   {average_diff_summer}')
+        print(f'Средняя  разность за осениий период:  {average_diff_autumn}')
     if estimate == 2:
         diff = abs.cacl_abs_diff(speed_wind_predictive, speed_wind_practical)
 
@@ -150,10 +151,10 @@ def main():
         abs_diff_summer = test_for_emptiness(diff_summer, abs.calc_abs(diff_summer))
         abs_diff_autumn = test_for_emptiness(diff_autumn, abs.calc_abs(diff_autumn))
 
-        print(f'Абсолютная погрешность за зимний период: {abs_diff_winter}')
+        print(f'Абсолютная погрешность за зимний период:   {abs_diff_winter}')
         print(f'Абсолютная погрешность за весенний период: {abs_diff_spring}')
-        print(f'Абсолютная погрешность за летний период: {abs_diff_summer}')
-        print(f'Абсолютная погрешность за осениий период: {abs_diff_autumn}')
+        print(f'Абсолютная погрешность за летний период:   {abs_diff_summer}')
+        print(f'Абсолютная погрешность за осениий период:  {abs_diff_autumn}')
     if estimate == 3:
         diff = rmse.calc_squared_difference(speed_wind_predictive, speed_wind_practical)
 
@@ -164,10 +165,10 @@ def main():
         rmse_summer = test_for_emptiness(diff_summer, rmse.calc_rmse(diff_summer))
         rmse_autumn = test_for_emptiness(diff_autumn, rmse.calc_rmse(diff_autumn))
 
-        print(f'Среднеквадратичная ошибка за зимний период: {rmse_winter}')
+        print(f'Среднеквадратичная ошибка за зимний период:   {rmse_winter}')
         print(f'Среднеквадратичная ошибка за весенний период: {rmse_spring}')
-        print(f'Среднеквадратичная ошибка за летний период: {rmse_summer}')
-        print(f'Среднеквадратичная ошибка за осениий период: {rmse_autumn}')
+        print(f'Среднеквадратичная ошибка за летний период:   {rmse_summer}')
+        print(f'Среднеквадратичная ошибка за осениий период:  {rmse_autumn}')
     if estimate == 4:
         diff_winter_predictive, \
         diff_spring_predictive, \
@@ -188,10 +189,10 @@ def main():
         if (len(diff_autumn_predictive) and len(diff_autumn_practical)) != 0:
             correl_coef_autumn = correl.calc_correl_coef(diff_autumn_predictive, diff_autumn_practical)
 
-        print(f'Коэффициент корреляции за зимний период: {correl_coef_winter}')
+        print(f'Коэффициент корреляции за зимний период:   {correl_coef_winter}')
         print(f'Коэффициент корреляции за весенний период: {correl_coef_spring}')
-        print(f'Коэффициент корреляции за летний период: {correl_coef_summer}')
-        print(f'Коэффициент корреляции за осениий период: {correl_coef_autumn}')
+        print(f'Коэффициент корреляции за летний период:   {correl_coef_summer}')
+        print(f'Коэффициент корреляции за осениий период:  {correl_coef_autumn}')
 
 
 main()
