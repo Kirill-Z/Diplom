@@ -5,7 +5,7 @@ def calc_diff(speed_wind_predictive, speed_wind_practical):
     diff = []
 
     if speed_wind_predictive < speed_wind_practical:
-        lenght_ = int(len(speed_wind_predictive))
+        lenght = int(len(speed_wind_predictive))
     elif speed_wind_practical < speed_wind_predictive:
         lenght = int(len(speed_wind_practical))
 

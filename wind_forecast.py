@@ -59,7 +59,7 @@ def getting_need_data_for_area(data_from_file, low_points_to_calculate, top_poin
 
 def adding_data_to_the_speed_list(file):
     # Adding file name, year, month, day, time
-    wind_data = [file, file[slice(0, 4)], int(file[slice(4, 6)]), int(file[slice(6, 8)]), int(file[slice(11, 13)])]
+    wind_data = [file, file[slice(0, 4)], file[slice(4, 6)], int(file[slice(6, 8)]), int(file[slice(11, 13)])]
     return wind_data
 
 
@@ -118,7 +118,7 @@ def calc_for_area(data_from_file, get_data, num_item):
     return correct_data
 
 
-def write_data_to_a_file(speed, write_file, name_file):
+def write_data_to_a_file(speed, write_file, name_file):  # For convenient output in a file
     my_file = open(PATH + name_file, 'w')
     my_file.write('File name     |   Year |Month |  Day |Lead Time|Level|         Wind Speed\n')
     for i in range(0, len(speed)):
@@ -133,6 +133,20 @@ def write_data_to_a_file(speed, write_file, name_file):
 
     write_file.close()
     return print('End of writing to file')
+
+
+def write_in_file(write_file, list_data):
+    my_file = open(PATH + write_file, 'w')
+    for i in range(0, len(list_data)):
+        for j in range(0, len(list_data[i])):
+            if j == (len(list_data[i]) - 1):
+                my_file.write(str(list_data[i][j]))
+            else:
+                my_file.write(str(list_data[i][j]) + ';')
+        my_file.write('\n')
+    my_file.close()
+    return print('End of writing list in file')
+
 
 
 def splitting_speed_by_lead_time(speed_wind):
@@ -229,9 +243,8 @@ def splitting_speed_by_lead_time(speed_wind):
                                  lead_time_72_hours, lead_time_75_hours, lead_time_78_hours]
     return speed_wind_with_lead_time
 
-def write_list_in_file(write_file, list_data):
+def write_list_in_file_with_lead_time(write_file, list_data):
     my_file = open(PATH + write_file, 'w')
-    print(list_data)
     for i in range(0, len(list_data)):
         for j in range(0, len(list_data[i])):
             for k in range(0, len(list_data[i][j])):
@@ -286,6 +299,7 @@ def main(value):
                 calculates_month_based_on_day(speed_wind, reference_num)
                 calculation_of_the_year_based_on_month(speed_wind, reference_num)
                 reference_num += 1
+
     elif value == '2':
         low_point_number, top_point_number = calculation_of_the_area_of_points()
         low_point_number += 1
@@ -321,7 +335,7 @@ def main(value):
                 calculates_month_based_on_day(speed_wind, reference_num)
                 calculation_of_the_year_based_on_month(speed_wind, reference_num)
                 reference_num += 1
-
+    write_in_file('list_data_by_season', speed_wind)
     return choice_speed_data_with_lead_time(speed_wind)
 
 
@@ -394,7 +408,6 @@ def main_for_difference_lead_time(value):
                 calculation_of_the_year_based_on_month(speed_wind, reference_num)
                 reference_num += 1
         speed_wind_with_lead_time = splitting_speed_by_lead_time(speed_wind)
-    write_list_in_file('list_data', speed_wind_with_lead_time)
+    write_list_in_file_with_lead_time('list_data', speed_wind_with_lead_time)
 
     return speed_wind_with_lead_time
-#main_for_difference_lead_time('1')
