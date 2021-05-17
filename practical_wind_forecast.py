@@ -2,7 +2,7 @@ import pandas as pd
 import os
 import re
 
-PATH = "/home/kirill/Downloads/Data/АВ6_Толмачево/2016/"
+PATH = "/home/kirill/Downloads/Data/АВ6/2016/"
 
 
 def add_data_to_the_speed_list(file, data, i):

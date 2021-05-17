@@ -148,7 +148,6 @@ def write_in_file(write_file, list_data):
     return print('End of writing list in file')
 
 
-
 def splitting_speed_by_lead_time(speed_wind):
     lead_time_0_hours = []
     lead_time_3_hours = []
