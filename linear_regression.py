@@ -6,6 +6,7 @@ import wind_forecast
 import practical_wind_forecast
 import sys
 import matplotlib.pyplot as plt
+import correl_coef_for_lead_time as correl
 
 
 def write_in_speed_predictive(lead_time: str, speed_wind_predictive):
@@ -40,7 +41,7 @@ def get_forecast_data(calc_time):
             elif value == '2':
                 wind_forecast.main_for_difference_lead_time(value)
 
-        current_file = "/home/kirill/Downloads/Data/gfs/2016/list_data"  # Path to the predicted wind speed file
+        current_file = "/home/kirill/Downloads/Data/gfs/list_data_for_lead_time"  # Path to the predicted wind speed file
         file_reader = pd.read_csv(current_file, sep=';', header=None, engine='python')
         speed_wind_predictive = []
         speed_wind = file_reader.values.tolist()
@@ -85,6 +86,7 @@ def clear_data(predictive, practical):
 
     return speed_wind_practical, speed_wind_predictive
 '''
+
 
 def division_of_data_by_seasons(predictive, practical):
     predictive_winter = []
@@ -159,58 +161,6 @@ def division_of_data_by_seasons(predictive, practical):
     return predictive_winter, predictive_spring, predictive_summer, predictive_autumn, practical_winter, practical_spring, practical_summer, practical_autumn
 
 
-def division_of_data_by_seasons_for_forecast(forecast):
-    forecast_winter = []
-    forecast_spring = []
-    forecast_summer = []
-    forecast_autumn = []
-
-
-
-    for i in range(0, len(forecast)):
-        if float(forecast[i][5]) >= 9999:
-            continue
-        else:
-            month = str(forecast[i][0][4:6])
-            if month == '11':
-                forecast_winter.append(forecast[i][5])
-
-            if month == '12':
-                forecast_winter.append(forecast[i][5])
-
-            if month in ('01', '1-'):
-                forecast_winter.append(forecast[i][5])
-
-            if month in ('02', '2-'):
-                forecast_winter.append(forecast[i][5])
-
-            if month in ('03', '3-'):
-                forecast_winter.append(forecast[i][5])
-
-            if month in ('04', '4-'):
-                forecast_spring.append(forecast[i][5])
-
-            if month in ('05', '5-'):
-                forecast_spring.append(forecast[i][5])
-
-            if month in ('06', '6-'):
-                forecast_summer.append(forecast[i][5])
-
-            if month in ('07', '7-'):
-                forecast_summer.append(forecast[i][5])
-
-            if month in ('08', '8-'):
-                forecast_summer.append(forecast[i][5])
-
-            if month in ('09', '9-'):
-                forecast_autumn.append(forecast[i][5])
-
-            if month == '10':
-                forecast_autumn.append(forecast[i][5])
-
-    return forecast_winter, forecast_spring, forecast_summer, forecast_autumn
-
-
 def linear_regression_by_season(predictant, predictor, forecast, speed_wind_practical_2018):
     x = np.array(predictant).reshape((-1, 1))
     y = np.array(predictor).reshape((-1, 1))
@@ -225,7 +175,7 @@ def linear_regression_by_season(predictant, predictor, forecast, speed_wind_prac
     y_pred = model.predict(speed_wind_practical_2018)
     #print('predicted response:', y_pred, sep='\n')
     print(len(y_pred))
-    #plt.scatter(speed_wind_practical_2018, forecast, color='gray')
+    plt.scatter(speed_wind_practical_2018, forecast, color='gray')
     plt.plot(speed_wind_practical_2018, y_pred)
     plt.show()
 
@@ -250,21 +200,73 @@ def main():
         linear_regression_by_season(practical_summer, predictive_summer, forecast_summer, pr_summer)
         linear_regression_by_season(practical_autumn, predictive_autumn, forecast_autumn, pr_autumn)
     if value == 2:
-        pass
+        print(speed_wind_practical)
+        lead_time_predictive = [
+            lead_time_0_predictive, lead_time_3_predictive, lead_time_6_predictive, lead_time_9_predictive,
+            lead_time_12_predictive, lead_time_15_predictive, lead_time_18_predictive, lead_time_21_predictive,
+            lead_time_24_predictive, lead_time_27_predictive, lead_time_30_predictive, lead_time_33_predictive,
+            lead_time_36_predictive, lead_time_39_predictive, lead_time_42_predictive, lead_time_45_predictive,
+            lead_time_48_predictive, lead_time_51_predictive, lead_time_54_predictive, lead_time_57_predictive,
+            lead_time_60_predictive, lead_time_63_predictive, lead_time_66_predictive, lead_time_69_predictive,
+            lead_time_72_predictive, lead_time_75_predictive,
+            lead_time_78_predictive] = correl.separation_data_by_lead_time(speed_wind_predictive)
 
-'''
-x = np.array([5, 15, 25, 35, 45, 55]).reshape((-1, 1))
-y = np.array([5, 20, 14, 32, 22, 38])
+        lead_time_practical = [
+            lead_time_0_practical, lead_time_3_practical, lead_time_6_practical, lead_time_9_practical,
+            lead_time_12_practical, lead_time_15_practical, lead_time_18_practical,
+            lead_time_21_practical] = correl.separation_data_by_lead_time_practical(speed_wind_practical)
 
-model = LinearRegression().fit(x, y)
 
-r_sq = model.score(x, y)
-print('Coefficient of determination: ', r_sq)
 
-print('intercept:', model.intercept_)
-print('slope:', model.coef_)
+def division_of_data_by_lead_time(predictive, practical):
+    lead_time_0_predictive = []
+    lead_time_3_predictive = []
+    lead_time_6_predictive = []
+    lead_time_9_predictive = []
+    lead_time_12_predictive = []
+    lead_time_15_predictive = []
+    lead_time_18_predictive = []
+    lead_time_21_predictive = []
+    lead_time_24_predictive = []
+    lead_time_27_predictive = []
+    lead_time_30_predictive = []
+    lead_time_33_predictive = []
+    lead_time_36_predictive = []
+    lead_time_39_predictive = []
+    lead_time_42_predictive = []
+    lead_time_45_predictive = []
+    lead_time_48_predictive = []
+    lead_time_51_predictive = []
+    lead_time_54_predictive = []
+    lead_time_57_predictive = []
+    lead_time_60_predictive = []
+    lead_time_63_predictive = []
+    lead_time_66_predictive = []
+    lead_time_69_predictive = []
+    lead_time_72_predictive = []
+    lead_time_75_predictive = []
+    lead_time_78_predictive = []
 
-y_pred = model.predict(x)
-print('predicted response:', y_pred, sep='\n')
-'''
+    for i, j in zip(predictive[0:8], practical):
+        if float(predictive[i][5]) >= 9999 or math.isnan(float(practical[i][5])):
+            continue
+        else:
+            pass
+    for i, j in zip(predictive[8:16], practical):
+        if float(predictive[i][5]) >= 9999 or math.isnan(float(practical[i][5])):
+            continue
+        else:
+            pass
+    for i, j in zip(predictive[16:24], practical):
+        if float(predictive[i][5]) >= 9999 or math.isnan(float(practical[i][5])):
+            continue
+        else:
+            pass
+    for i, j in zip(predictive[24:27], practical):
+        if float(predictive[i][5]) >= 9999 or math.isnan(float(practical[i][5])):
+            continue
+        else:
+            pass
+
+
 main()
