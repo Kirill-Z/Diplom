@@ -16,11 +16,9 @@ def write_in_speed_predictive(lead_time: str, speed_wind_predictive):
     return local_speed_wind
 
 
-def get_forecast_data():
-    calc_time = int(input('Press 1 if you want to read the regression for the season or 2 if you want to read the '
-                          'regression for the lead time'))
+def get_forecast_data(calc_time):
     if calc_time == 1:
-        tmp = input('Press 1 if you want to calculate values')
+        tmp = input('Press 1 if you want to calculate values: ')
         if tmp == "1":
             value = input(
                 "Forecast data: If you need to calculate a point, press 1, if you need to calculate an area, press 2: ")
@@ -29,7 +27,7 @@ def get_forecast_data():
             elif value == '2':
                 wind_forecast.main(value)
 
-        current_file = "/home/kirill/Downloads/Data/gfs/2016/list_data_by_season"  # Path to the predicted wind speed file
+        current_file = "/home/kirill/Downloads/Data/gfs/list_data_by_season"  # Path to the predicted wind speed file
         file_reader = pd.read_csv(current_file, sep=';', header=None, engine='python')
         speed_wind_predictive = file_reader.values.tolist()
     elif calc_time == 2:
@@ -105,7 +103,6 @@ def division_of_data_by_seasons(predictive, practical):
     else:
         length_list_data = len(predictive)
 
-    print(length_list_data)
     for i in range(0, length_list_data):
         if float(predictive[i][5]) >= 9999 or math.isnan(float(practical[i][5])):
             continue
@@ -162,26 +159,96 @@ def division_of_data_by_seasons(predictive, practical):
     return predictive_winter, predictive_spring, predictive_summer, predictive_autumn, practical_winter, practical_spring, practical_summer, practical_autumn
 
 
-def linear_regression_by_season(predictant, predictor):
+def division_of_data_by_seasons_for_forecast(forecast):
+    forecast_winter = []
+    forecast_spring = []
+    forecast_summer = []
+    forecast_autumn = []
+
+
+
+    for i in range(0, len(forecast)):
+        if float(forecast[i][5]) >= 9999:
+            continue
+        else:
+            month = str(forecast[i][0][4:6])
+            if month == '11':
+                forecast_winter.append(forecast[i][5])
+
+            if month == '12':
+                forecast_winter.append(forecast[i][5])
+
+            if month in ('01', '1-'):
+                forecast_winter.append(forecast[i][5])
+
+            if month in ('02', '2-'):
+                forecast_winter.append(forecast[i][5])
+
+            if month in ('03', '3-'):
+                forecast_winter.append(forecast[i][5])
+
+            if month in ('04', '4-'):
+                forecast_spring.append(forecast[i][5])
+
+            if month in ('05', '5-'):
+                forecast_spring.append(forecast[i][5])
+
+            if month in ('06', '6-'):
+                forecast_summer.append(forecast[i][5])
+
+            if month in ('07', '7-'):
+                forecast_summer.append(forecast[i][5])
+
+            if month in ('08', '8-'):
+                forecast_summer.append(forecast[i][5])
+
+            if month in ('09', '9-'):
+                forecast_autumn.append(forecast[i][5])
+
+            if month == '10':
+                forecast_autumn.append(forecast[i][5])
+
+    return forecast_winter, forecast_spring, forecast_summer, forecast_autumn
+
+
+def linear_regression_by_season(predictant, predictor, forecast, speed_wind_practical_2018):
     x = np.array(predictant).reshape((-1, 1))
-    y = np.array(predictor)
-    print(x)
-    print(y)
+    y = np.array(predictor).reshape((-1, 1))
+    speed_wind_practical_2018 = np.array(speed_wind_practical_2018).reshape((-1, 1))
+    forecast = np.array(forecast).reshape((-1, 1))
+    #print(x)
+    #print(y)
+    print(speed_wind_practical_2018)
     model = LinearRegression().fit(x, y)
-    y_pred = model.predict(x)
-    print('predicted response:', y_pred, sep='\n')
-    plt.plot(x, y_pred)
+    print('intercept:', model.intercept_)
+    print('slope:', model.coef_)
+    y_pred = model.predict(speed_wind_practical_2018)
+    #print('predicted response:', y_pred, sep='\n')
+    print(len(y_pred))
+    #plt.scatter(speed_wind_practical_2018, forecast, color='gray')
+    plt.plot(speed_wind_practical_2018, y_pred)
     plt.show()
 
+
 def main():
+    value = int(input('Press 1 if linear regression by season or press 2 for lead time: '))
     np.set_printoptions(threshold=sys.maxsize)
-    speed_wind_predictive = get_forecast_data()
-    speed_wind_practical = get_observation_data()
-    value = int(input('Press 1 if linear regression by season or press 2 for lead time'))
+    speed_wind_predictive = get_forecast_data(value)
+    speed_wind_practical, speed_wind_practical_2018 = get_observation_data()
+
     if value == 1:
         predictive_winter, predictive_spring, predictive_summer, predictive_autumn, practical_winter, practical_spring, practical_summer, practical_autumn = division_of_data_by_seasons(speed_wind_predictive, speed_wind_practical)
 
-        linear_regression_by_season(practical_winter, predictive_winter)
+        current_file = "/home/kirill/Downloads/Data/gfs/list_data_by_season_forecast"  # Path to the predicted wind speed file
+        file_reader = pd.read_csv(current_file, sep=';', header=None, engine='python')
+        forecast = file_reader.values.tolist()
+
+        forecast_winter, forecast_spring, forecast_summer, forecast_autumn, pr_winter, pr_spring, pr_summer, pr_autumn = division_of_data_by_seasons(forecast, speed_wind_practical_2018)
+
+        linear_regression_by_season(practical_winter, predictive_winter, forecast_winter, pr_winter)
+        linear_regression_by_season(practical_spring, predictive_spring, forecast_spring, pr_spring)
+        linear_regression_by_season(practical_summer, predictive_summer, forecast_summer, pr_summer)
+        linear_regression_by_season(practical_autumn, predictive_autumn, forecast_autumn, pr_autumn)
     if value == 2:
         pass
 

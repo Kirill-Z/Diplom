@@ -2,7 +2,7 @@ import pandas as pd
 import os
 import re
 
-PATH = "/home/kirill/Downloads/Data/gfs/2016/"
+PATH = "/home/kirill/Downloads/Data/gfs/"
 
 
 # Calculation of the point number based on the specified coordinates
@@ -267,44 +267,85 @@ def choice_speed_data_with_lead_time(speed_wind):
 def main(value):
     reference_num = 0
     speed_wind = []
+    speed_wind_for_forecast_data = []
 
     if value == '1':
         points_to_calculate = calculation_of_the_point_number() + 1
-        for file in sorted(os.listdir(PATH)):
-            if re.match('\d{10}_([0,1][0-9]|21)', file):
-                current_file = PATH + file
-                file_reader = pd.read_csv(current_file, sep='/s', skiprows=1, header=None, engine='python')
-                data_from_file = file_reader.values.tolist()
-                num_rows = 0
-                for i in range(0, 70):
-                    data_from_file[i] = data_from_file[i][0].split()
-                    if (data_from_file[i][0] == "04" or "05") and data_from_file[i][1] == '21':
-                        if data_from_file[i][0] == '04':
-                            correct_data_UGRD = calc_point(data_from_file,
-                                                           getting_need_data_for_point(points_to_calculate,
-                                                                                       data_from_file, num_rows),
-                                                           num_rows)
-                        if data_from_file[i][0] == '05':
-                            correct_data_VGRD = calc_point(data_from_file,
-                                                           getting_need_data_for_point(points_to_calculate,
-                                                                                       data_from_file, num_rows),
-                                                           num_rows)
+        for dirs in sorted(os.listdir(PATH)):
+            if re.match('201[6,7]', dirs):
+                for file in sorted(os.listdir(PATH + dirs)):
+                    if re.match('\d{10}_([0,1][0-9]|21)', file):
+                        current_file = PATH + dirs + '/' + file
+                        file_reader = pd.read_csv(current_file, sep='/s', skiprows=1, header=None, engine='python')
+                        data_from_file = file_reader.values.tolist()
+                        num_rows = 0
+                        for i in range(0, 70):
+                            data_from_file[i] = data_from_file[i][0].split()
+                            if (data_from_file[i][0] == "04" or "05") and data_from_file[i][1] == '21':
+                                if data_from_file[i][0] == '04':
+                                    correct_data_UGRD = calc_point(data_from_file,
+                                                                   getting_need_data_for_point(points_to_calculate,
+                                                                                               data_from_file,
+                                                                                               num_rows),
+                                                                   num_rows)
+                                if data_from_file[i][0] == '05':
+                                    correct_data_VGRD = calc_point(data_from_file,
+                                                                   getting_need_data_for_point(points_to_calculate,
+                                                                                               data_from_file,
+                                                                                               num_rows),
+                                                                   num_rows)
 
-                    num_rows += 1
+                            num_rows += 1
 
-                speed_wind.append(calculation_wind_speed(correct_data_VGRD, correct_data_UGRD, file))
+                        speed_wind.append(calculation_wind_speed(correct_data_VGRD, correct_data_UGRD, file))
 
-                calculates_the_day_based_on_the_lead_time(speed_wind, reference_num)
-                calculates_month_based_on_day(speed_wind, reference_num)
-                calculation_of_the_year_based_on_month(speed_wind, reference_num)
-                reference_num += 1
+                        calculates_the_day_based_on_the_lead_time(speed_wind, reference_num)
+                        calculates_month_based_on_day(speed_wind, reference_num)
+                        calculation_of_the_year_based_on_month(speed_wind, reference_num)
+                        reference_num += 1
+
+            elif re.match('2018', dirs):
+                for file in sorted(os.listdir(PATH + dirs)):
+                    if re.match('\d{10}_([0,1][0-9]|21)', file):
+                        current_file = PATH + dirs + '/' + file
+                        file_reader = pd.read_csv(current_file, sep='/s', skiprows=1, header=None, engine='python')
+                        data_from_file = file_reader.values.tolist()
+                        num_rows = 0
+                        for i in range(0, 70):
+                            data_from_file[i] = data_from_file[i][0].split()
+                            if (data_from_file[i][0] == "04" or "05") and data_from_file[i][1] == '21':
+                                if data_from_file[i][0] == '04':
+                                    correct_data_UGRD = calc_point(data_from_file,
+                                                                   getting_need_data_for_point(points_to_calculate,
+                                                                                               data_from_file,
+                                                                                               num_rows),
+                                                                   num_rows)
+                                if data_from_file[i][0] == '05':
+                                    correct_data_VGRD = calc_point(data_from_file,
+                                                                   getting_need_data_for_point(points_to_calculate,
+                                                                                               data_from_file,
+                                                                                               num_rows),
+                                                                   num_rows)
+
+                            num_rows += 1
+
+                        speed_wind_for_forecast_data.append(
+                            calculation_wind_speed(correct_data_VGRD, correct_data_UGRD, file))
+
+                        calculates_the_day_based_on_the_lead_time(speed_wind_for_forecast_data, reference_num)
+                        calculates_month_based_on_day(speed_wind_for_forecast_data, reference_num)
+                        calculation_of_the_year_based_on_month(speed_wind_for_forecast_data, reference_num)
+                        reference_num += 1
+
+
+
 
     elif value == '2':
         low_point_number, top_point_number = calculation_of_the_area_of_points()
         low_point_number += 1
         top_point_number += 1
         for file in sorted(os.listdir(PATH)):
-            if re.match('\d{10}_([0,1][0-9]|21)', file):
+            if re.match('\d{3}[6,7]\d{6}_([0,1][0-9]|21)', file):
                 current_file = PATH + file
                 file_reader = pd.read_csv(current_file, sep='/s', skiprows=1, header=None, engine='python')
                 data_from_file = file_reader.values.tolist()
@@ -334,7 +375,9 @@ def main(value):
                 calculates_month_based_on_day(speed_wind, reference_num)
                 calculation_of_the_year_based_on_month(speed_wind, reference_num)
                 reference_num += 1
+
     write_in_file('list_data_by_season', speed_wind)
+    write_in_file('list_data_by_season_forecast', speed_wind_for_forecast_data)
     return choice_speed_data_with_lead_time(speed_wind)
 
 
@@ -410,3 +453,5 @@ def main_for_difference_lead_time(value):
     write_list_in_file_with_lead_time('list_data', speed_wind_with_lead_time)
 
     return speed_wind_with_lead_time
+
+

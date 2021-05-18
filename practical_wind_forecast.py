@@ -2,7 +2,7 @@ import pandas as pd
 import os
 import re
 
-PATH = "/home/kirill/Downloads/Data/АВ6/2016/"
+PATH = "/home/kirill/Downloads/Data/АВ6/"
 
 
 def add_data_to_the_speed_list(file, data, i):
@@ -113,19 +113,39 @@ def calc_for_a_range_with_every_minute(file, data_from_file, speed_wind, num_rec
 
 def main(value: str):
     speed_wind = []
+    speed_wind_practical = []
     num_record = 0
-    for dirs in sorted(os.listdir(PATH)):
-        for file in sorted(os.listdir(PATH + dirs)):
-            if re.match('av*', file):
-                currentFile = PATH + dirs + '/' + file
-                file_reader = pd.read_csv(currentFile, sep=';', header=None, engine='python')
-                data_from_file = file_reader.values.tolist()
-                if value == '1':
-                    speed_wind = calc_hour_by_hour(file, data_from_file, speed_wind)
-                if value == '2':
-                    speed_wind = calc_time_range(file, data_from_file, speed_wind, num_record)
-                if value == '3':
-                    speed_wind = calc_for_a_range_with_every_minute(file, data_from_file, speed_wind, num_record)
-    return speed_wind
+    for dirs1 in sorted(os.listdir(PATH)):
+        if re.match('201[6,7]', dirs1):
+            for dirs2 in sorted(os.listdir(PATH + dirs1)):
+                for file in sorted(os.listdir(PATH + dirs1 + '/' + dirs2)):
+                    if re.match('av*', file):
+                        currentFile = PATH + dirs1 + '/' + dirs2 + '/' + file
+                        file_reader = pd.read_csv(currentFile, sep=';', header=None, engine='python')
+                        data_from_file = file_reader.values.tolist()
+                        if value == '1':
+                            speed_wind = calc_hour_by_hour(file, data_from_file, speed_wind)
+                        if value == '2':
+                            speed_wind = calc_time_range(file, data_from_file, speed_wind, num_record)
+                        if value == '3':
+                            speed_wind = calc_for_a_range_with_every_minute(file, data_from_file, speed_wind,
+                                                                            num_record)
 
-main('1')
+        if re.match('2018', dirs1):
+            for dirs2 in sorted(os.listdir(PATH + dirs1)):
+                for file in sorted(os.listdir(PATH + dirs1 + '/' + dirs2)):
+                    if re.match('av*', file):
+                        currentFile = PATH + dirs1 + '/' + dirs2 + '/' + file
+                        file_reader = pd.read_csv(currentFile, sep=';', header=None, engine='python')
+                        data_from_file = file_reader.values.tolist()
+                        if value == '1':
+                            speed_wind_practical = calc_hour_by_hour(file, data_from_file, speed_wind_practical)
+                        if value == '2':
+                            speed_wind_practical = calc_time_range(file, data_from_file, speed_wind_practical, num_record)
+                        if value == '3':
+                            speed_wind_practical = calc_for_a_range_with_every_minute(file, data_from_file, speed_wind_practical,
+                                                                            num_record)
+
+    return speed_wind, speed_wind_practical
+
+
