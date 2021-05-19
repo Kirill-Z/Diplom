@@ -268,7 +268,7 @@ def choice_speed_data_with_lead_time(speed_wind):
 
 def get_wind_speed_for_point(dirs, points_to_calculate, speed_wind, reference_num):
     for file in sorted(os.listdir(PATH + dirs)):
-        if re.match('\d{10}_([0,1][0-9]|21)', file):
+        if re.match('\d{10}_\d{2}', file):
             current_file = PATH + dirs + '/' + file
             file_reader = pd.read_csv(current_file, sep='/s', skiprows=1, header=None, engine='python')
             data_from_file = file_reader.values.tolist()
@@ -305,7 +305,7 @@ def get_wind_speed_for_point(dirs, points_to_calculate, speed_wind, reference_nu
 def get_wind_speed_for_area(dirs, low_point_number, top_point_number, reference_num):
     speed_wind = []
     for file in sorted(os.listdir(PATH + dirs)):
-        if re.match('\d{10}_([0,1][0-9]|21)', file):
+        if re.match('\d{10}_\d{2}', file):
             current_file = PATH + dirs + '/' + file
             file_reader = pd.read_csv(current_file, sep='/s', skiprows=1, header=None, engine='python')
             data_from_file = file_reader.values.tolist()
@@ -403,5 +403,4 @@ def main_for_difference_lead_time(value):
     write_in_file('list_data_for_lead_time_forecast', speed_wind_for_forecast_data)
 
     return speed_wind
-
 
