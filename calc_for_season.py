@@ -17,7 +17,7 @@ def get_forecast_data():
         elif value == '2':
             wind_forecast.main(value)
 
-    current_file = "/home/kirill/Downloads/Data/gfs/2016/list_data_by_season"  # Path to the predicted wind speed file
+    current_file = "/home/kirill/Downloads/Data/gfs/list_data_by_season"  # Path to the predicted wind speed file
     file_reader = pd.read_csv(current_file, sep=';', header=None, engine='python')
     speed_wind_predictive = file_reader.values.tolist()
     return speed_wind_predictive

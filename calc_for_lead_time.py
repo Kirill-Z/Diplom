@@ -24,7 +24,7 @@ def get_forecat_data():
         elif value == '2':
             wind_forecast.main_for_difference_lead_time(value)
 
-    current_file = "/home/kirill/Downloads/Data/gfs/2016/list_data"  # Path to the predicted wind speed file
+    current_file = "/home/kirill/Downloads/Data/gfs/list_data"  # Path to the predicted wind speed file
     file_reader = pd.read_csv(current_file, sep=';', header=None, engine='python')
     speed_wind_predictive_true = []
     speed_wind_predictive = file_reader.values.tolist()
