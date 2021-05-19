@@ -135,7 +135,7 @@ def write_data_to_a_file(speed, write_file, name_file):  # For convenient output
     return print('End of writing to file')
 
 
-def write_in_file(write_file, list_data):
+def write_in_file(PATH, write_file, list_data):
     my_file = open(PATH + write_file, 'w')
     for i in range(0, len(list_data)):
         for j in range(0, len(list_data[i])):
@@ -366,8 +366,8 @@ def main(value):
                 speed_wind_for_forecast_data = get_wind_speed_for_area(dirs,low_point_number, top_point_number, reference_num)
 
 
-    write_in_file('list_data_by_season', speed_wind)
-    write_in_file('list_data_by_season_forecast', speed_wind_for_forecast_data)
+    write_in_file(PATH, 'list_data_by_season', speed_wind)
+    write_in_file(PATH, 'list_data_by_season_forecast', speed_wind_for_forecast_data)
 
     return choice_speed_data_with_lead_time(speed_wind)
 
