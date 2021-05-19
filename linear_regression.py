@@ -2,11 +2,10 @@ import math
 import numpy as np
 import pandas as pd
 from sklearn.linear_model import LinearRegression
-import wind_forecast
-import practical_wind_forecast
 import sys
 import matplotlib.pyplot as plt
 import correl_coef_for_lead_time as correl
+import get_data_from_file
 
 
 def write_in_speed_predictive(lead_time: str, speed_wind_predictive):
@@ -17,58 +16,6 @@ def write_in_speed_predictive(lead_time: str, speed_wind_predictive):
     return local_speed_wind
 
 
-def get_forecast_data(calc_time):
-    if calc_time == 1:
-        tmp = input('Press 1 if you want to calculate values: ')
-        if tmp == "1":
-            value = input(
-                "Forecast data: If you need to calculate a point, press 1, if you need to calculate an area, press 2: ")
-            if value == '1':
-                wind_forecast.main(value)
-            elif value == '2':
-                wind_forecast.main(value)
-
-        current_file = "/home/kirill/Downloads/Data/gfs/list_data_by_season"  # Path to the predicted wind speed file
-        file_reader = pd.read_csv(current_file, sep=';', header=None, engine='python')
-        speed_wind_predictive = file_reader.values.tolist()
-    elif calc_time == 2:
-        tmp = input('Press 1 if you want to calculate values')
-        if tmp == "1":
-            value = input(
-                "Forecast data: If you need to calculate a point, press 1, if you need to calculate an area, press 2: ")
-            if value == '1':
-                wind_forecast.main_for_difference_lead_time(value)
-            elif value == '2':
-                wind_forecast.main_for_difference_lead_time(value)
-
-        current_file = "/home/kirill/Downloads/Data/gfs/list_data_for_lead_time"  # Path to the predicted wind speed file
-        file_reader = pd.read_csv(current_file, sep=';', header=None, engine='python')
-        speed_wind_predictive = []
-        speed_wind = file_reader.values.tolist()
-
-        lead_time = (
-            '00', '03', '06', '09', '12', '15', '18', '21', '24', '27', '30', '33', '36', '39', '42', '45', '48', '51',
-            '54', '57', '60', '63', '66', '69', '72', '75', '78')
-
-        for i in lead_time:
-            speed_wind_predictive.append(write_in_speed_predictive(i, speed_wind))
-
-    return speed_wind_predictive
-
-
-def get_observation_data():
-    value = input("Practical data: If you need to calculate a point, press 1, if you need to calculate an area, "
-                  "press 2 or 3: ")
-    if value == '1':
-        speed_wind_practical = practical_wind_forecast.main(value)
-    elif value == '2':
-        speed_wind_practical = practical_wind_forecast.main(value)
-    elif value == '3':
-        speed_wind_practical = practical_wind_forecast.main(value)
-
-    return speed_wind_practical
-
-'''
 def clear_data(predictive, practical):
     if len(predictive) < len(practical):
         tmp = int(len(predictive))
@@ -85,7 +32,6 @@ def clear_data(predictive, practical):
             speed_wind_predictive.append(predictive[i])
 
     return speed_wind_practical, speed_wind_predictive
-'''
 
 
 def division_of_data_by_seasons(predictive, practical):
@@ -183,8 +129,8 @@ def linear_regression_by_season(predictant, predictor, forecast, speed_wind_prac
 def main():
     value = int(input('Press 1 if linear regression by season or press 2 for lead time: '))
     np.set_printoptions(threshold=sys.maxsize)
-    speed_wind_predictive = get_forecast_data(value)
-    speed_wind_practical, speed_wind_practical_2018 = get_observation_data()
+    speed_wind_predictive = get_data_from_file.forecast_data(value)
+    speed_wind_practical, speed_wind_practical_2018 = get_data_from_file.observation_data()
 
     if value == 1:
         predictive_winter, predictive_spring, predictive_summer, predictive_autumn, practical_winter, practical_spring, practical_summer, practical_autumn = division_of_data_by_seasons(speed_wind_predictive, speed_wind_practical)
