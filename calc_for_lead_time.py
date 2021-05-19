@@ -1,6 +1,6 @@
 import pandas as pd
 import wind_forecast
-import practical_wind_forecast
+import practical_wind
 import difference_for_lead_time as difference
 import abs_error_for_lead_time as abs
 import root_mean_square_error_for_lead_time as rmse
@@ -39,7 +39,7 @@ def get_forecat_data():
 
 
 def get_observation_data():
-    speed_wind_practical = practical_wind_forecast.main('1')
+    speed_wind_practical = practical_wind.main('1')
     return speed_wind_practical
 
 
