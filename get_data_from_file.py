@@ -1,5 +1,5 @@
 import wind_forecast
-import practical_wind_forecast
+import practical_wind
 import pandas as pd
 
 
@@ -25,11 +25,11 @@ def observation_data():
         value = input("Practical data: If you need to calculate a point, press 1, if you need to calculate an area, "
                       "press 2 or 3: ")
         if value == '1':
-            practical_wind_forecast.main(value)
+            practical_wind.main(value)
         elif value == '2':
-            practical_wind_forecast.main(value)
+            practical_wind.main(value)
         elif value == '3':
-            practical_wind_forecast.main(value)
+            practical_wind.main(value)
 
     current_file = "/home/kirill/Downloads/Data/АВ6/practical_data_training"  # Path to the predicted wind speed file
     file_reader = pd.read_csv(current_file, sep=';', header=None, engine='python')
