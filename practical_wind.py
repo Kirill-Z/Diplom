@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 import re
+import wind_forecast
 
 PATH = "/home/kirill/Downloads/Data/АВ6/"
 
@@ -117,6 +118,7 @@ def main(value: str):
     num_record = 0
     for dirs1 in sorted(os.listdir(PATH)):
         if re.match('201[6,7]', dirs1):
+            print(dirs1)
             for dirs2 in sorted(os.listdir(PATH + dirs1)):
                 for file in sorted(os.listdir(PATH + dirs1 + '/' + dirs2)):
                     if re.match('av*', file):
@@ -132,6 +134,7 @@ def main(value: str):
                                                                             num_record)
 
         if re.match('2018', dirs1):
+            print(dirs1)
             for dirs2 in sorted(os.listdir(PATH + dirs1)):
                 for file in sorted(os.listdir(PATH + dirs1 + '/' + dirs2)):
                     if re.match('av*', file):
@@ -146,6 +149,8 @@ def main(value: str):
                             speed_wind_practical = calc_for_a_range_with_every_minute(file, data_from_file, speed_wind_practical,
                                                                             num_record)
 
+    wind_forecast.write_in_file(PATH, 'practical_data_training', speed_wind)
+    wind_forecast.write_in_file(PATH, 'practical_data_test', speed_wind_practical)
     return speed_wind, speed_wind_practical
 
 
