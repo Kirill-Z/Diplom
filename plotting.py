@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 from matplotlib import dates
 import datetime as dt
+import matplotlib.ticker as ticker
+import matplotlib.axis as ax
 
 def plotting_wind_speed(data, data_format, num_param, color, label):
     lengthData = len(data)
@@ -31,4 +33,22 @@ def plotting_wind_speed(data, data_format, num_param, color, label):
     plt.scatter(x_data, y_data, label=label, edgecolors=color)
     plt.legend()
     plt.gcf().autofmt_xdate()
+
+
+def plotting_graph_for_error(data, text_information, chart_signature):
+
+    x_data = []
+    y_data = []
+
+    for i in range(0, len(data)):
+            x_data.append(data[i][0])
+            y_data.append(data[i][1])
+
+    plt.xlabel('Заблаговременность')
+    plt.ylabel('Оценка')
+    plt.xticks(x_data)
+    plt.title(chart_signature)
+    plt.scatter(x_data, y_data)
+    plt.plot(x_data, y_data, label=text_information)
+    plt.legend()
 
