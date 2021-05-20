@@ -112,51 +112,89 @@ def calc_for_a_range_with_every_minute(file, data_from_file, speed_wind, num_rec
     return speed_wind
 
 
+'''def get_speed_wind_practical_from_file(dirs1):
+    for dirs2 in sorted(os.listdir(PATH + dirs1)):
+        for file in sorted(os.listdir(PATH + dirs1 + '/' + dirs2)):
+            if re.match('av*', file):
+                currentFile = PATH + dirs1 + '/' + dirs2 + '/' + file
+                file_reader = pd.read_csv(currentFile, sep=';', header=None, engine='python')
+                data_from_file = file_reader.values.tolist()
+    return file, data_from_file'''
+
+
 def main(value: str):
     speed_wind = []
     speed_wind_practical = []
     num_record = 0
-    for dirs1 in sorted(os.listdir(PATH)):
-        if re.match('201[6,7]', dirs1):
-            print(dirs1)
-            for dirs2 in sorted(os.listdir(PATH + dirs1)):
-                for file in sorted(os.listdir(PATH + dirs1 + '/' + dirs2)):
-                    if re.match('av*', file):
-                        currentFile = PATH + dirs1 + '/' + dirs2 + '/' + file
-                        file_reader = pd.read_csv(currentFile, sep=';', header=None, engine='python')
-                        data_from_file = file_reader.values.tolist()
-                        if value == '1':
+    if value == '1':
+        for dirs1 in sorted(os.listdir(PATH)):
+            if re.match('201[6,7]', dirs1):
+                for dirs2 in sorted(os.listdir(PATH + dirs1)):
+                    for file in sorted(os.listdir(PATH + dirs1 + '/' + dirs2)):
+                        if re.match('av*', file):
+                            currentFile = PATH + dirs1 + '/' + dirs2 + '/' + file
+                            file_reader = pd.read_csv(currentFile, sep=';', header=None, engine='python')
+                            data_from_file = file_reader.values.tolist()
                             speed_wind = calc_hour_by_hour(file, data_from_file, speed_wind)
-                            wind_forecast.write_in_file(PATH, 'practical_data_training_hour_by_hour', speed_wind)
-                        if value == '2':
-                            speed_wind = calc_time_range(file, data_from_file, speed_wind, num_record)
-                            wind_forecast.write_in_file(PATH, 'practical_data_training_time_range', speed_wind)
-                        if value == '3':
-                            speed_wind = calc_for_a_range_with_every_minute(file, data_from_file, speed_wind,
-                                                                            num_record)
-                            wind_forecast.write_in_file(PATH, 'practical_data_training_time_range_with_every_minute',
-                                                        speed_wind)
 
-        if re.match('2018', dirs1):
-            print(dirs1)
-            for dirs2 in sorted(os.listdir(PATH + dirs1)):
-                for file in sorted(os.listdir(PATH + dirs1 + '/' + dirs2)):
-                    if re.match('av*', file):
-                        currentFile = PATH + dirs1 + '/' + dirs2 + '/' + file
-                        file_reader = pd.read_csv(currentFile, sep=';', header=None, engine='python')
-                        data_from_file = file_reader.values.tolist()
-                        if value == '1':
+
+            if re.match('2018', dirs1):
+                for dirs2 in sorted(os.listdir(PATH + dirs1)):
+                    for file in sorted(os.listdir(PATH + dirs1 + '/' + dirs2)):
+                        if re.match('av*', file):
+                            currentFile = PATH + dirs1 + '/' + dirs2 + '/' + file
+                            file_reader = pd.read_csv(currentFile, sep=';', header=None, engine='python')
+                            data_from_file = file_reader.values.tolist()
                             speed_wind_practical = calc_hour_by_hour(file, data_from_file, speed_wind_practical)
-                            wind_forecast.write_in_file(PATH, 'practical_data_test_hour_by_hour', speed_wind_practical)
-                        if value == '2':
-                            speed_wind_practical = calc_time_range(file, data_from_file, speed_wind_practical,
-                                                                   num_record)
-                            wind_forecast.write_in_file(PATH, 'practical_data_test_time_range', speed_wind_practical)
-                        if value == '3':
-                            speed_wind_practical = calc_for_a_range_with_every_minute(file, data_from_file,
-                                                                                      speed_wind_practical,num_record)
-                            wind_forecast.write_in_file(PATH, 'practical_data_test_time_range_with_every_minute',
-                                                        speed_wind_practical)
+        print(speed_wind)
+        wind_forecast.write_in_file(PATH, 'practical_data_training_hour_by_hour', speed_wind)
+        wind_forecast.write_in_file(PATH, 'practical_data_test_hour_by_hour', speed_wind_practical)
+
+    if value == '2':
+        for dirs1 in sorted(os.listdir(PATH)):
+            if re.match('201[6,7]', dirs1):
+                for dirs2 in sorted(os.listdir(PATH + dirs1)):
+                    for file in sorted(os.listdir(PATH + dirs1 + '/' + dirs2)):
+                        if re.match('av*', file):
+                            currentFile = PATH + dirs1 + '/' + dirs2 + '/' + file
+                            file_reader = pd.read_csv(currentFile, sep=';', header=None, engine='python')
+                            data_from_file = file_reader.values.tolist()
+                            speed_wind = calc_time_range(file, data_from_file, speed_wind, num_record)
+
+            if re.match('2018', dirs1):
+                for dirs2 in sorted(os.listdir(PATH + dirs1)):
+                    for file in sorted(os.listdir(PATH + dirs1 + '/' + dirs2)):
+                        if re.match('av*', file):
+                            currentFile = PATH + dirs1 + '/' + dirs2 + '/' + file
+                            file_reader = pd.read_csv(currentFile, sep=';', header=None, engine='python')
+                            data_from_file = file_reader.values.tolist()
+                            speed_wind_practical = calc_time_range(file, data_from_file, speed_wind_practical, num_record)
+
+        wind_forecast.write_in_file(PATH, 'practical_data_training_time_range', speed_wind)
+        wind_forecast.write_in_file(PATH, 'practical_data_test_time_range', speed_wind_practical)
+
+    if value == '3':
+        for dirs1 in sorted(os.listdir(PATH)):
+            if re.match('201[6,7]', dirs1):
+                for dirs2 in sorted(os.listdir(PATH + dirs1)):
+                    for file in sorted(os.listdir(PATH + dirs1 + '/' + dirs2)):
+                        if re.match('av*', file):
+                            currentFile = PATH + dirs1 + '/' + dirs2 + '/' + file
+                            file_reader = pd.read_csv(currentFile, sep=';', header=None, engine='python')
+                            data_from_file = file_reader.values.tolist()
+                            speed_wind = calc_for_a_range_with_every_minute(file, data_from_file, speed_wind, num_record)
+
+            if re.match('2018', dirs1):
+                for dirs2 in sorted(os.listdir(PATH + dirs1)):
+                    for file in sorted(os.listdir(PATH + dirs1 + '/' + dirs2)):
+                        if re.match('av*', file):
+                            currentFile = PATH + dirs1 + '/' + dirs2 + '/' + file
+                            file_reader = pd.read_csv(currentFile, sep=';', header=None, engine='python')
+                            data_from_file = file_reader.values.tolist()
+                            speed_wind_practical = calc_for_a_range_with_every_minute(file, data_from_file, speed_wind_practical,
+                                                                          num_record)
+        wind_forecast.write_in_file(PATH, 'practical_data_training_time_range_with_every_minute', speed_wind)
+        wind_forecast.write_in_file(PATH, 'practical_data_test_time_range_with_every_minute', speed_wind_practical)
 
     return speed_wind, speed_wind_practical
 
