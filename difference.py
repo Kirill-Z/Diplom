@@ -15,7 +15,7 @@ def get_diff_for_season_and_lead_time(lead_time_forecast, lead_time_practical):
         lead_time += 3
 
     for predictive, practical in zip(lead_time_forecast[16: 24], lead_time_practical):
-        average_diff.append([lead_time,calc_the_average_diff(calc_error.get_need_data(predictive), practical)])
+        average_diff.append([lead_time, calc_the_average_diff(calc_error.get_need_data(predictive), practical)])
         lead_time += 3
 
     for predictive, practical in zip(lead_time_forecast[24:27], lead_time_practical[0:3]):
