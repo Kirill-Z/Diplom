@@ -345,6 +345,7 @@ def main(value):
     reference_num = 0
     speed_wind = []
     speed_wind_for_forecast_data = []
+    print('Hello')
     if value == '1':
         points_to_calculate = calculation_of_the_point_number() + 1
         for dirs in sorted(os.listdir(PATH)):
@@ -371,40 +372,4 @@ def main(value):
         write_in_file(PATH, 'list_data_by_with_area', speed_wind)
         write_in_file(PATH, 'list_data_by_forecast_with_area', speed_wind_for_forecast_data)
 
-
-
-    return 0
-
-
-def main_for_difference_lead_time(value):
-    reference_num = 0
-    speed_wind = []
-    speed_wind_for_forecast_data = []
-    if value == '1':
-        points_to_calculate = calculation_of_the_point_number() + 1
-        for dirs in sorted(os.listdir(PATH)):
-            if re.match('201[6,7]', dirs):
-                get_wind_speed_for_point(dirs, points_to_calculate, speed_wind, reference_num)
-            elif re.match('2018', dirs):
-                reference_num = 0
-                get_wind_speed_for_point(dirs, points_to_calculate, speed_wind_for_forecast_data, reference_num)
-    elif value == '2':
-        low_point_number, top_point_number = calculation_of_the_area_of_points()
-        low_point_number += 1
-        top_point_number += 1
-        for dirs in sorted(os.listdir(PATH)):
-            if re.match('201[6,7]', dirs):
-                speed_wind = get_wind_speed_for_area(dirs, low_point_number, top_point_number, reference_num)
-            elif re.match('2018', dirs):
-                reference_num = 0
-                speed_wind_for_forecast_data = get_wind_speed_for_area(dirs, low_point_number, top_point_number,
-                                                                       reference_num)
-
-    #speed_wind_with_lead_time = splitting_speed_by_lead_time(speed_wind)
-    #speed_wind_with_lead_time_for_forecast_data = splitting_speed_by_lead_time(speed_wind_for_forecast_data)
-
-    write_in_file('list_data_for_lead_time', speed_wind)
-    write_in_file('list_data_for_lead_time_forecast', speed_wind_for_forecast_data)
-
-    return speed_wind
-
+    return speed_wind, speed_wind_for_forecast_data
