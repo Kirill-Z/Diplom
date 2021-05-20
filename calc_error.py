@@ -3,6 +3,8 @@ import abs_error as abs
 import root_mean_square_error as rmse
 import correl_coef as correl
 import get_data_from_file
+import plotting
+import matplotlib.pyplot as plt
 
 
 def get_need_data(data):
@@ -261,8 +263,14 @@ def main():
         df.print_average_diff('весенний', average_diff_spring)
         df.print_average_diff('летний', average_diff_summer)
         df.print_average_diff('осенний', average_diff_autumn)
-    if estimate == 2:
 
+        plotting.plotting_graph_for_error(average_diff_winter, 'Зимний период', 'Средняя арифметическая погрешность')
+        plotting.plotting_graph_for_error(average_diff_spring, 'Весенний период', 'Средняя арифметическая погрешность')
+        plotting.plotting_graph_for_error(average_diff_summer, 'Летний период', 'Средняя арифметическая погрешность')
+        plotting.plotting_graph_for_error(average_diff_autumn, 'Осенний период', 'Средняя арифметическая погрешность')
+        plt.show()
+
+    if estimate == 2:
         abs_diff_winter = abs.get_diff_abs_for_season_and_lead_time(lead_time_forecast_winter, lead_time_practical_winter)
         abs_diff_spring = abs.get_diff_abs_for_season_and_lead_time(lead_time_forecast_spring, lead_time_practical_spring)
         abs_diff_summer = abs.get_diff_abs_for_season_and_lead_time(lead_time_forecast_summer, lead_time_practical_summer)
@@ -272,8 +280,14 @@ def main():
         abs.print_average_diff_abs('весенний', abs_diff_spring)
         abs.print_average_diff_abs('летний',   abs_diff_summer)
         abs.print_average_diff_abs('осенний',  abs_diff_autumn)
-    if estimate == 3:
 
+        plotting.plotting_graph_for_error(abs_diff_winter, 'Зимний период', 'Абсолютная погрешность')
+        plotting.plotting_graph_for_error(abs_diff_spring, 'Весенний период', 'Абсолютная погрешность')
+        plotting.plotting_graph_for_error(abs_diff_summer, 'Летний период', 'Абсолютная погрешность')
+        plotting.plotting_graph_for_error(abs_diff_autumn, 'Осенний период', 'Абсолютная погрешность')
+        plt.show()
+
+    if estimate == 3:
         rmse_winter = rmse.get_rmse_for_season_and_lead_time(lead_time_forecast_winter, lead_time_practical_winter)
         rmse_spring = rmse.get_rmse_for_season_and_lead_time(lead_time_forecast_spring, lead_time_practical_spring)
         rmse_summer = rmse.get_rmse_for_season_and_lead_time(lead_time_forecast_summer, lead_time_practical_summer)
@@ -283,8 +297,14 @@ def main():
         rmse.print_average_rmse('весенний', rmse_spring)
         rmse.print_average_rmse('летний',   rmse_summer)
         rmse.print_average_rmse('осенний',  rmse_autumn)
-    if estimate == 4:
 
+        plotting.plotting_graph_for_error(rmse_winter, 'Зимний период', 'Среднеквадратичная погрешность')
+        plotting.plotting_graph_for_error(rmse_spring, 'Весенний период', 'Среднеквадратичная погрешность')
+        plotting.plotting_graph_for_error(rmse_summer, 'Летний период', 'Среднеквадратичная погрешность')
+        plotting.plotting_graph_for_error(rmse_autumn, 'Осенний период', 'Среднеквадратичная погрешность')
+        plt.show()
+
+    if estimate == 4:
         correl_coef_winter = correl.get_correl_coef_for_season_and_lead_time(lead_time_forecast_winter, lead_time_practical_winter)
         correl_coef_spring = correl.get_correl_coef_for_season_and_lead_time(lead_time_forecast_spring, lead_time_practical_spring)
         correl_coef_summer = correl.get_correl_coef_for_season_and_lead_time(lead_time_forecast_summer, lead_time_practical_summer)
@@ -295,6 +315,11 @@ def main():
         correl.print_correl_coef('летний', correl_coef_summer)
         correl.print_correl_coef('осенний', correl_coef_autumn)
 
+        plotting.plotting_graph_for_error(correl_coef_winter, 'Зимний период', 'Коэффициент корреляции')
+        plotting.plotting_graph_for_error(correl_coef_spring, 'Весенний период', 'Коэффициент корреляции')
+        plotting.plotting_graph_for_error(correl_coef_summer, 'Летний период', 'Коэффициент корреляции')
+        plotting.plotting_graph_for_error(correl_coef_autumn, 'Осенний период', 'Коэффициент корреляции')
+        plt.show()
 
 if __name__ == '__main__':
     main()
