@@ -256,6 +256,7 @@ def main():
         average_diff_spring = df.get_diff_for_season_and_lead_time(lead_time_forecast_spring, lead_time_practical_spring)
         average_diff_summer = df.get_diff_for_season_and_lead_time(lead_time_forecast_summer, lead_time_practical_summer)
         average_diff_autumn = df.get_diff_for_season_and_lead_time(lead_time_forecast_autumn, lead_time_practical_autumn)
+
         df.print_average_diff('зимний', average_diff_winter)
         df.print_average_diff('весенний', average_diff_spring)
         df.print_average_diff('летний', average_diff_summer)
