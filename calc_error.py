@@ -7,8 +7,8 @@ import plotting
 import matplotlib.pyplot as plt
 
 
-def get_need_data(data):
-    for i in range(len(data)):
+def get_date_and_speed(data):
+    for i in range(0, len(data)):
         data[i][0] = str(data[i][1]) + '-' + str(data[i][2]) + '-' + str(data[i][3]) + '-' + str(data[i][4])
         del data[i][4]
         del data[i][3]
