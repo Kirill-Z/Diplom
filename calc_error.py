@@ -30,7 +30,7 @@ def separation_of_data_by_seasons(diff):
     return winter, spring, summer, autumn
 
 
-def separation_data_by_lead_time(data):
+def separation_data_by_lead_time_forecast(data):
     lead_time_0 = []
     lead_time_3 = []
     lead_time_6 = []
@@ -122,7 +122,7 @@ def separation_data_by_lead_time(data):
     return lead_time_data
 
 
-def separation_data_by_lead_time_practical(data):
+def separation_data_by_lead_time_observation(data):
     lead_time_0 = []
     lead_time_3 = []
     lead_time_6 = []
@@ -162,24 +162,24 @@ def test_for_emptiness(diff, calc_func):
 
 
 def main():
-    speed_wind_predictive = get_data.forecast_data()
-    speed_wind_practical = get_data.observation_data()
+    speed_wind_forecast = get_data.forecast_data()
+    speed_wind_observation = get_data.observation_data()
 
     winter_forecast, spring_forecast, summer_forecast, autumn_forecast \
-        = separation_of_data_by_seasons(speed_wind_predictive)
+        = separation_of_data_by_seasons(speed_wind_forecast)
 
-    lead_time_forecast_winter = separation_data_by_lead_time(winter_forecast)
-    lead_time_forecast_spring = separation_data_by_lead_time(spring_forecast)
-    lead_time_forecast_summer = separation_data_by_lead_time(summer_forecast)
-    lead_time_forecast_autumn = separation_data_by_lead_time(autumn_forecast)
+    lead_time_forecast_winter = separation_data_by_lead_time_forecast(winter_forecast)
+    lead_time_forecast_spring = separation_data_by_lead_time_forecast(spring_forecast)
+    lead_time_forecast_summer = separation_data_by_lead_time_forecast(summer_forecast)
+    lead_time_forecast_autumn = separation_data_by_lead_time_forecast(autumn_forecast)
 
-    winter_practical, spring_practical, summer_practical, autumn_practical \
-        = separation_of_data_by_seasons(speed_wind_practical)
+    winter_observation, spring_observation, summer_observation, autumn_observation \
+        = separation_of_data_by_seasons(speed_wind_observation)
     
-    lead_time_practical_winter = separation_data_by_lead_time_practical(winter_practical)
-    lead_time_practical_spring = separation_data_by_lead_time_practical(spring_practical)
-    lead_time_practical_summer = separation_data_by_lead_time_practical(summer_practical)
-    lead_time_practical_autumn = separation_data_by_lead_time_practical(autumn_practical)
+    lead_time_observation_winter = separation_data_by_lead_time_observation(winter_observation)
+    lead_time_observation_spring = separation_data_by_lead_time_observation(spring_observation)
+    lead_time_observation_summer = separation_data_by_lead_time_observation(summer_observation)
+    lead_time_observation_autumn = separation_data_by_lead_time_observation(autumn_observation)
     print("Select calculation number:")
     print(10 * " " + "1. Different")
     print(10 * " " + "2. Absolute")
@@ -188,13 +188,13 @@ def main():
     estimate = int(input("Calculation number: "))
     if estimate == 1:
         average_diff_winter = df.get_diff_for_season_and_lead_time(lead_time_forecast_winter,
-                                                                   lead_time_practical_winter)
+                                                                   lead_time_observation_winter)
         average_diff_spring = df.get_diff_for_season_and_lead_time(lead_time_forecast_spring,
-                                                                   lead_time_practical_spring)
+                                                                   lead_time_observation_spring)
         average_diff_summer = df.get_diff_for_season_and_lead_time(lead_time_forecast_summer,
-                                                                   lead_time_practical_summer)
+                                                                   lead_time_observation_summer)
         average_diff_autumn = df.get_diff_for_season_and_lead_time(lead_time_forecast_autumn,
-                                                                   lead_time_practical_autumn)
+                                                                   lead_time_observation_autumn)
 
         df.print_average_diff('зимний', average_diff_winter)
         df.print_average_diff('весенний', average_diff_spring)
@@ -209,13 +209,13 @@ def main():
 
     if estimate == 2:
         abs_diff_winter = abs_error.get_diff_abs_for_season_and_lead_time(lead_time_forecast_winter,
-                                                                          lead_time_practical_winter)
+                                                                          lead_time_observation_winter)
         abs_diff_spring = abs_error.get_diff_abs_for_season_and_lead_time(lead_time_forecast_spring,
-                                                                          lead_time_practical_spring)
+                                                                          lead_time_observation_spring)
         abs_diff_summer = abs_error.get_diff_abs_for_season_and_lead_time(lead_time_forecast_summer,
-                                                                          lead_time_practical_summer)
+                                                                          lead_time_observation_summer)
         abs_diff_autumn = abs_error.get_diff_abs_for_season_and_lead_time(lead_time_forecast_autumn,
-                                                                          lead_time_practical_autumn)
+                                                                          lead_time_observation_autumn)
 
         abs_error.print_average_diff_abs('зимний',   abs_diff_winter)
         abs_error.print_average_diff_abs('весенний', abs_diff_spring)
@@ -229,10 +229,10 @@ def main():
         plt.show()
 
     if estimate == 3:
-        rmse_winter = rmse.get_rmse_for_season_and_lead_time(lead_time_forecast_winter, lead_time_practical_winter)
-        rmse_spring = rmse.get_rmse_for_season_and_lead_time(lead_time_forecast_spring, lead_time_practical_spring)
-        rmse_summer = rmse.get_rmse_for_season_and_lead_time(lead_time_forecast_summer, lead_time_practical_summer)
-        rmse_autumn = rmse.get_rmse_for_season_and_lead_time(lead_time_forecast_autumn, lead_time_practical_autumn)
+        rmse_winter = rmse.get_rmse_for_season_and_lead_time(lead_time_forecast_winter, lead_time_observation_winter)
+        rmse_spring = rmse.get_rmse_for_season_and_lead_time(lead_time_forecast_spring, lead_time_observation_spring)
+        rmse_summer = rmse.get_rmse_for_season_and_lead_time(lead_time_forecast_summer, lead_time_observation_summer)
+        rmse_autumn = rmse.get_rmse_for_season_and_lead_time(lead_time_forecast_autumn, lead_time_observation_autumn)
 
         rmse.print_average_rmse('зимний',   rmse_winter)
         rmse.print_average_rmse('весенний', rmse_spring)
@@ -247,13 +247,13 @@ def main():
 
     if estimate == 4:
         correlation_coefficient_winter = correlation.get_correlation_coefficient_for_season_and_lead_time(
-            lead_time_forecast_winter, lead_time_practical_winter)
+            lead_time_forecast_winter, lead_time_observation_winter)
         correlation_coefficient_spring = correlation.get_correlation_coefficient_for_season_and_lead_time(
-            lead_time_forecast_spring, lead_time_practical_spring)
+            lead_time_forecast_spring, lead_time_observation_spring)
         correlation_coefficient_summer = correlation.get_correlation_coefficient_for_season_and_lead_time(
-            lead_time_forecast_summer, lead_time_practical_summer)
+            lead_time_forecast_summer, lead_time_observation_summer)
         correlation_coefficient_autumn = correlation.get_correlation_coefficient_for_season_and_lead_time(
-            lead_time_forecast_autumn, lead_time_practical_autumn)
+            lead_time_forecast_autumn, lead_time_observation_autumn)
 
         correlation.print_correlation_coefficient('зимний', correlation_coefficient_winter)
         correlation.print_correlation_coefficient('весенний', correlation_coefficient_spring)
