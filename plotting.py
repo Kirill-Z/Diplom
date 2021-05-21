@@ -1,22 +1,19 @@
 import matplotlib.pyplot as plt
 from matplotlib import dates
 import datetime as dt
+import calc_error
+
 
 def plotting_wind_speed(data, data_format, num_param, color, label):
-    lengthData = len(data)
 
-    for i in range(lengthData):
-        data[i][0] = str(data[i][1]) + '-' + str(data[i][2]) + '-' + str(data[i][3]) + '-' + str(data[i][4])
-        del data[i][4]
-        del data[i][3]
-        del data[i][2]
-        del data[i][1]
+    data = calc_error.get_date_and_speed(data)
+
     fmt = dates.DateFormatter(data_format)
 
     x_data = []
     y_data = []
 
-    for i in range(lengthData):
+    for i in range(0, len(data)):
         if data[i][1] >= 9999:
             continue
         else:
