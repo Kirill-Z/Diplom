@@ -112,16 +112,6 @@ def calc_for_a_range_with_every_minute(file, data_from_file, speed_wind, num_rec
     return speed_wind
 
 
-'''def get_speed_wind_practical_from_file(dirs1):
-    for dirs2 in sorted(os.listdir(PATH + dirs1)):
-        for file in sorted(os.listdir(PATH + dirs1 + '/' + dirs2)):
-            if re.match('av*', file):
-                currentFile = PATH + dirs1 + '/' + dirs2 + '/' + file
-                file_reader = pd.read_csv(currentFile, sep=';', header=None, engine='python')
-                data_from_file = file_reader.values.tolist()
-    return file, data_from_file'''
-
-
 def main(value: str):
     speed_wind = []
     speed_wind_practical = []
