@@ -11,6 +11,7 @@ def calculation_of_the_point_number():
     lon = float(input('Input longitude: ') or 82.6)
     point_number_in_gfc = ((lat - 43.5) * 2) * ((lon - 49.5) * 2)
     point_number_in_gfc = int(point_number_in_gfc + (0.5 if point_number_in_gfc > 0 else -0.5))
+    print(f"Point number  in gfc: {point_number_in_gfc}")
     return point_number_in_gfc
 
     # Calculation of the area of points by the specified coordinates
@@ -43,17 +44,14 @@ def adding_information(data_from_file, get_data, num_item):
 
 # Obtaining data on the direction of wind speed
 def getting_need_data_for_point(point_to_calculate, data_from_file, num_item):
-    for j in range(0, len(data_from_file[num_item])):
-        if j == point_to_calculate:
-            correct_data = data_from_file[num_item][j]
+    correct_data = data_from_file[num_item][point_to_calculate]
     return correct_data
 
 
 def getting_need_data_for_area(data_from_file, low_points_to_calculate, top_points_to_calculate, num_item):
     correct_data = []
-    for j in range(0, len(data_from_file[num_item])):
-        if low_points_to_calculate < j < top_points_to_calculate:
-            correct_data.append(data_from_file[num_item][j])
+    for j in range(low_points_to_calculate, top_points_to_calculate):
+        correct_data.append(data_from_file[num_item][j])
     return correct_data
 
 
@@ -135,8 +133,8 @@ def write_data_to_a_file(speed, write_file, name_file):  # For convenient output
     return print('End of writing to file')
 
 
-def write_in_file(PATH, write_file, list_data):
-    my_file = open(PATH + write_file, 'w')
+def write_in_file(path_to_dir, write_file, list_data):
+    my_file = open(path_to_dir + write_file, 'w')
     for i in range(0, len(list_data)):
         for j in range(0, len(list_data[i])):
             if j == (len(list_data[i]) - 1):
@@ -144,115 +142,6 @@ def write_in_file(PATH, write_file, list_data):
             else:
                 my_file.write(str(list_data[i][j]) + ';')
         my_file.write('\n')
-    my_file.close()
-    return print('End of writing list in file')
-
-
-def splitting_speed_by_lead_time(speed_wind):
-    lead_time_0_hours = []
-    lead_time_3_hours = []
-    lead_time_6_hours = []
-    lead_time_9_hours = []
-    lead_time_12_hours = []
-    lead_time_15_hours = []
-    lead_time_18_hours = []
-    lead_time_21_hours = []
-    lead_time_24_hours = []
-    lead_time_27_hours = []
-    lead_time_30_hours = []
-    lead_time_33_hours = []
-    lead_time_36_hours = []
-    lead_time_39_hours = []
-    lead_time_42_hours = []
-    lead_time_45_hours = []
-    lead_time_48_hours = []
-    lead_time_51_hours = []
-    lead_time_54_hours = []
-    lead_time_57_hours = []
-    lead_time_60_hours = []
-    lead_time_63_hours = []
-    lead_time_66_hours = []
-    lead_time_69_hours = []
-    lead_time_72_hours = []
-    lead_time_75_hours = []
-    lead_time_78_hours = []
-    for i in range(0, len(speed_wind)):
-        lead_time = speed_wind[i][0][11:13]
-        if lead_time == '00':
-            lead_time_0_hours.append(speed_wind[i])
-        if lead_time == '03':
-            lead_time_3_hours.append(speed_wind[i])
-        if lead_time == '06':
-            lead_time_6_hours.append(speed_wind[i])
-        if lead_time == '09':
-            lead_time_9_hours.append(speed_wind[i])
-        if lead_time == '12':
-            lead_time_12_hours.append(speed_wind[i])
-        if lead_time == '15':
-            lead_time_15_hours.append(speed_wind[i])
-        if lead_time == '18':
-            lead_time_18_hours.append(speed_wind[i])
-        if lead_time == '21':
-            lead_time_21_hours.append(speed_wind[i])
-        if lead_time == '24':
-            lead_time_24_hours.append(speed_wind[i])
-        if lead_time == '27':
-            lead_time_27_hours.append(speed_wind[i])
-        if lead_time == '30':
-            lead_time_30_hours.append(speed_wind[i])
-        if lead_time == '33':
-            lead_time_33_hours.append(speed_wind[i])
-        if lead_time == '36':
-            lead_time_36_hours.append(speed_wind[i])
-        if lead_time == '39':
-            lead_time_39_hours.append(speed_wind[i])
-        if lead_time == '42':
-            lead_time_42_hours.append(speed_wind[i])
-        if lead_time == '45':
-            lead_time_45_hours.append(speed_wind[i])
-        if lead_time == '48':
-            lead_time_48_hours.append(speed_wind[i])
-        if lead_time == '51':
-            lead_time_51_hours.append(speed_wind[i])
-        if lead_time == '54':
-            lead_time_54_hours.append(speed_wind[i])
-        if lead_time == '57':
-            lead_time_57_hours.append(speed_wind[i])
-        if lead_time == '60':
-            lead_time_60_hours.append(speed_wind[i])
-        if lead_time == '63':
-            lead_time_63_hours.append(speed_wind[i])
-        if lead_time == '66':
-            lead_time_66_hours.append(speed_wind[i])
-        if lead_time == '69':
-            lead_time_69_hours.append(speed_wind[i])
-        if lead_time == '72':
-            lead_time_72_hours.append(speed_wind[i])
-        if lead_time == '75':
-            lead_time_75_hours.append(speed_wind[i])
-        if lead_time == '78':
-            lead_time_78_hours.append(speed_wind[i])
-
-    speed_wind_with_lead_time = [lead_time_0_hours, lead_time_3_hours, lead_time_6_hours, lead_time_9_hours,
-                                 lead_time_12_hours, lead_time_15_hours, lead_time_18_hours, lead_time_21_hours,
-                                 lead_time_24_hours, lead_time_27_hours, lead_time_30_hours, lead_time_33_hours,
-                                 lead_time_36_hours, lead_time_39_hours, lead_time_42_hours, lead_time_45_hours,
-                                 lead_time_48_hours, lead_time_51_hours, lead_time_54_hours, lead_time_57_hours,
-                                 lead_time_60_hours, lead_time_63_hours, lead_time_66_hours, lead_time_69_hours,
-                                 lead_time_72_hours, lead_time_75_hours, lead_time_78_hours]
-    return speed_wind_with_lead_time
-
-
-def write_list_in_file_with_lead_time(write_file, list_data):
-    my_file = open(PATH + write_file, 'w')
-    for i in range(0, len(list_data)):
-        for j in range(0, len(list_data[i])):
-            for k in range(0, len(list_data[i][j])):
-                if k == (len(list_data[i][j]) - 1):
-                    my_file.write(str(list_data[i][j][k]))
-                else:
-                    my_file.write(str(list_data[i][j][k]) + ';')
-            my_file.write('\n')
     my_file.close()
     return print('End of writing list in file')
 
@@ -350,7 +239,8 @@ def main(value):
                 speed_wind = get_wind_speed_for_point(dirs, points_to_calculate, speed_wind, reference_num)
             elif re.match('2018', dirs):
                 reference_num = 0
-                speed_wind_for_forecast_data = get_wind_speed_for_point(dirs, points_to_calculate, speed_wind_for_forecast_data, reference_num)
+                speed_wind_for_forecast_data = get_wind_speed_for_point(dirs, points_to_calculate,
+                                                                        speed_wind_for_forecast_data, reference_num)
 
         write_in_file(PATH, 'list_data_with_point', speed_wind)
         write_in_file(PATH, 'list_data_by_forecast_with_point', speed_wind_for_forecast_data)
@@ -361,7 +251,8 @@ def main(value):
         top_point_number += 1
         for dirs in sorted(os.listdir(PATH)):
             if re.match('201[6,7]', dirs):
-                speed_wind = get_wind_speed_for_area(dirs, low_point_number, top_point_number, speed_wind, reference_num)
+                speed_wind = get_wind_speed_for_area(dirs, low_point_number, top_point_number, speed_wind,
+                                                     reference_num)
             elif re.match('2018', dirs):
                 reference_num = 0
                 speed_wind_for_forecast_data = get_wind_speed_for_area(dirs, low_point_number, top_point_number,
@@ -371,3 +262,6 @@ def main(value):
         write_in_file(PATH, 'list_data_by_forecast_with_area', speed_wind_for_forecast_data)
 
     return speed_wind, speed_wind_for_forecast_data
+
+
+main('1')
