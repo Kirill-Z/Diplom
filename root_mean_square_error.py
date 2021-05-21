@@ -34,9 +34,9 @@ def print_average_rmse(season, rmse):
 def calc_squared_difference(speed_wind_predictive, speed_wind_practical):
     diff = []
 
-    if speed_wind_predictive < speed_wind_practical:
+    if len(speed_wind_predictive) <= len(speed_wind_practical):
         lenght = int(len(speed_wind_predictive))
-    elif speed_wind_practical < speed_wind_predictive:
+    elif len(speed_wind_practical) < len(speed_wind_predictive):
         lenght = int(len(speed_wind_practical))
 
     for i in range(0, lenght):
