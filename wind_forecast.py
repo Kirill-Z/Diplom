@@ -242,8 +242,8 @@ def main(value):
                 speed_wind_for_forecast_data = get_wind_speed_for_point(dirs, points_to_calculate,
                                                                         speed_wind_for_forecast_data, reference_num)
 
-        write_in_file(PATH, 'list_data_with_point', speed_wind)
-        write_in_file(PATH, 'list_data_by_forecast_with_point', speed_wind_for_forecast_data)
+        write_in_file(PATH, 'forecast_for_point_data', speed_wind)
+        write_in_file(PATH, 'forecast_for_point_data_', speed_wind_for_forecast_data)
 
     elif value == '2':
         low_point_number, top_point_number = calculation_of_the_area_of_points()
@@ -258,10 +258,7 @@ def main(value):
                 speed_wind_for_forecast_data = get_wind_speed_for_area(dirs, low_point_number, top_point_number,
                                                                        speed_wind_for_forecast_data, reference_num)
 
-        write_in_file(PATH, 'list_data_by_with_area', speed_wind)
-        write_in_file(PATH, 'list_data_by_forecast_with_area', speed_wind_for_forecast_data)
+        write_in_file(PATH, 'forecast_for_area_data', speed_wind)
+        write_in_file(PATH, 'forecast_for_area_data_', speed_wind_for_forecast_data)
 
     return speed_wind, speed_wind_for_forecast_data
-
-
-main('1')
