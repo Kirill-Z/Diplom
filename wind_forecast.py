@@ -291,8 +291,7 @@ def get_wind_speed_for_point(dirs, points_to_calculate, speed_wind, reference_nu
 
                 num_rows += 1
 
-            speed_wind.append(
-                calculation_wind_speed(correct_data_VGRD, correct_data_UGRD, file))
+            speed_wind.append(calculation_wind_speed(correct_data_VGRD, correct_data_UGRD, file))
 
             calculates_the_day_based_on_the_lead_time(speed_wind, reference_num)
             calculates_month_based_on_day(speed_wind, reference_num)
@@ -302,8 +301,7 @@ def get_wind_speed_for_point(dirs, points_to_calculate, speed_wind, reference_nu
     return speed_wind
 
 
-def get_wind_speed_for_area(dirs, low_point_number, top_point_number, reference_num):
-    speed_wind = []
+def get_wind_speed_for_area(dirs, low_point_number, top_point_number, speed_wind, reference_num):
     for file in sorted(os.listdir(PATH + dirs)):
         if re.match('\d{10}_\d{2}', file):
             current_file = PATH + dirs + '/' + file
@@ -345,7 +343,6 @@ def main(value):
     reference_num = 0
     speed_wind = []
     speed_wind_for_forecast_data = []
-    print('Hello')
     if value == '1':
         points_to_calculate = calculation_of_the_point_number() + 1
         for dirs in sorted(os.listdir(PATH)):
@@ -364,10 +361,11 @@ def main(value):
         top_point_number += 1
         for dirs in sorted(os.listdir(PATH)):
             if re.match('201[6,7]', dirs):
-                speed_wind = get_wind_speed_for_area(dirs, low_point_number, top_point_number, reference_num)
+                speed_wind = get_wind_speed_for_area(dirs, low_point_number, top_point_number, speed_wind, reference_num)
             elif re.match('2018', dirs):
                 reference_num = 0
-                speed_wind_for_forecast_data = get_wind_speed_for_area(dirs ,low_point_number, top_point_number, reference_num)
+                speed_wind_for_forecast_data = get_wind_speed_for_area(dirs, low_point_number, top_point_number,
+                                                                       speed_wind_for_forecast_data, reference_num)
 
         write_in_file(PATH, 'list_data_by_with_area', speed_wind)
         write_in_file(PATH, 'list_data_by_forecast_with_area', speed_wind_for_forecast_data)
