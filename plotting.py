@@ -1,8 +1,6 @@
 import matplotlib.pyplot as plt
 from matplotlib import dates
 import datetime as dt
-import matplotlib.ticker as ticker
-import matplotlib.axis as ax
 
 def plotting_wind_speed(data, data_format, num_param, color, label):
     lengthData = len(data)
