@@ -12,7 +12,7 @@ def add_data_to_the_speed_list(file, data, i):
 
 
 def write_data_to_a_file(speed_wind):
-    my_file = open(PATH + 'data_practical_wind_01_2016.csv', 'w')
+    my_file = open(PATH + 'data_observation_wind_01_2016.csv', 'w')
     my_file.write('File name    |  Year |Month| Day |  Time  |Speed|\n')
     for i in range(0, len(speed_wind)):
         for j in range(0, len(speed_wind[i])):
@@ -114,7 +114,7 @@ def calc_for_a_range_with_every_minute(file, data_from_file, speed_wind, num_rec
 
 def main(value: str):
     speed_wind = []
-    speed_wind_practical = []
+    speed_wind_observation = []
     num_record = 0
     if value == '1':
         for dirs1 in sorted(os.listdir(PATH)):
@@ -134,10 +134,10 @@ def main(value: str):
                             current_file = PATH + dirs1 + '/' + dirs2 + '/' + file
                             file_reader = pd.read_csv(current_file, sep=';', header=None, engine='python')
                             data_from_file = file_reader.values.tolist()
-                            speed_wind_practical = calc_hour_by_hour(file, data_from_file, speed_wind_practical)
+                            speed_wind_observation = calc_hour_by_hour(file, data_from_file, speed_wind_observation)
         print(speed_wind)
-        wind_forecast.write_in_file(PATH, 'practical_data_training_hour_by_hour', speed_wind)
-        wind_forecast.write_in_file(PATH, 'practical_data_test_hour_by_hour', speed_wind_practical)
+        wind_forecast.write_in_file(PATH, 'observation_data_training_hour_by_hour', speed_wind)
+        wind_forecast.write_in_file(PATH, 'observation_data_test_hour_by_hour', speed_wind_observation)
 
     if value == '2':
         for dirs1 in sorted(os.listdir(PATH)):
@@ -157,11 +157,11 @@ def main(value: str):
                             current_file = PATH + dirs1 + '/' + dirs2 + '/' + file
                             file_reader = pd.read_csv(current_file, sep=';', header=None, engine='python')
                             data_from_file = file_reader.values.tolist()
-                            speed_wind_practical = calc_time_range(file, data_from_file, speed_wind_practical,
+                            speed_wind_observation = calc_time_range(file, data_from_file, speed_wind_observation,
                                                                    num_record)
 
-        wind_forecast.write_in_file(PATH, 'practical_data_training_time_range', speed_wind)
-        wind_forecast.write_in_file(PATH, 'practical_data_test_time_range', speed_wind_practical)
+        wind_forecast.write_in_file(PATH, 'observation_data_training_time_range', speed_wind)
+        wind_forecast.write_in_file(PATH, 'observation_data_test_time_range', speed_wind_observation)
 
     if value == '3':
         for dirs1 in sorted(os.listdir(PATH)):
@@ -182,9 +182,9 @@ def main(value: str):
                             current_file = PATH + dirs1 + '/' + dirs2 + '/' + file
                             file_reader = pd.read_csv(current_file, sep=';', header=None, engine='python')
                             data_from_file = file_reader.values.tolist()
-                            speed_wind_practical = calc_for_a_range_with_every_minute(file, data_from_file, 
-                                                                                      speed_wind_practical, num_record)
-        wind_forecast.write_in_file(PATH, 'practical_data_training_time_range_with_every_minute', speed_wind)
-        wind_forecast.write_in_file(PATH, 'practical_data_test_time_range_with_every_minute', speed_wind_practical)
+                            speed_wind_observation = calc_for_a_range_with_every_minute(file, data_from_file, 
+                                                                                      speed_wind_observation, num_record)
+        wind_forecast.write_in_file(PATH, 'observation_data_training_time_range_with_every_minute', speed_wind)
+        wind_forecast.write_in_file(PATH, 'observation_data_test_time_range_with_every_minute', speed_wind_observation)
 
-    return speed_wind, speed_wind_practical
+    return speed_wind, speed_wind_observation
