@@ -1,5 +1,5 @@
 import math
-import calc_error
+import get_data
 
 
 def get_diff_for_season_and_lead_time(lead_time_forecast, lead_time_practical):
@@ -7,19 +7,19 @@ def get_diff_for_season_and_lead_time(lead_time_forecast, lead_time_practical):
     lead_time = 0
     for predictive, practical in zip(lead_time_forecast[0: 8], lead_time_practical):
         average_diff.append(
-            [lead_time, calc_the_average_diff(calc_error.get_need_data(predictive), calc_error.get_need_data(practical))])
+            [lead_time, calc_the_average_diff(get_data.get_date_and_speed(predictive), get_data.get_date_and_speed(practical))])
         lead_time += 3
 
     for predictive, practical in zip(lead_time_forecast[8: 16], lead_time_practical):
-        average_diff.append([lead_time, calc_the_average_diff(calc_error.get_need_data(predictive), practical)])
+        average_diff.append([lead_time, calc_the_average_diff(get_data.get_date_and_speed(predictive), practical)])
         lead_time += 3
 
     for predictive, practical in zip(lead_time_forecast[16: 24], lead_time_practical):
-        average_diff.append([lead_time, calc_the_average_diff(calc_error.get_need_data(predictive), practical)])
+        average_diff.append([lead_time, calc_the_average_diff(get_data.get_date_and_speed(predictive), practical)])
         lead_time += 3
 
     for predictive, practical in zip(lead_time_forecast[24:27], lead_time_practical[0:3]):
-        average_diff.append([lead_time, calc_the_average_diff(calc_error.get_need_data(predictive), practical)])
+        average_diff.append([lead_time, calc_the_average_diff(get_data.get_date_and_speed(predictive), practical)])
         lead_time += 3
 
     return average_diff
@@ -34,10 +34,12 @@ def print_average_diff(season, average_diff):
 def calc_diff(speed_wind_predictive, speed_wind_practical):
     diff = []
 
-    if len(speed_wind_predictive) <= len(speed_wind_practical):
+    if len(speed_wind_predictive) < len(speed_wind_practical):
         length = len(speed_wind_predictive)
     elif len(speed_wind_practical) < len(speed_wind_predictive):
         length = len(speed_wind_practical)
+    else:
+        length = len(speed_wind_predictive)
 
     for i in range(0, length):
         diff1 = [speed_wind_practical[i][0]]
