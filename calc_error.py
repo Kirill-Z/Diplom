@@ -12,21 +12,20 @@ def separation_of_data_by_seasons(diff):
     spring = []
     summer = []
     autumn = []
+
     for i in range(0, len(diff)):
         month = str(diff[i][0][4:6])
-        diff_value = diff[i]
         if month in ('11', '12', '01', '02', '03'):
-            winter.append(diff_value)
+            winter.append(diff[i])
 
         if month in ('04', '05'):
-            spring.append(diff_value)
+            spring.append(diff[i])
 
         if month in ('06', '07', '08'):
-            summer.append(diff_value)
+            summer.append(diff[i])
 
         if month in ('09', '10'):
-            autumn.append(diff_value)
-
+            autumn.append(diff[i])
     return winter, spring, summer, autumn
 
 
@@ -165,16 +164,14 @@ def main():
     speed_wind_forecast = get_data.forecast_data()
     speed_wind_observation = get_data.observation_data()
 
-    winter_forecast, spring_forecast, summer_forecast, autumn_forecast \
-        = separation_of_data_by_seasons(speed_wind_forecast)
+    winter_forecast, spring_forecast, summer_forecast, autumn_forecast, \
+    winter_observation, spring_observation, summer_observation, autumn_observation \
+        = separation_of_data_by_seasons(speed_wind_forecast, speed_wind_observation)
 
     lead_time_forecast_winter = separation_data_by_lead_time_forecast(winter_forecast)
     lead_time_forecast_spring = separation_data_by_lead_time_forecast(spring_forecast)
     lead_time_forecast_summer = separation_data_by_lead_time_forecast(summer_forecast)
     lead_time_forecast_autumn = separation_data_by_lead_time_forecast(autumn_forecast)
-
-    winter_observation, spring_observation, summer_observation, autumn_observation \
-        = separation_of_data_by_seasons(speed_wind_observation)
     
     lead_time_observation_winter = separation_data_by_lead_time_observation(winter_observation)
     lead_time_observation_spring = separation_data_by_lead_time_observation(spring_observation)
