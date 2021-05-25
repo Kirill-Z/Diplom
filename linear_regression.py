@@ -3,6 +3,7 @@ from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
 import get_data
 import pandas as pd
+import math
 from calc_error import separation_of_data_by_seasons, separation_data_by_lead_time_forecast, \
                        separation_data_by_lead_time_observation
 
@@ -16,11 +17,17 @@ def write_in_speed_forecast(lead_time: str, speed_wind_forecast):
 
 
 def get_coefficient_for_linear_regression(predictant, predictor):
-    x = np.array(predictant).reshape((-1, 1))
-    y = np.array(predictor).reshape((-1, 1))
-    print(predictant)
-    print('\n')
-    print(predictor)
+    true_predictant = []
+    true_predictor = []
+    for i in range(0, len(predictant)):
+        if float(predictor[i]) >= 9999 or math.isnan(float(predictant[i])):
+            continue
+        else:
+            true_predictant.append(predictant[i])
+            true_predictor.append(predictor[i])
+    x = np.array(true_predictant).reshape((-1, 1))
+    y = np.array(true_predictor).reshape((-1, 1))
+
     if len(x) < len(y):
         length_array = len(x)
     elif len(y) < len(x):
@@ -28,13 +35,7 @@ def get_coefficient_for_linear_regression(predictant, predictor):
     else:
         length_array = len(x)
 
-    #observation_test = np.array(observation_test).reshape((-1, 1))
-    #forecast_test = np.array(forecast_test).reshape((-1, 1))
     model = LinearRegression().fit(x[0:length_array], y[0:length_array])
-    #y_pred = model.predict(observation_test)
-    #plt.scatter(observation_test, forecast_test, color='gray')
-    #plt.plot(observation_test, y_pred)
-    #plt.show()
     coefficient = [model.intercept_, model.coef_]
     return coefficient
 
@@ -58,16 +59,15 @@ def main():
     speed_wind_forecast_training = get_data.forecast_data()
     speed_wind_observation_training = get_data.observation_data()
 
-    winter_forecast_training, spring_forecast_training, summer_forecast_training, autumn_forecast_training \
+    winter_forecast_training, spring_forecast_training, summer_forecast_training, autumn_forecast_training\
         = separation_of_data_by_seasons(speed_wind_forecast_training)
+    winter_observation_training, spring_observation_training, summer_observation_training, autumn_observation_training \
+        = separation_of_data_by_seasons(speed_wind_observation_training)
 
     lead_time_forecast_winter_training = separation_data_by_lead_time_forecast(winter_forecast_training)
     lead_time_forecast_spring_training = separation_data_by_lead_time_forecast(spring_forecast_training)
     lead_time_forecast_summer_training = separation_data_by_lead_time_forecast(summer_forecast_training)
     lead_time_forecast_autumn_training = separation_data_by_lead_time_forecast(autumn_forecast_training)
-
-    winter_observation_training, spring_observation_training, summer_observation_training, autumn_observation_training \
-        = separation_of_data_by_seasons(speed_wind_observation_training)
 
     lead_time_observation_winter_training = separation_data_by_lead_time_observation(winter_observation_training)
     lead_time_observation_spring_training = separation_data_by_lead_time_observation(spring_observation_training)
@@ -85,14 +85,13 @@ def main():
 
     winter_forecast_test, spring_forecast_test, summer_forecast_test, autumn_forecast_test \
         = separation_of_data_by_seasons(speed_wind_forecast_test)
+    winter_observation_test, spring_observation_test, summer_observation_test, autumn_observation_test \
+        = separation_of_data_by_seasons(speed_wind_observation_test)
 
     lead_time_forecast_winter_test = separation_data_by_lead_time_forecast(winter_forecast_test)
     lead_time_forecast_spring_test = separation_data_by_lead_time_forecast(spring_forecast_test)
     lead_time_forecast_summer_test = separation_data_by_lead_time_forecast(summer_forecast_test)
     lead_time_forecast_autumn_test = separation_data_by_lead_time_forecast(autumn_forecast_test)
-
-    winter_observation_test, spring_observation_test, summer_observation_test, autumn_observation_test \
-        = separation_of_data_by_seasons(speed_wind_observation_test)
 
     lead_time_observation_winter_test = separation_data_by_lead_time_observation(winter_observation_test)
     lead_time_observation_spring_test = separation_data_by_lead_time_observation(spring_observation_test)
@@ -108,6 +107,7 @@ def main():
     b1_summer = []
     b0_autumn = []
     b1_autumn = []
+
     print(10 * ' ' + 'Коэффициенты для зимнего периода')
     lead_time = 0
     for i in range(0, 8):
@@ -161,7 +161,7 @@ def main():
         print(f'Отрезок для заблаговременности {lead_time}: {b0}')
         print(f'Наклон для заблаговременности {lead_time}: {b1}\n')
         lead_time += 3
-    
+
     print(10 * ' ' + 'Коэффициенты для осеннего периода')
     lead_time = 0
     for i in range(0, 8):
@@ -171,6 +171,7 @@ def main():
         print(f'Отрезок для заблаговременности {lead_time}: {b0}')
         print(f'Наклон для заблаговременности {lead_time}: {b1}\n')
         lead_time += 3
+
 
     for i in range(8, 10):
         b0, b1 = get_coefficient_for_linear_regression(lead_time_observation_autumn_training[i - 8], lead_time_forecast_autumn_training[i])
@@ -183,17 +184,20 @@ def main():
     # Winter
     lead_time = 0
     for i in range(0, 8):
-        linear_regression(lead_time_forecast_winter_test[i], lead_time_observation_winter_test[i], b0_winter[i], b1_winter[i], lead_time, 'Зимний период')
+        linear_regression(lead_time_forecast_winter_test[i], lead_time_observation_winter_test[i], b0_winter[i],
+                          b1_winter[i], lead_time, 'Зимний период')
         lead_time += 3
     for i in range(8, 10):
-        linear_regression(lead_time_forecast_winter_test[i], lead_time_observation_winter_test[i-8], b0_winter[i], b1_winter[i], lead_time, 'Зимний период')
+        linear_regression(lead_time_forecast_winter_test[i], lead_time_observation_winter_test[i-8], b0_winter[i],
+                          b1_winter[i], lead_time, 'Зимний период')
         lead_time += 3
     for i in range(10, 18):
         linear_regression(lead_time_forecast_winter_test[i], lead_time_observation_winter_test[i-10], b0_winter[i-10],
                             b1_winter[i-10], lead_time, 'Зимний период')
         lead_time += 3
     for i in range(18, 20):
-        linear_regression(lead_time_forecast_winter_test[i], lead_time_observation_winter_test[i-16], b0_winter[i-10], b1_winter[i-10], lead_time, 'Зимний период')
+        linear_regression(lead_time_forecast_winter_test[i], lead_time_observation_winter_test[i-16], b0_winter[i-10],
+                          b1_winter[i-10], lead_time, 'Зимний период')
         lead_time += 3
     for i in range(20, 24):
         linear_regression(lead_time_forecast_winter_test[i], lead_time_observation_winter_test[i - 16],
@@ -203,10 +207,6 @@ def main():
         linear_regression(lead_time_forecast_winter_test[i], lead_time_observation_winter_test[i - 24],
                             b0_winter[i - 20], b1_winter[i - 20], lead_time, 'Зимний период')
         lead_time += 3
-
-
-
-    
 
 
 main()
