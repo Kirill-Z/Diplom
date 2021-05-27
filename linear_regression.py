@@ -8,6 +8,7 @@ import math
 from calc_error import separation_of_data_by_seasons, separation_data_by_lead_time_forecast, \
                        separation_data_by_lead_time_observation
 from difference import get_diff_for_season_and_lead_time_recovery, print_average_diff
+import abs_error as abs
 import plotting
 
 
@@ -97,27 +98,27 @@ def get_recovery_data_for_season(lead_time_forecast_season, lead_time_observatio
     lead_time = 0
     for i in range(0, 8):
         recovery_data.append(linear_regression(lead_time_forecast_season[i], lead_time_observation_season[i],
-                                                b0[i], b1[i], lead_time, season))
+                                               b0[i], b1[i], lead_time, season))
         lead_time += 3
     for i in range(8, 10):
-        recovery_data.append(linear_regression(lead_time_forecast_season[i], lead_time_observation_season[i - 8],
-                                                b0[i], b1[i], lead_time, season))
+        recovery_data.append(linear_regression(lead_time_forecast_season[i], lead_time_observation_season[i-8],
+                                               b0[i], b1[i], lead_time, season))
         lead_time += 3
     for i in range(10, 18):
-        recovery_data.append(linear_regression(lead_time_forecast_season[i], lead_time_observation_season[i - 10],
-                                                b0[i - 10], b1[i - 10], lead_time, season))
+        recovery_data.append(linear_regression(lead_time_forecast_season[i], lead_time_observation_season[i-10],
+                                               b0[i-10], b1[i-10], lead_time, season))
         lead_time += 3
     for i in range(18, 20):
-        recovery_data.append(linear_regression(lead_time_forecast_season[i], lead_time_observation_season[i - 16],
-                                                b0[i - 10], b1[i - 10], lead_time, season))
+        recovery_data.append(linear_regression(lead_time_forecast_season[i], lead_time_observation_season[i-16],
+                                               b0[i-10], b1[i-10], lead_time, season))
         lead_time += 3
     for i in range(20, 24):
-        recovery_data.append(linear_regression(lead_time_forecast_season[i], lead_time_observation_season[i - 16],
-                                                b0[i - 20], b1[i - 20], lead_time, season))
+        recovery_data.append(linear_regression(lead_time_forecast_season[i], lead_time_observation_season[i-16],
+                                               b0[i-20], b1[i-20], lead_time, season))
         lead_time += 3
     for i in range(24, 27):
-        recovery_data.append(linear_regression(lead_time_forecast_season[i], lead_time_observation_season[i - 24],
-                                                b0[i - 20], b1[i - 20], lead_time, season))
+        recovery_data.append(linear_regression(lead_time_forecast_season[i], lead_time_observation_season[i-24],
+                                               b0[i-20], b1[i-20], lead_time, season))
         lead_time += 3
 
     return recovery_data
@@ -202,13 +203,15 @@ def main():
     print_average_diff('летний', average_diff_recovery_summer)
     print_average_diff('осенний', average_diff_recovery_autumn)
 
-    plotting.plotting_graph_for_error(average_diff_recovery_winter, 'Зимний период', 'Средняя арифметическая погрешность')
-    plotting.plotting_graph_for_error(average_diff_recovery_spring, 'Весенний период', 'Средняя арифметическая погрешность')
-    plotting.plotting_graph_for_error(average_diff_recovery_summer, 'Летний период', 'Средняя арифметическая погрешность')
-    plotting.plotting_graph_for_error(average_diff_recovery_autumn, 'Осенний период', 'Средняя арифметическая погрешность')
-
+    plotting.plotting_graph_for_error(average_diff_recovery_winter, 'Зимний период',
+                                      'Средняя арифметическая погрешность')
+    plotting.plotting_graph_for_error(average_diff_recovery_spring, 'Весенний период',
+                                      'Средняя арифметическая погрешность')
+    plotting.plotting_graph_for_error(average_diff_recovery_summer, 'Летний период',
+                                      'Средняя арифметическая погрешность')
+    plotting.plotting_graph_for_error(average_diff_recovery_autumn, 'Осенний период',
+                                      'Средняя арифметическая погрешность')
     plt.show()
-
 
     plot_data(lead_time_forecast_winter_test, 'Зимний период. Модельные данные за 2018 год', 'blue')
     plot_data(lead_time_forecast_spring_test, 'Весенний период. Модельные данные за 2018 год', 'orange')
@@ -224,5 +227,23 @@ def main():
     plt.legend()
     plt.show()
 
+    abs_diff_recovery_winter = abs.get_diff_abs_for_season_and_lead_time_recovery(recovery_data_winter,
+                                                                              lead_time_observation_winter_test)
+    abs_diff_recovery_spring = abs.get_diff_abs_for_season_and_lead_time_recovery(recovery_data_spring,
+                                                                              lead_time_observation_spring_test)
+    abs_diff_recovery_summer = abs.get_diff_abs_for_season_and_lead_time_recovery(recovery_data_summer,
+                                                                              lead_time_observation_summer_test)
+    abs_diff_recovery_autumn = abs.get_diff_abs_for_season_and_lead_time_recovery(recovery_data_autumn,
+                                                                              lead_time_observation_autumn_test)
+
+    abs.print_average_diff_abs('зимний', abs_diff_recovery_winter)
+    abs.print_average_diff_abs('весенний', abs_diff_recovery_spring)
+    abs.print_average_diff_abs('летний', abs_diff_recovery_summer)
+    abs.print_average_diff_abs('осенний', abs_diff_recovery_autumn)
+    plotting.plotting_graph_for_error(abs_diff_recovery_winter, 'Зимний период', 'Абсолютная погрешность')
+    plotting.plotting_graph_for_error(abs_diff_recovery_spring, 'Весенний период', 'Абсолютная погрешность')
+    plotting.plotting_graph_for_error(abs_diff_recovery_summer, 'Летний период', 'Абсолютная погрешность')
+    plotting.plotting_graph_for_error(abs_diff_recovery_autumn, 'Осенний период', 'Абсолютная погрешность')
+    plt.show()
 
 main()
