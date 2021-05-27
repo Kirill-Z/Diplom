@@ -71,13 +71,11 @@ def difference_for_recovery_data(recovery_data_forecast, observation_data):
         else:
             diff.append(observation_data[i] - recovery_data_forecast[i][0])
 
-    print(len(diff))
     return diff
 
 
 def calc_the_average_recovery_data(recovery_data_forecast, observation_data):
-    diff_lead_time = difference_for_recovery_data(recovery_data_forecast,
-                                                    observation_data)
+    diff_lead_time = difference_for_recovery_data(recovery_data_forecast, observation_data)
     average_diff = 0
     for i in range(0, len(diff_lead_time)):
         average_diff += diff_lead_time[i]
@@ -105,4 +103,3 @@ def get_diff_for_season_and_lead_time_recovery(lead_time_forecast_recovery, lead
         lead_time += 3
 
     return average_diff
-
