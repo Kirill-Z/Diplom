@@ -10,7 +10,8 @@ from calc_error import separation_of_data_by_seasons, separation_data_by_lead_ti
 from difference import get_diff_for_season_and_lead_time_recovery, print_average_diff
 import abs_error as abs
 import plotting
-
+import root_mean_square_error as rmse
+import correl_coef as correlation
 
 def write_in_speed_forecast(lead_time: str, speed_wind_forecast):
     local_speed_wind = []
@@ -245,5 +246,46 @@ def main():
     plotting.plotting_graph_for_error(abs_diff_recovery_summer, 'Летний период', 'Абсолютная погрешность')
     plotting.plotting_graph_for_error(abs_diff_recovery_autumn, 'Осенний период', 'Абсолютная погрешность')
     plt.show()
+
+    rmse_recovery_winter = rmse.get_rmse_for_season_and_lead_time_recovery(recovery_data_winter,
+                                                                              lead_time_observation_winter_test)
+    rmse_recovery_spring = rmse.get_rmse_for_season_and_lead_time_recovery(recovery_data_spring,
+                                                                              lead_time_observation_spring_test)
+    rmse_recovery_summer = rmse.get_rmse_for_season_and_lead_time_recovery(recovery_data_summer,
+                                                                              lead_time_observation_summer_test)
+    rmse_recovery_autumn = rmse.get_rmse_for_season_and_lead_time_recovery(recovery_data_autumn,
+                                                                              lead_time_observation_autumn_test)
+    rmse.print_average_rmse('зимний',   rmse_recovery_winter)
+    rmse.print_average_rmse('весенний', rmse_recovery_spring)
+    rmse.print_average_rmse('летний',   rmse_recovery_summer)
+    rmse.print_average_rmse('осенний',  rmse_recovery_autumn)
+    plotting.plotting_graph_for_error(rmse_recovery_winter, 'Зимний период', 'Среднеквадратичная погрешность')
+    plotting.plotting_graph_for_error(rmse_recovery_spring, 'Весенний период', 'Среднеквадратичная погрешность')
+    plotting.plotting_graph_for_error(rmse_recovery_summer, 'Летний период', 'Среднеквадратичная погрешность')
+    plotting.plotting_graph_for_error(rmse_recovery_autumn, 'Осенний период', 'Среднеквадратичная погрешность')
+    plt.show()
+
+    correlation_coefficient_recovery_winter = correlation.get_correlation_coefficient_for_season_and_lead_time_recovery(
+        recovery_data_winter, lead_time_observation_winter_test)
+    correlation_coefficient_recovery_spring = correlation.get_correlation_coefficient_for_season_and_lead_time_recovery(
+        recovery_data_spring, lead_time_observation_spring_test)
+    correlation_coefficient_recovery_summer = correlation.get_correlation_coefficient_for_season_and_lead_time_recovery(
+        recovery_data_summer, lead_time_observation_summer_test)
+    correlation_coefficient_recovery_autumn = correlation.get_correlation_coefficient_for_season_and_lead_time_recovery(
+        recovery_data_autumn, lead_time_observation_autumn_test)
+    correlation.print_correlation_coefficient('зимний', correlation_coefficient_recovery_winter)
+    correlation.print_correlation_coefficient('весенний', correlation_coefficient_recovery_spring)
+    correlation.print_correlation_coefficient('летний', correlation_coefficient_recovery_summer)
+    correlation.print_correlation_coefficient('осенний', correlation_coefficient_recovery_autumn)
+    plotting.plotting_graph_for_error(correlation_coefficient_recovery_winter, 'Зимний период',
+                                      'Коэффициент корреляции')
+    plotting.plotting_graph_for_error(correlation_coefficient_recovery_spring, 'Весенний период',
+                                      'Коэффициент корреляции')
+    plotting.plotting_graph_for_error(correlation_coefficient_recovery_summer, 'Летний период',
+                                      'Коэффициент корреляции')
+    plotting.plotting_graph_for_error(correlation_coefficient_recovery_autumn, 'Осенний период',
+                                      'Коэффициент корреляции')
+    plt.show()
+
 
 main()
