@@ -7,7 +7,8 @@ def get_diff_for_season_and_lead_time(lead_time_forecast, lead_time_practical):
     lead_time = 0
     for predictive, practical in zip(lead_time_forecast[0: 8], lead_time_practical):
         average_diff.append(
-            [lead_time, calc_the_average_diff(get_data.get_date_and_speed(predictive), get_data.get_date_and_speed(practical))])
+            [lead_time,
+             calc_the_average_diff(get_data.get_date_and_speed(predictive), get_data.get_date_and_speed(practical))])
         lead_time += 3
 
     for predictive, practical in zip(lead_time_forecast[8: 16], lead_time_practical):
@@ -60,3 +61,48 @@ def calc_the_average_diff(predictive_data, practical_data):
             average_diff += diff_lead_time[i][1]
     average_diff = average_diff / len(diff_lead_time)
     return average_diff
+
+
+def difference_for_recovery_data(recovery_data_forecast, observation_data):
+    diff = []
+    for i in range(0, len(recovery_data_forecast)):
+        if math.isnan(float(observation_data[i])):
+            pass
+        else:
+            diff.append(observation_data[i] - recovery_data_forecast[i][0])
+
+    print(len(diff))
+    return diff
+
+
+def calc_the_average_recovery_data(recovery_data_forecast, observation_data):
+    diff_lead_time = difference_for_recovery_data(recovery_data_forecast,
+                                                    observation_data)
+    average_diff = 0
+    for i in range(0, len(diff_lead_time)):
+        average_diff += diff_lead_time[i]
+    average_diff = average_diff / len(diff_lead_time)
+    return average_diff
+
+
+def get_diff_for_season_and_lead_time_recovery(lead_time_forecast_recovery, lead_time_observation):
+    average_diff = []
+    lead_time = 0
+    for forecast, observation in zip(lead_time_forecast_recovery[0:8], lead_time_observation):
+        average_diff.append([lead_time, calc_the_average_recovery_data(forecast, observation)])
+        lead_time += 3
+
+    for forecast, observation in zip(lead_time_forecast_recovery[8:16], lead_time_observation):
+        average_diff.append([lead_time, calc_the_average_recovery_data(forecast, observation)])
+        lead_time += 3
+
+    for forecast, observation in zip(lead_time_forecast_recovery[16:24], lead_time_observation):
+        average_diff.append([lead_time, calc_the_average_recovery_data(forecast, observation)])
+        lead_time += 3
+
+    for forecast, observation in zip(lead_time_forecast_recovery[24:27], lead_time_observation[0:3]):
+        average_diff.append([lead_time, calc_the_average_recovery_data(forecast, observation)])
+        lead_time += 3
+
+    return average_diff
+
