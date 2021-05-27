@@ -1,4 +1,5 @@
 import numpy as np
+import pylab as pl
 from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
 import get_data
@@ -6,6 +7,8 @@ import pandas as pd
 import math
 from calc_error import separation_of_data_by_seasons, separation_data_by_lead_time_forecast, \
                        separation_data_by_lead_time_observation
+from difference import get_diff_for_season_and_lead_time_recovery, print_average_diff
+import plotting
 
 
 def write_in_speed_forecast(lead_time: str, speed_wind_forecast):
@@ -41,24 +44,24 @@ def get_coefficient_for_linear_regression(predictant, predictor):
 
 
 def linear_regression(forecast_test, observation_test, b0, b1, lead_time, season):
-
     observation_test = np.array(observation_test).reshape((-1, 1))
     forecast_test = np.array(forecast_test).reshape((-1, 1))
-    y_pred = b0 + b1 * observation_test
-    plt.scatter(observation_test, forecast_test, color='red')
-    plt.title(season)
-    plt.xlabel('Предиктант')
-    plt.ylabel('Предиктор')
-    plt.plot(observation_test, y_pred, label=f'Заблаговременность {lead_time}')
-    plt.legend()
-    plt.show()
+    y_pred = b0 + b1 * forecast_test
+    #plt.scatter(observation_test, forecast_test, color='red')
+    #plt.title(season)
+    #plt.xlabel('Предиктант')
+    #plt.ylabel('Предиктор')
+    #plt.plot(observation_test, y_pred, label=f'Заблаговременность {lead_time}')
+    #plt.legend()
+    #plt.show()
+
+    return y_pred.tolist()
 
 
 def main():
     #  Training data
     speed_wind_forecast_training = get_data.forecast_data()
     speed_wind_observation_training = get_data.observation_data()
-
     winter_forecast_training, spring_forecast_training, summer_forecast_training, autumn_forecast_training\
         = separation_of_data_by_seasons(speed_wind_forecast_training)
     winter_observation_training, spring_observation_training, summer_observation_training, autumn_observation_training \
@@ -172,7 +175,6 @@ def main():
         print(f'Наклон для заблаговременности {lead_time}: {b1}\n')
         lead_time += 3
 
-
     for i in range(8, 10):
         b0, b1 = get_coefficient_for_linear_regression(lead_time_observation_autumn_training[i - 8], lead_time_forecast_autumn_training[i])
         b0_autumn.append(b0)
@@ -182,31 +184,204 @@ def main():
         lead_time += 3
 
     # Winter
+    recovered_data_winter = []
     lead_time = 0
     for i in range(0, 8):
-        linear_regression(lead_time_forecast_winter_test[i], lead_time_observation_winter_test[i], b0_winter[i],
-                          b1_winter[i], lead_time, 'Зимний период')
+        recovered_data_winter.append(linear_regression(lead_time_forecast_winter_test[i], lead_time_observation_winter_test[i], b0_winter[i],
+                          b1_winter[i], lead_time, 'Зимний период'))
         lead_time += 3
     for i in range(8, 10):
-        linear_regression(lead_time_forecast_winter_test[i], lead_time_observation_winter_test[i-8], b0_winter[i],
-                          b1_winter[i], lead_time, 'Зимний период')
+        recovered_data_winter.append(linear_regression(lead_time_forecast_winter_test[i], lead_time_observation_winter_test[i-8], b0_winter[i],
+                          b1_winter[i], lead_time, 'Зимний период'))
         lead_time += 3
     for i in range(10, 18):
-        linear_regression(lead_time_forecast_winter_test[i], lead_time_observation_winter_test[i-10], b0_winter[i-10],
-                            b1_winter[i-10], lead_time, 'Зимний период')
+        recovered_data_winter.append(linear_regression(lead_time_forecast_winter_test[i], lead_time_observation_winter_test[i-10], b0_winter[i-10],
+                            b1_winter[i-10], lead_time, 'Зимний период'))
         lead_time += 3
     for i in range(18, 20):
-        linear_regression(lead_time_forecast_winter_test[i], lead_time_observation_winter_test[i-16], b0_winter[i-10],
-                          b1_winter[i-10], lead_time, 'Зимний период')
+        recovered_data_winter.append(linear_regression(lead_time_forecast_winter_test[i], lead_time_observation_winter_test[i-16], b0_winter[i-10],
+                          b1_winter[i-10], lead_time, 'Зимний период'))
         lead_time += 3
     for i in range(20, 24):
-        linear_regression(lead_time_forecast_winter_test[i], lead_time_observation_winter_test[i - 16],
-                            b0_winter[i - 20], b1_winter[i - 20], lead_time, 'Зимний период')
+        recovered_data_winter.append(linear_regression(lead_time_forecast_winter_test[i], lead_time_observation_winter_test[i - 16],
+                            b0_winter[i - 20], b1_winter[i - 20], lead_time, 'Зимний период'))
         lead_time += 3
     for i in range(24, 27):
-        linear_regression(lead_time_forecast_winter_test[i], lead_time_observation_winter_test[i - 24],
-                            b0_winter[i - 20], b1_winter[i - 20], lead_time, 'Зимний период')
+        recovered_data_winter.append(linear_regression(lead_time_forecast_winter_test[i], lead_time_observation_winter_test[i - 24],
+                            b0_winter[i - 20], b1_winter[i - 20], lead_time, 'Зимний период'))
         lead_time += 3
+
+    # Spring
+    recovery_data_spring = []
+    lead_time = 0
+    for i in range(0, 8):
+        recovery_data_spring.append(linear_regression(lead_time_forecast_spring_test[i], lead_time_observation_spring_test[i], b0_spring[i],
+                          b1_spring[i], lead_time, 'Весенний период'))
+        lead_time += 3
+    for i in range(8, 10):
+        recovery_data_spring.append(linear_regression(lead_time_forecast_spring_test[i], lead_time_observation_spring_test[i - 8], b0_spring[i],
+                          b1_spring[i], lead_time, 'Весенний период'))
+        lead_time += 3
+    for i in range(10, 18):
+        recovery_data_spring.append(linear_regression(lead_time_forecast_spring_test[i], lead_time_observation_spring_test[i - 10],
+                          b0_spring[i - 10], b1_spring[i - 10], lead_time, 'Весенний период'))
+        lead_time += 3
+    for i in range(18, 20):
+        recovery_data_spring.append(linear_regression(lead_time_forecast_spring_test[i], lead_time_observation_spring_test[i - 16],
+                          b0_spring[i - 10], b1_spring[i - 10], lead_time, 'Весенний период'))
+        lead_time += 3
+    for i in range(20, 24):
+        recovery_data_spring.append(linear_regression(lead_time_forecast_spring_test[i], lead_time_observation_spring_test[i - 16],
+                          b0_spring[i - 20], b1_spring[i - 20], lead_time, 'Весенний период'))
+        lead_time += 3
+    for i in range(24, 27):
+        recovery_data_spring.append(linear_regression(lead_time_forecast_spring_test[i], lead_time_observation_spring_test[i - 24],
+                          b0_spring[i - 20], b1_spring[i - 20], lead_time, 'Весенний период'))
+        lead_time += 3
+
+    # Summer
+    recovery_data_summer = []
+    lead_time = 0
+    for i in range(0, 8):
+        recovery_data_summer.append(linear_regression(lead_time_forecast_summer_test[i], lead_time_observation_summer_test[i], b0_summer[i],
+                            b1_summer[i], lead_time, 'Летний период'))
+        lead_time += 3
+    for i in range(8, 10):
+        recovery_data_summer.append(linear_regression(lead_time_forecast_summer_test[i], lead_time_observation_summer_test[i - 8], b0_summer[i],
+                            b1_summer[i], lead_time, 'Летний период'))
+        lead_time += 3
+    for i in range(10, 18):
+        recovery_data_summer.append(linear_regression(lead_time_forecast_summer_test[i], lead_time_observation_summer_test[i - 10],
+                            b0_summer[i - 10], b1_summer[i - 10], lead_time, 'Летний период'))
+        lead_time += 3
+    for i in range(18, 20):
+        recovery_data_summer.append(linear_regression(lead_time_forecast_summer_test[i], lead_time_observation_summer_test[i - 16],
+                            b0_summer[i - 10], b1_summer[i - 10], lead_time, 'Летний период'))
+        lead_time += 3
+    for i in range(20, 24):
+        recovery_data_summer.append(linear_regression(lead_time_forecast_summer_test[i], lead_time_observation_summer_test[i - 16],
+                            b0_summer[i - 20], b1_summer[i - 20], lead_time, 'Летний период'))
+        lead_time += 3
+    for i in range(24, 27):
+        recovery_data_summer.append(linear_regression(lead_time_forecast_summer_test[i], lead_time_observation_summer_test[i - 24],
+                            b0_summer[i - 20], b1_summer[i - 20], lead_time, 'Летний период'))
+        lead_time += 3
+
+    # Autumn
+    recovery_data_autumn = []
+    lead_time = 0
+    for i in range(0, 8):
+        recovery_data_autumn.append(linear_regression(lead_time_forecast_autumn_test[i], lead_time_observation_autumn_test[i], b0_autumn[i],
+                          b1_autumn[i], lead_time, 'Осенний период'))
+        lead_time += 3
+    for i in range(8, 10):
+        recovery_data_autumn.append(linear_regression(lead_time_forecast_autumn_test[i], lead_time_observation_autumn_test[i - 8], b0_autumn[i],
+                          b1_autumn[i], lead_time, 'Осенний период'))
+        lead_time += 3
+    for i in range(10, 18):
+        recovery_data_autumn.append(linear_regression(lead_time_forecast_autumn_test[i], lead_time_observation_autumn_test[i - 10],
+                          b0_autumn[i - 10], b1_autumn[i - 10], lead_time, 'Осенний период'))
+        lead_time += 3
+    for i in range(18, 20):
+        recovery_data_autumn.append(linear_regression(lead_time_forecast_autumn_test[i], lead_time_observation_autumn_test[i - 16],
+                          b0_autumn[i - 10], b1_autumn[i - 10], lead_time, 'Осенний период'))
+        lead_time += 3
+    for i in range(20, 24):
+        recovery_data_autumn.append(linear_regression(lead_time_forecast_autumn_test[i], lead_time_observation_autumn_test[i - 16],
+                          b0_autumn[i - 20], b1_autumn[i - 20], lead_time, 'Осенний период'))
+        lead_time += 3
+    for i in range(24, 27):
+        recovery_data_autumn.append(linear_regression(lead_time_forecast_autumn_test[i], lead_time_observation_autumn_test[i - 24],
+                          b0_autumn[i - 20], b1_autumn[i - 20], lead_time, 'Осенний период'))
+        lead_time += 3
+
+    average_diff_recovery_winter = get_diff_for_season_and_lead_time_recovery(recovered_data_winter,
+                                                                              lead_time_observation_winter_test)
+    average_diff_recovery_spring = get_diff_for_season_and_lead_time_recovery(recovery_data_spring,
+                                                                              lead_time_observation_spring_test)
+    average_diff_recovery_summer = get_diff_for_season_and_lead_time_recovery(recovery_data_summer,
+                                                                              lead_time_observation_summer_test)
+    average_diff_recovery_autumn = get_diff_for_season_and_lead_time_recovery(recovery_data_autumn,
+                                                                              lead_time_observation_autumn_test)
+
+    print_average_diff('зимний', average_diff_recovery_winter)
+    print_average_diff('весенний', average_diff_recovery_spring)
+    print_average_diff('летний', average_diff_recovery_summer)
+    print_average_diff('осенний', average_diff_recovery_autumn)
+
+    plotting.plotting_graph_for_error(average_diff_recovery_winter, 'Зимний период', 'Средняя арифметическая погрешность')
+    plotting.plotting_graph_for_error(average_diff_recovery_spring, 'Весенний период', 'Средняя арифметическая погрешность')
+    plotting.plotting_graph_for_error(average_diff_recovery_summer, 'Летний период', 'Средняя арифметическая погрешность')
+    plotting.plotting_graph_for_error(average_diff_recovery_autumn, 'Осенний период', 'Средняя арифметическая погрешность')
+
+    plt.show()
+    for i in range(0, len(lead_time_forecast_winter_test)):
+        for j in range(0, len(lead_time_forecast_winter_test[i])):
+            if (i == 0 and j == 0):
+                plt.scatter(i * 3, lead_time_forecast_winter_test[i][j], c='blue',
+                            label='Зимний период. Модельные данные за 2018 год')
+            else:
+                plt.scatter(i * 3, lead_time_forecast_winter_test[i][j], c='blue')
+            
+    for i in range(0, len(lead_time_forecast_spring_test)):
+        for j in range(0, len(lead_time_forecast_spring_test[i])):
+            if (i == 0 and j == 0):
+                plt.scatter(i*3, lead_time_forecast_spring_test[i][j], c='orange',
+                            label='Весенний период. Модельные данные за 2018 год')
+            else:
+                plt.scatter(i*3, lead_time_forecast_spring_test[i][j], c='orange')
+
+    for i in range(0, len(lead_time_forecast_summer_test)):
+        for j in range(0, len(lead_time_forecast_summer_test[i])):
+            if (i == 0 and j == 0):
+                plt.scatter(i*3, lead_time_forecast_summer_test[i][j], c='green',
+                            label='Летний период. Модельные данные за 2018 год')
+            else:
+                plt.scatter(i*3, lead_time_forecast_summer_test[i][j], c='green')
+
+    for i in range(0, len(lead_time_forecast_autumn_test)):
+        for j in range(0, len(lead_time_forecast_autumn_test[i])):
+            if (i == 0 and j == 0):
+                plt.scatter(i*3, lead_time_forecast_autumn_test[i][j], c='red',
+                            label='Осенний период. Модельные данные за 2018 год')
+            else:
+                plt.scatter(i*3, lead_time_forecast_autumn_test[i][j], c='red')
+    plt.legend()
+    plt.show()
+
+    for i in range(0, len(recovered_data_winter)):
+        for j in range(0, len(recovered_data_winter[i])):
+            if (i == 0 and j == 0):
+                plt.scatter(i * 3, recovered_data_winter[i][j], c='blue',
+                        label='Зимний период. Восстановленные данные за 2018 год')
+            else:
+                plt.scatter(i * 3, recovered_data_winter[i][j], c='blue')
+
+    for i in range(0, len(recovery_data_spring)):
+        for j in range(0, len(recovery_data_spring[i])):
+            if (i == 0 and j == 0):
+                plt.scatter(i * 3, recovery_data_spring[i][j], c='orange',
+                        label='Весенний период. Восстановленные данные за 2018 год')
+            else:
+                plt.scatter(i * 3, recovery_data_spring[i][j], c='orange')
+
+    for i in range(0, len(recovery_data_summer)):
+        for j in range(0, len(recovery_data_summer[i])):
+            if (i == 0 and j == 0):
+                plt.scatter(i * 3, recovery_data_summer[i][j], c='green',
+                        label='Летний период. Восстановленные данные за 2018 год')
+            else:
+                plt.scatter(i * 3, recovery_data_summer[i][j], c='green')
+
+    for i in range(0, len(recovery_data_autumn)):
+        for j in range(0, len(recovery_data_autumn[i])):
+            if (i == 0 and j == 0):
+                plt.scatter(i * 3, recovery_data_autumn[i][j], c='red',
+                        label='Осенний период. Восстановленные данные за 2018 год')
+            else:
+                plt.scatter(i * 3, recovery_data_autumn[i][j], c='red')
+    plt.legend()
+    plt.show()
 
 
 main()
