@@ -7,23 +7,19 @@ def get_correlation_coefficient_for_season_and_lead_time(lead_time_forecast, lea
     lead_time = 0
     for forecast, observation in zip(lead_time_forecast[0: 8], lead_time_observation):
         average_diff.append(
-            [lead_time, calc_correlation_coefficient(get_data.get_date_and_speed(forecast),
-                                                     get_data.get_date_and_speed(observation))])
+            [lead_time, calc_correlation_coefficient(forecast, observation)])
         lead_time += 3
 
     for forecast, observation in zip(lead_time_forecast[8: 16], lead_time_observation):
-        average_diff.append([lead_time, calc_correlation_coefficient(get_data.get_date_and_speed(forecast),
-                                                                     observation)])
+        average_diff.append([lead_time, calc_correlation_coefficient(forecast, observation)])
         lead_time += 3
 
     for forecast, observation in zip(lead_time_forecast[16: 24], lead_time_observation):
-        average_diff.append([lead_time, calc_correlation_coefficient(get_data.get_date_and_speed(forecast),
-                                                                     observation)])
+        average_diff.append([lead_time, calc_correlation_coefficient(forecast, observation)])
         lead_time += 3
 
     for forecast, observation in zip(lead_time_forecast[24:27], lead_time_observation[0:3]):
-        average_diff.append([lead_time, calc_correlation_coefficient(get_data.get_date_and_speed(forecast),
-                                                                     observation)])
+        average_diff.append([lead_time, calc_correlation_coefficient(forecast, observation)])
         lead_time += 3
 
     return average_diff
@@ -48,11 +44,11 @@ def calc_correlation_coefficient(speed_wind_forecast, speed_wind_observation):
         length = int(len(speed_wind_forecast))
 
     for i in range(0, length):
-        if float(speed_wind_forecast[i][1]) >= 9999 or math.isnan(float(speed_wind_observation[i][1])):
+        if float(speed_wind_forecast[i]) >= 9999 or math.isnan(float(speed_wind_observation[i])):
             continue
         else:
-            x_avg += speed_wind_observation[i][1]
-            y_avg += speed_wind_forecast[i][1]
+            x_avg += speed_wind_observation[i]
+            y_avg += speed_wind_forecast[i]
     x_avg /= length
     y_avg /= length
 
@@ -60,15 +56,14 @@ def calc_correlation_coefficient(speed_wind_forecast, speed_wind_observation):
     x = 0
     y = 0
     for i in range(0, length):
-        if float(speed_wind_forecast[i][1]) >= 9999 or math.isnan(float(speed_wind_observation[i][1])):
+        if float(speed_wind_forecast[i]) >= 9999 or math.isnan(float(speed_wind_observation[i])):
             continue
         else:
-            numerator += (speed_wind_observation[i][1] - x_avg)*(speed_wind_forecast[i][1] - y_avg)
-            x += (speed_wind_observation[i][1] - x_avg)**2
-            y += (speed_wind_forecast[i][1] - y_avg)**2
+            numerator += (speed_wind_observation[i] - x_avg)*(speed_wind_forecast[i] - y_avg)
+            x += (speed_wind_observation[i] - x_avg)**2
+            y += (speed_wind_forecast[i] - y_avg)**2
     denominator = math.sqrt(x*y)
     correlation_coefficient = numerator / denominator
-
     return correlation_coefficient
 
 

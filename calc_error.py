@@ -164,9 +164,10 @@ def main():
     speed_wind_forecast = get_data.forecast_data()
     speed_wind_observation = get_data.observation_data()
 
-    winter_forecast, spring_forecast, summer_forecast, autumn_forecast, \
+    winter_forecast, spring_forecast, summer_forecast, autumn_forecast \
+        = separation_of_data_by_seasons(speed_wind_forecast)
     winter_observation, spring_observation, summer_observation, autumn_observation \
-        = separation_of_data_by_seasons(speed_wind_forecast, speed_wind_observation)
+        = separation_of_data_by_seasons(speed_wind_observation)
 
     lead_time_forecast_winter = separation_data_by_lead_time_forecast(winter_forecast)
     lead_time_forecast_spring = separation_data_by_lead_time_forecast(spring_forecast)
@@ -203,6 +204,7 @@ def main():
         plotting.plotting_graph_for_error(average_diff_summer, 'Летний период', 'Средняя арифметическая погрешность')
         plotting.plotting_graph_for_error(average_diff_autumn, 'Осенний период', 'Средняя арифметическая погрешность')
         plt.show()
+        return average_diff_winter, average_diff_spring, average_diff_summer, average_diff_autumn
 
     if estimate == 2:
         abs_diff_winter = abs_error.get_diff_abs_for_season_and_lead_time(lead_time_forecast_winter,
@@ -224,6 +226,7 @@ def main():
         plotting.plotting_graph_for_error(abs_diff_summer, 'Летний период', 'Абсолютная погрешность')
         plotting.plotting_graph_for_error(abs_diff_autumn, 'Осенний период', 'Абсолютная погрешность')
         plt.show()
+        return abs_diff_winter, abs_diff_spring, abs_diff_summer, abs_diff_autumn
 
     if estimate == 3:
         rmse_winter = rmse.get_rmse_for_season_and_lead_time(lead_time_forecast_winter, lead_time_observation_winter)
@@ -241,6 +244,7 @@ def main():
         plotting.plotting_graph_for_error(rmse_summer, 'Летний период', 'Среднеквадратичная погрешность')
         plotting.plotting_graph_for_error(rmse_autumn, 'Осенний период', 'Среднеквадратичная погрешность')
         plt.show()
+        return rmse_winter, rmse_spring, rmse_summer, rmse_autumn
 
     if estimate == 4:
         correlation_coefficient_winter = correlation.get_correlation_coefficient_for_season_and_lead_time(
@@ -262,6 +266,8 @@ def main():
         plotting.plotting_graph_for_error(correlation_coefficient_summer, 'Летний период', 'Коэффициент корреляции')
         plotting.plotting_graph_for_error(correlation_coefficient_autumn, 'Осенний период', 'Коэффициент корреляции')
         plt.show()
+        return correlation_coefficient_winter, correlation_coefficient_spring, correlation_coefficient_spring, \
+               correlation_coefficient_autumn
 
 
 if __name__ == '__main__':

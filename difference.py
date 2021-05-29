@@ -1,5 +1,4 @@
 import math
-import get_data
 
 
 def get_diff_for_season_and_lead_time(lead_time_forecast, lead_time_practical):
@@ -8,19 +7,19 @@ def get_diff_for_season_and_lead_time(lead_time_forecast, lead_time_practical):
     for predictive, practical in zip(lead_time_forecast[0: 8], lead_time_practical):
         average_diff.append(
             [lead_time,
-             calc_the_average_diff(get_data.get_date_and_speed(predictive), get_data.get_date_and_speed(practical))])
+             calc_the_average_diff(predictive, practical)])
         lead_time += 3
 
     for predictive, practical in zip(lead_time_forecast[8: 16], lead_time_practical):
-        average_diff.append([lead_time, calc_the_average_diff(get_data.get_date_and_speed(predictive), practical)])
+        average_diff.append([lead_time, calc_the_average_diff(predictive, practical)])
         lead_time += 3
 
     for predictive, practical in zip(lead_time_forecast[16: 24], lead_time_practical):
-        average_diff.append([lead_time, calc_the_average_diff(get_data.get_date_and_speed(predictive), practical)])
+        average_diff.append([lead_time, calc_the_average_diff(predictive, practical)])
         lead_time += 3
 
     for predictive, practical in zip(lead_time_forecast[24:27], lead_time_practical[0:3]):
-        average_diff.append([lead_time, calc_the_average_diff(get_data.get_date_and_speed(predictive), practical)])
+        average_diff.append([lead_time, calc_the_average_diff(predictive, practical)])
         lead_time += 3
 
     return average_diff
@@ -34,7 +33,6 @@ def print_average_diff(season, average_diff):
 
 def calc_diff(speed_wind_predictive, speed_wind_practical):
     diff = []
-
     if len(speed_wind_predictive) < len(speed_wind_practical):
         length = len(speed_wind_predictive)
     elif len(speed_wind_practical) < len(speed_wind_predictive):
@@ -43,22 +41,19 @@ def calc_diff(speed_wind_predictive, speed_wind_practical):
         length = len(speed_wind_predictive)
 
     for i in range(0, length):
-        diff1 = [speed_wind_practical[i][0]]
-        for j in range(1, len(speed_wind_predictive[i])):
-            if float(speed_wind_predictive[i][j]) >= 9999 or math.isnan(float(speed_wind_practical[i][j])):
-                continue
-            else:
-                diff1.append(speed_wind_practical[i][j] - speed_wind_predictive[i][j])
-        diff.append(diff1)
+        if float(speed_wind_predictive[i]) >= 9999 or math.isnan(float(speed_wind_practical[i])):
+            continue
+        else:
+            diff.append(speed_wind_practical[i] - speed_wind_predictive[i])
     return diff
 
 
 def calc_the_average_diff(predictive_data, practical_data):
     diff_lead_time = calc_diff(predictive_data, practical_data)
     average_diff = 0
+
     for i in range(0, len(diff_lead_time)):
-        if len(diff_lead_time[i]) > 1:
-            average_diff += diff_lead_time[i][1]
+        average_diff += diff_lead_time[i]
     average_diff = average_diff / len(diff_lead_time)
     return average_diff
 

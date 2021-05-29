@@ -1,5 +1,4 @@
 import math
-import get_data
 
 
 def get_diff_abs_for_season_and_lead_time(lead_time_forecast, lead_time_observation):
@@ -7,19 +6,19 @@ def get_diff_abs_for_season_and_lead_time(lead_time_forecast, lead_time_observat
     lead_time = 0
     for forecast, observation in zip(lead_time_forecast[0: 8], lead_time_observation):
         average_diff.append(
-            [lead_time, calc_abs(get_data.get_date_and_speed(forecast), get_data.get_date_and_speed(observation))])
+            [lead_time, calc_abs(forecast, observation)])
         lead_time += 3
 
     for forecast, observation in zip(lead_time_forecast[8: 16], lead_time_observation):
-        average_diff.append([lead_time, calc_abs(get_data.get_date_and_speed(forecast), observation)])
+        average_diff.append([lead_time, calc_abs(forecast, observation)])
         lead_time += 3
 
     for forecast, observation in zip(lead_time_forecast[16: 24], lead_time_observation):
-        average_diff.append([lead_time, calc_abs(get_data.get_date_and_speed(forecast), observation)])
+        average_diff.append([lead_time, calc_abs(forecast, observation)])
         lead_time += 3
 
     for forecast, observation in zip(lead_time_forecast[24:27], lead_time_observation[0:3]):
-        average_diff.append([lead_time, calc_abs(get_data.get_date_and_speed(forecast), observation)])
+        average_diff.append([lead_time, calc_abs(forecast, observation)])
         lead_time += 3
 
     return average_diff
@@ -43,13 +42,10 @@ def calc_abs_diff(speed_wind_forecast, speed_wind_observation):
         length = int(len(speed_wind_forecast))
 
     for i in range(0, length):
-        diff1 = [speed_wind_observation[i][0]]
-        for j in range(1, len(speed_wind_forecast[i])):
-            if float(speed_wind_forecast[i][j]) >= 9999 or math.isnan(float(speed_wind_observation[i][j])):
-                continue
-            else:
-                diff1.append(math.fabs(speed_wind_observation[i][j] - speed_wind_forecast[i][j]))
-        diff.append(diff1)
+        if float(speed_wind_forecast[i]) >= 9999 or math.isnan(float(speed_wind_observation[i])):
+            continue
+        else:
+            diff.append(math.fabs(speed_wind_observation[i] - speed_wind_forecast[i]))
     return diff
 
 
@@ -57,8 +53,7 @@ def calc_abs(forecast_data, observation_data):
     diff_lead_time = calc_abs_diff(forecast_data, observation_data)
     average_diff = 0
     for i in range(0, len(diff_lead_time)):
-        if len(diff_lead_time[i]) > 1:
-            average_diff += diff_lead_time[i][1]
+        average_diff += diff_lead_time[i]
     average_diff = average_diff / len(diff_lead_time)
     return average_diff
 
