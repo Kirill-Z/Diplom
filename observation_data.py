@@ -1,33 +1,18 @@
-import pandas as pd
 import os
 import re
-import wind_forecast
+import pandas as pd
+import forecast_data
 
-PATH = "/home/kirill/Downloads/Data/АВ6/"
+PATH = "/home/kirill/Downloads/Data/АВ6/"  # Path to files with observation data
 
 
 def add_data_to_the_speed_list(file, data, i):
+    """Adding file name, year, month, day, time."""
     speed_wind = [file[2:], file[2:6], file[6:8], file[8:10], data[i][0], data[i][2]]
     return speed_wind
 
 
-def write_data_to_a_file(speed_wind):
-    my_file = open(PATH + 'data_observation_wind_01_2016.csv', 'w')
-    my_file.write('File name    |  Year |Month| Day |  Time  |Speed|\n')
-    for i in range(0, len(speed_wind)):
-        for j in range(0, len(speed_wind[i])):
-            if len(str(speed_wind[i][j])) == 1:
-                my_file.write(str(speed_wind[i][j]) + '  |  ')
-            elif len(str(speed_wind[i][j])) == 3:
-                my_file.write(str(speed_wind[i][j]) + '|   ')
-            else:
-                my_file.write(str(speed_wind[i][j]) + ' |  ')
-        my_file.write('\n')
-    my_file.close()
-    return print('The end write in file')
-
-
-def calc_hour_by_hour(file, data_from_file, speed_wind):
+def get_data_hour_by_hour(file, data_from_file, speed_wind):
     for i in range(0, len(data_from_file)):
         hour1 = data_from_file[i][0][0]
         hour2 = data_from_file[i][0][1]
@@ -40,7 +25,7 @@ def calc_hour_by_hour(file, data_from_file, speed_wind):
     return speed_wind
 
 
-def calc_time_range(file, data_from_file, speed_wind, num_record):
+def get_data_in_time_range(file, data_from_file, speed_wind, num_record):
     hour_time = 0
     data_for_next_time = 0
     speed_for_next_time = 0
@@ -72,7 +57,7 @@ def calc_time_range(file, data_from_file, speed_wind, num_record):
     return speed_wind
 
 
-def calc_for_a_range_with_every_minute(file, data_from_file, speed_wind, num_record):
+def get_data_for_a_range_with_every_minute(file, data_from_file, speed_wind, num_record):
     hour_time = 0
     data_for_next_time = 0
     speed_for_next_time = 0
@@ -113,8 +98,8 @@ def calc_for_a_range_with_every_minute(file, data_from_file, speed_wind, num_rec
 
 
 def main(value: str):
-    speed_wind = []
-    speed_wind_observation = []
+    speed_wind_training = []
+    speed_wind_test = []
     num_record = 0
     if value == '1':
         for dirs1 in sorted(os.listdir(PATH)):
@@ -125,7 +110,7 @@ def main(value: str):
                             current_file = PATH + dirs1 + '/' + dirs2 + '/' + file
                             file_reader = pd.read_csv(current_file, sep=';', header=None, engine='python')
                             data_from_file = file_reader.values.tolist()
-                            speed_wind = calc_hour_by_hour(file, data_from_file, speed_wind)
+                            speed_wind_training = get_data_hour_by_hour(file, data_from_file, speed_wind_training)
 
             if re.match('2018', dirs1):
                 for dirs2 in sorted(os.listdir(PATH + dirs1)):
@@ -134,10 +119,10 @@ def main(value: str):
                             current_file = PATH + dirs1 + '/' + dirs2 + '/' + file
                             file_reader = pd.read_csv(current_file, sep=';', header=None, engine='python')
                             data_from_file = file_reader.values.tolist()
-                            speed_wind_observation = calc_hour_by_hour(file, data_from_file, speed_wind_observation)
-        print(speed_wind)
-        wind_forecast.write_in_file(PATH, 'observation_data_training_hour_by_hour', speed_wind)
-        wind_forecast.write_in_file(PATH, 'observation_data_test_hour_by_hour', speed_wind_observation)
+                            speed_wind_test = get_data_hour_by_hour(file, data_from_file, speed_wind_test)
+        print(speed_wind_training)
+        forecast_data.write_in_file(PATH, 'observation_data_training_hour_by_hour', speed_wind_training)
+        forecast_data.write_in_file(PATH, 'observation_data_test_hour_by_hour', speed_wind_test)
 
     if value == '2':
         for dirs1 in sorted(os.listdir(PATH)):
@@ -148,7 +133,8 @@ def main(value: str):
                             current_file = PATH + dirs1 + '/' + dirs2 + '/' + file
                             file_reader = pd.read_csv(current_file, sep=';', header=None, engine='python')
                             data_from_file = file_reader.values.tolist()
-                            speed_wind = calc_time_range(file, data_from_file, speed_wind, num_record)
+                            speed_wind_training = get_data_in_time_range(file, data_from_file, speed_wind_training,
+                                                                         num_record)
 
             if re.match('2018', dirs1):
                 for dirs2 in sorted(os.listdir(PATH + dirs1)):
@@ -157,11 +143,10 @@ def main(value: str):
                             current_file = PATH + dirs1 + '/' + dirs2 + '/' + file
                             file_reader = pd.read_csv(current_file, sep=';', header=None, engine='python')
                             data_from_file = file_reader.values.tolist()
-                            speed_wind_observation = calc_time_range(file, data_from_file, speed_wind_observation,
-                                                                   num_record)
+                            speed_wind_test = get_data_in_time_range(file, data_from_file, speed_wind_test, num_record)
 
-        wind_forecast.write_in_file(PATH, 'observation_data_training_time_range', speed_wind)
-        wind_forecast.write_in_file(PATH, 'observation_data_test_time_range', speed_wind_observation)
+        forecast_data.write_in_file(PATH, 'observation_data_training_time_range', speed_wind_training)
+        forecast_data.write_in_file(PATH, 'observation_data_test_time_range', speed_wind_test)
 
     if value == '3':
         for dirs1 in sorted(os.listdir(PATH)):
@@ -172,8 +157,9 @@ def main(value: str):
                             current_file = PATH + dirs1 + '/' + dirs2 + '/' + file
                             file_reader = pd.read_csv(current_file, sep=';', header=None, engine='python')
                             data_from_file = file_reader.values.tolist()
-                            speed_wind = calc_for_a_range_with_every_minute(file, data_from_file, speed_wind,
-                                                                            num_record)
+                            speed_wind_training = get_data_for_a_range_with_every_minute(file, data_from_file,
+                                                                                         speed_wind_training,
+                                                                                         num_record)
 
             if re.match('2018', dirs1):
                 for dirs2 in sorted(os.listdir(PATH + dirs1)):
@@ -182,9 +168,9 @@ def main(value: str):
                             current_file = PATH + dirs1 + '/' + dirs2 + '/' + file
                             file_reader = pd.read_csv(current_file, sep=';', header=None, engine='python')
                             data_from_file = file_reader.values.tolist()
-                            speed_wind_observation = calc_for_a_range_with_every_minute(file, data_from_file, 
-                                                                                      speed_wind_observation, num_record)
-        wind_forecast.write_in_file(PATH, 'observation_data_training_time_range_with_every_minute', speed_wind)
-        wind_forecast.write_in_file(PATH, 'observation_data_test_time_range_with_every_minute', speed_wind_observation)
+                            speed_wind_test = get_data_for_a_range_with_every_minute(file, data_from_file,
+                                                                                      speed_wind_test, num_record)
+        forecast_data.write_in_file(PATH, 'observation_data_training_time_range_with_every_minute', speed_wind_training)
+        forecast_data.write_in_file(PATH, 'observation_data_test_time_range_with_every_minute', speed_wind_test)
 
-    return speed_wind, speed_wind_observation
+    return speed_wind_training, speed_wind_test
