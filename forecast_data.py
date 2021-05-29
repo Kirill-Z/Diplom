@@ -5,7 +5,7 @@ import re
 PATH = "/home/kirill/Downloads/Data/gfs/"  # Path to files with forecast data
 
 
-def calculation_of_the_point_number():
+def calc_point_number():
     """Calculation of the point number based on the specified coordinates."""
     lat = float(input('Input latitude: ') or 55.03)
     lon = float(input('Input longitude: ') or 82.6)
@@ -15,7 +15,7 @@ def calculation_of_the_point_number():
     return point_number_in_gfc
 
 
-def calculation_of_the_area_of_points():
+def calc_area_of_points():
     """Calculation of the area of points by the specified coordinates."""
     low_lat = float(input('Enter the lower value latitude: ') or 54.5)
     low_lon = float(input('Enter the lower value longitude: ') or 82.1)
@@ -30,7 +30,7 @@ def calculation_of_the_area_of_points():
     return low_point_number_in_gfc, top_point_number_in_gfc
 
 
-def adding_information(data_from_file, get_data, num_item):
+def add_information(data_from_file, get_data, num_item):
     correct_data = [data_from_file[num_item][0], data_from_file[num_item][1]]
     speed_data = get_data
     if len(speed_data) > 2:  # Executed if an area of points is present
@@ -41,13 +41,13 @@ def adding_information(data_from_file, get_data, num_item):
     return correct_data
 
 
-def getting_need_data_for_point(point_to_calculate, data_from_file, num_item):
+def get_need_data_for_point(point_to_calculate, data_from_file, num_item):
     """Obtaining data on the direction of wind speed for point."""
     correct_data = data_from_file[num_item][point_to_calculate]
     return correct_data
 
 
-def getting_need_data_for_area(data_from_file, low_points_to_calculate, top_points_to_calculate, num_item):
+def get_need_data_for_area(data_from_file, low_points_to_calculate, top_points_to_calculate, num_item):
     """Obtaining wind speed direction data for a point area."""
     correct_data = []
     for j in range(low_points_to_calculate, top_points_to_calculate):
@@ -55,23 +55,23 @@ def getting_need_data_for_area(data_from_file, low_points_to_calculate, top_poin
     return correct_data
 
 
-def adding_data_to_the_speed_list(file):
+def add_data_to_the_speed_list(file):
     """Adding file name, year, month, day, time."""
     wind_data = [file, file[slice(0, 4)], file[slice(4, 6)], int(file[slice(6, 8)]), int(file[slice(11, 13)])]
     return wind_data
 
 
-def calculation_wind_speed(correct_data_VGRD, correct_data_UGRD, file):
-    speed = adding_data_to_the_speed_list(file)
+def calc_wind_speed(correct_data_VGRD, correct_data_UGRD, file):
+    speed = add_data_to_the_speed_list(file)
     for j in range(2, len(correct_data_VGRD)):
         speed.append(((float(correct_data_UGRD[j]) ** 2) +
                       (float(correct_data_VGRD[j]) ** 2)) ** (1 / 2))
     if len(speed) > 6:
-        speed[5] = calculation_of_the_average_speed_in_the_range(speed)
+        speed[5] = calc_average_speed_in_the_range(speed)
     return speed
 
 
-def calculation_of_the_average_speed_in_the_range(speed):
+def calc_average_speed_in_the_range(speed):
     num_of_points = 0
     for i in range(6, len(speed)):
         speed[5] += speed[i]
@@ -82,7 +82,7 @@ def calculation_of_the_average_speed_in_the_range(speed):
     return speed[5]
 
 
-def calculates_the_day_based_on_the_lead_time(speed_wind, reference_num):
+def calc_day_based_on_lead_time(speed_wind, reference_num):
     """Used when the lead time exceeds a day."""
     hours_in_a_day = {1: 24, 2: 48, 3: 72, 4: 96}
     for i in hours_in_a_day:
@@ -91,7 +91,7 @@ def calculates_the_day_based_on_the_lead_time(speed_wind, reference_num):
             speed_wind[reference_num][3] = int(speed_wind[reference_num][3]) + i
 
 
-def calculates_month_based_on_day(speed_wind, reference_num):
+def calc_month_based_on_day(speed_wind, reference_num):
     """Used when the number of days in a month exceeds the allowable."""
     day_in_month = {1: 31, 2: (29 if (int(speed_wind[reference_num][1]) % 4 == 0) else 28), 3: 31, 4: 30, 5: 31,
                     6: 30, 7: 31, 8: 31, 9: 30, 10: 31, 11: 30, 12: 31}
@@ -102,7 +102,7 @@ def calculates_month_based_on_day(speed_wind, reference_num):
             speed_wind[reference_num][2] += 1
 
 
-def calculation_of_the_year_based_on_month(speed_wind, reference_num):
+def calc_year_based_on_month(speed_wind, reference_num):
     """Used when the month value overflows > 13."""
     if int(speed_wind[reference_num][2]) > 12:
         speed_wind[reference_num][2] = speed_wind[reference_num][2] - 12
@@ -110,12 +110,12 @@ def calculation_of_the_year_based_on_month(speed_wind, reference_num):
 
 
 def calc_point(data_from_file, get_data, num_item):
-    correct_data = adding_information(data_from_file, get_data, num_item)
+    correct_data = add_information(data_from_file, get_data, num_item)
     return correct_data
 
 
 def calc_for_area(data_from_file, get_data, num_item):
-    correct_data = adding_information(data_from_file, get_data, num_item)
+    correct_data = add_information(data_from_file, get_data, num_item)
     return correct_data
 
 
@@ -153,24 +153,24 @@ def get_wind_speed_for_point(dirs, points_to_calculate, speed_wind, reference_nu
                 if (data_from_file[i][0] == "04" or "05") and data_from_file[i][1] == '21':
                     if data_from_file[i][0] == '04':
                         correct_data_UGRD = calc_point(data_from_file,
-                                                       getting_need_data_for_point(points_to_calculate,
+                                                       get_need_data_for_point(points_to_calculate,
                                                                                    data_from_file,
                                                                                    num_rows),
                                                        num_rows)
                     if data_from_file[i][0] == '05':
                         correct_data_VGRD = calc_point(data_from_file,
-                                                       getting_need_data_for_point(points_to_calculate,
+                                                       get_need_data_for_point(points_to_calculate,
                                                                                    data_from_file,
                                                                                    num_rows),
                                                        num_rows)
 
                 num_rows += 1
 
-            speed_wind.append(calculation_wind_speed(correct_data_VGRD, correct_data_UGRD, file))
+            speed_wind.append(calc_wind_speed(correct_data_VGRD, correct_data_UGRD, file))
 
-            calculates_the_day_based_on_the_lead_time(speed_wind, reference_num)
-            calculates_month_based_on_day(speed_wind, reference_num)
-            calculation_of_the_year_based_on_month(speed_wind, reference_num)
+            calc_day_based_on_lead_time(speed_wind, reference_num)
+            calc_month_based_on_day(speed_wind, reference_num)
+            calc_year_based_on_month(speed_wind, reference_num)
             reference_num += 1
 
     return speed_wind
@@ -189,7 +189,7 @@ def get_wind_speed_for_area(dirs, low_point_number, top_point_number, speed_wind
                 if (data_from_file[i][0] == "04" or "05") and data_from_file[i][1] == '21':
                     if data_from_file[i][0] == '04':
                         correct_data_UGRD = calc_for_area(data_from_file,
-                                                          getting_need_data_for_area(data_from_file,
+                                                          get_need_data_for_area(data_from_file,
                                                                                      low_point_number,
                                                                                      top_point_number,
                                                                                      num_rows),
@@ -197,18 +197,18 @@ def get_wind_speed_for_area(dirs, low_point_number, top_point_number, speed_wind
 
                     if data_from_file[i][0] == '05':
                         correct_data_VGRD = calc_for_area(data_from_file,
-                                                          getting_need_data_for_area(data_from_file,
+                                                          get_need_data_for_area(data_from_file,
                                                                                      low_point_number,
                                                                                      top_point_number,
                                                                                      num_rows),
                                                           num_rows)
 
                 num_rows += 1
-            speed_wind.append(calculation_wind_speed(correct_data_VGRD, correct_data_UGRD, file))
+            speed_wind.append(calc_wind_speed(correct_data_VGRD, correct_data_UGRD, file))
 
-            calculates_the_day_based_on_the_lead_time(speed_wind, reference_num)
-            calculates_month_based_on_day(speed_wind, reference_num)
-            calculation_of_the_year_based_on_month(speed_wind, reference_num)
+            calc_day_based_on_lead_time(speed_wind, reference_num)
+            calc_month_based_on_day(speed_wind, reference_num)
+            calc_year_based_on_month(speed_wind, reference_num)
             reference_num += 1
 
     return speed_wind
@@ -219,7 +219,7 @@ def main(value):
     speed_wind_training = []
     speed_wind_test = []
     if value == '1':
-        points_to_calculate = calculation_of_the_point_number() + 1
+        points_to_calculate = calc_point_number() + 1
         for dirs in sorted(os.listdir(PATH)):
             if re.match('201[6,7]', dirs):
                 speed_wind_training = get_wind_speed_for_point(dirs, points_to_calculate, speed_wind_training,
@@ -232,7 +232,7 @@ def main(value):
         write_in_file(PATH, 'forecast_for_point_data_', speed_wind_test)
 
     elif value == '2':
-        low_point_number, top_point_number = calculation_of_the_area_of_points()
+        low_point_number, top_point_number = calc_area_of_points()
         low_point_number += 1
         top_point_number += 1
         for dirs in sorted(os.listdir(PATH)):
