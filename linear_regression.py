@@ -1,5 +1,4 @@
 import numpy as np
-import pylab as pl
 from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
 import get_data
@@ -12,6 +11,7 @@ import abs_error as abs
 import plotting
 import root_mean_square_error as rmse
 import correl_coef as correlation
+
 
 def write_in_speed_forecast(lead_time: str, speed_wind_forecast):
     local_speed_wind = []
@@ -40,22 +40,14 @@ def get_coefficient_for_linear_regression(predictant, predictor):
     else:
         length_array = len(x)
 
-    model = LinearRegression().fit(x[0:length_array], y[0:length_array])
+    model = LinearRegression().fit(y[0:length_array], x[0:length_array])
     coefficient = [model.intercept_, model.coef_]
     return coefficient
 
 
-def linear_regression(forecast_test, observation_test, b0, b1, lead_time, season):
-    observation_test = np.array(observation_test).reshape((-1, 1))
+def linear_regression(forecast_test, b0, b1):
     forecast_test = np.array(forecast_test).reshape((-1, 1))
     y_pred = b0 + b1 * forecast_test
-    #plt.scatter(observation_test, forecast_test, color='red')
-    #plt.title(season)
-    #plt.xlabel('Предиктант')
-    #plt.ylabel('Предиктор')
-    #plt.plot(observation_test, y_pred, label=f'Заблаговременность {lead_time}')
-    #plt.legend()
-    #plt.show()
 
     return y_pred.tolist()
 
@@ -75,6 +67,9 @@ def get_correl_coef_regression_for_season(season, lead_time_observation, lead_ti
     b1_season = []
     print(10 * ' ' + f'Коэффициенты для {season} периода')
     lead_time = 0
+    print(lead_time_forecast[0])
+    print('observation')
+    print(lead_time_observation[0])
     for i in range(0, 8):
         b0, b1 = get_coefficient_for_linear_regression(lead_time_observation[i],
                                                         lead_time_forecast[i])
@@ -91,35 +86,30 @@ def get_correl_coef_regression_for_season(season, lead_time_observation, lead_ti
         print(f'Отрезок для заблаговременности {lead_time}: {b0}')
         print(f'Наклон для заблаговременности {lead_time}: {b1}\n')
         lead_time += 3
+
     return b0_season, b1_season
 
 
-def get_recovery_data_for_season(lead_time_forecast_season, lead_time_observation_season, b0, b1, season):
+def get_recovery_data_for_season(lead_time_forecast_season, b0, b1):
     recovery_data = []
     lead_time = 0
     for i in range(0, 8):
-        recovery_data.append(linear_regression(lead_time_forecast_season[i], lead_time_observation_season[i],
-                                               b0[i], b1[i], lead_time, season))
+        recovery_data.append(linear_regression(lead_time_forecast_season[i], b0[i], b1[i]))
         lead_time += 3
     for i in range(8, 10):
-        recovery_data.append(linear_regression(lead_time_forecast_season[i], lead_time_observation_season[i-8],
-                                               b0[i], b1[i], lead_time, season))
+        recovery_data.append(linear_regression(lead_time_forecast_season[i], b0[i], b1[i]))
         lead_time += 3
     for i in range(10, 18):
-        recovery_data.append(linear_regression(lead_time_forecast_season[i], lead_time_observation_season[i-10],
-                                               b0[i-10], b1[i-10], lead_time, season))
+        recovery_data.append(linear_regression(lead_time_forecast_season[i], b0[i-10], b1[i-10]))
         lead_time += 3
     for i in range(18, 20):
-        recovery_data.append(linear_regression(lead_time_forecast_season[i], lead_time_observation_season[i-16],
-                                               b0[i-10], b1[i-10], lead_time, season))
+        recovery_data.append(linear_regression(lead_time_forecast_season[i], b0[i-10], b1[i-10]))
         lead_time += 3
     for i in range(20, 24):
-        recovery_data.append(linear_regression(lead_time_forecast_season[i], lead_time_observation_season[i-16],
-                                               b0[i-20], b1[i-20], lead_time, season))
+        recovery_data.append(linear_regression(lead_time_forecast_season[i], b0[i-20], b1[i-20]))
         lead_time += 3
     for i in range(24, 27):
-        recovery_data.append(linear_regression(lead_time_forecast_season[i], lead_time_observation_season[i-24],
-                                               b0[i-20], b1[i-20], lead_time, season))
+        recovery_data.append(linear_regression(lead_time_forecast_season[i], b0[i-20], b1[i-20]))
         lead_time += 3
 
     return recovery_data
@@ -177,42 +167,109 @@ def main():
     b0_autumn, b1_autumn = get_correl_coef_regression_for_season('осеннего', lead_time_observation_autumn_training,
                                                                  lead_time_forecast_autumn_training)
 
-    recovery_data_winter = get_recovery_data_for_season(lead_time_forecast_winter_test,
-                                                        lead_time_observation_winter_test, b0_winter, b1_winter,
-                                                        'Зимний период')
-    recovery_data_spring = get_recovery_data_for_season(lead_time_forecast_spring_test,
-                                                        lead_time_observation_spring_test, b0_spring, b1_spring,
-                                                        'Весенний период')
-    recovery_data_summer = get_recovery_data_for_season(lead_time_forecast_summer_test,
-                                                        lead_time_observation_summer_test, b0_summer, b1_summer,
-                                                        'Летний период')
-    recovery_data_autumn = get_recovery_data_for_season(lead_time_forecast_autumn_test,
-                                                        lead_time_observation_autumn_test, b0_autumn, b1_autumn,
-                                                        'Осенний период')
+    recovery_data_winter = get_recovery_data_for_season(lead_time_forecast_winter_test, b0_winter, b1_winter)
+    recovery_data_spring = get_recovery_data_for_season(lead_time_forecast_spring_test, b0_spring, b1_spring)
+    recovery_data_summer = get_recovery_data_for_season(lead_time_forecast_summer_test, b0_summer, b1_summer)
+    recovery_data_autumn = get_recovery_data_for_season(lead_time_forecast_autumn_test, b0_autumn, b1_autumn)
 
-    average_diff_recovery_winter = get_diff_for_season_and_lead_time_recovery(recovery_data_winter,
-                                                                              lead_time_observation_winter_test)
-    average_diff_recovery_spring = get_diff_for_season_and_lead_time_recovery(recovery_data_spring,
-                                                                              lead_time_observation_spring_test)
-    average_diff_recovery_summer = get_diff_for_season_and_lead_time_recovery(recovery_data_summer,
-                                                                              lead_time_observation_summer_test)
-    average_diff_recovery_autumn = get_diff_for_season_and_lead_time_recovery(recovery_data_autumn,
-                                                                              lead_time_observation_autumn_test)
+    print("Select calculation number:")
+    print(10 * " " + "1. Different for recovered data")
+    print(10 * " " + "2. Absolute for recovered data")
+    print(10 * " " + "3. RMSE for recovered data")
+    print(10 * " " + "4. correlation coefficient for recovered data")
+    estimate = int(input("Calculation number: "))
+    if estimate == 1:
+        average_diff_recovery_winter = get_diff_for_season_and_lead_time_recovery(recovery_data_winter,
+                                                                                  lead_time_observation_winter_test)
+        average_diff_recovery_spring = get_diff_for_season_and_lead_time_recovery(recovery_data_spring,
+                                                                                  lead_time_observation_spring_test)
+        average_diff_recovery_summer = get_diff_for_season_and_lead_time_recovery(recovery_data_summer,
+                                                                                  lead_time_observation_summer_test)
+        average_diff_recovery_autumn = get_diff_for_season_and_lead_time_recovery(recovery_data_autumn,
+                                                                                  lead_time_observation_autumn_test)
 
-    print_average_diff('зимний', average_diff_recovery_winter)
-    print_average_diff('весенний', average_diff_recovery_spring)
-    print_average_diff('летний', average_diff_recovery_summer)
-    print_average_diff('осенний', average_diff_recovery_autumn)
+        print_average_diff('зимний', average_diff_recovery_winter)
+        print_average_diff('весенний', average_diff_recovery_spring)
+        print_average_diff('летний', average_diff_recovery_summer)
+        print_average_diff('осенний', average_diff_recovery_autumn)
 
-    plotting.plotting_graph_for_error(average_diff_recovery_winter, 'Зимний период',
-                                      'Средняя арифметическая погрешность')
-    plotting.plotting_graph_for_error(average_diff_recovery_spring, 'Весенний период',
-                                      'Средняя арифметическая погрешность')
-    plotting.plotting_graph_for_error(average_diff_recovery_summer, 'Летний период',
-                                      'Средняя арифметическая погрешность')
-    plotting.plotting_graph_for_error(average_diff_recovery_autumn, 'Осенний период',
-                                      'Средняя арифметическая погрешность')
-    plt.show()
+        #plotting.plotting_graph_for_error(average_diff_recovery_winter, 'Зимний период',
+        #                                  'Средняя арифметическая погрешность')
+        #plotting.plotting_graph_for_error(average_diff_recovery_spring, 'Весенний период',
+        #                                  'Средняя арифметическая погрешность')
+        #plotting.plotting_graph_for_error(average_diff_recovery_summer, 'Летний период',
+        #                                  'Средняя арифметическая погрешность')
+        #plotting.plotting_graph_for_error(average_diff_recovery_autumn, 'Осенний период',
+        #                                  'Средняя арифметическая погрешность')
+        #plt.show()
+        return average_diff_recovery_winter, average_diff_recovery_spring, average_diff_recovery_summer, \
+               average_diff_recovery_autumn
+
+    if estimate == 2:
+        abs_diff_recovery_winter = abs.get_diff_abs_for_season_and_lead_time_recovery(recovery_data_winter,
+                                                                                      lead_time_observation_winter_test)
+        abs_diff_recovery_spring = abs.get_diff_abs_for_season_and_lead_time_recovery(recovery_data_spring,
+                                                                                      lead_time_observation_spring_test)
+        abs_diff_recovery_summer = abs.get_diff_abs_for_season_and_lead_time_recovery(recovery_data_summer,
+                                                                                      lead_time_observation_summer_test)
+        abs_diff_recovery_autumn = abs.get_diff_abs_for_season_and_lead_time_recovery(recovery_data_autumn,
+                                                                                      lead_time_observation_autumn_test)
+
+        abs.print_average_diff_abs('зимний', abs_diff_recovery_winter)
+        abs.print_average_diff_abs('весенний', abs_diff_recovery_spring)
+        abs.print_average_diff_abs('летний', abs_diff_recovery_summer)
+        abs.print_average_diff_abs('осенний', abs_diff_recovery_autumn)
+        #plotting.plotting_graph_for_error(abs_diff_recovery_winter, 'Зимний период', 'Абсолютная погрешность')
+        #plotting.plotting_graph_for_error(abs_diff_recovery_spring, 'Весенний период', 'Абсолютная погрешность')
+        #plotting.plotting_graph_for_error(abs_diff_recovery_summer, 'Летний период', 'Абсолютная погрешность')
+        #plotting.plotting_graph_for_error(abs_diff_recovery_autumn, 'Осенний период', 'Абсолютная погрешность')
+        #plt.show()
+        return abs_diff_recovery_winter, abs_diff_recovery_spring, abs_diff_recovery_summer, abs_diff_recovery_autumn
+
+    if estimate == 3:
+        rmse_recovery_winter = rmse.get_rmse_for_season_and_lead_time_recovery(recovery_data_winter,
+                                                                               lead_time_observation_winter_test)
+        rmse_recovery_spring = rmse.get_rmse_for_season_and_lead_time_recovery(recovery_data_spring,
+                                                                               lead_time_observation_spring_test)
+        rmse_recovery_summer = rmse.get_rmse_for_season_and_lead_time_recovery(recovery_data_summer,
+                                                                               lead_time_observation_summer_test)
+        rmse_recovery_autumn = rmse.get_rmse_for_season_and_lead_time_recovery(recovery_data_autumn,
+                                                                               lead_time_observation_autumn_test)
+        rmse.print_average_rmse('зимний', rmse_recovery_winter)
+        rmse.print_average_rmse('весенний', rmse_recovery_spring)
+        rmse.print_average_rmse('летний', rmse_recovery_summer)
+        rmse.print_average_rmse('осенний', rmse_recovery_autumn)
+        #plotting.plotting_graph_for_error(rmse_recovery_winter, 'Зимний период', 'Среднеквадратичная погрешность')
+        #plotting.plotting_graph_for_error(rmse_recovery_spring, 'Весенний период', 'Среднеквадратичная погрешность')
+        #plotting.plotting_graph_for_error(rmse_recovery_summer, 'Летний период', 'Среднеквадратичная погрешность')
+        #plotting.plotting_graph_for_error(rmse_recovery_autumn, 'Осенний период', 'Среднеквадратичная погрешность')
+        #plt.show()
+        return rmse_recovery_winter, rmse_recovery_spring, rmse_recovery_summer, rmse_recovery_autumn
+
+    if estimate == 4:
+        correlation_coefficient_recovery_winter = correlation.get_correlation_coefficient_for_season_and_lead_time_recovery(
+            recovery_data_winter, lead_time_observation_winter_test)
+        correlation_coefficient_recovery_spring = correlation.get_correlation_coefficient_for_season_and_lead_time_recovery(
+            recovery_data_spring, lead_time_observation_spring_test)
+        correlation_coefficient_recovery_summer = correlation.get_correlation_coefficient_for_season_and_lead_time_recovery(
+            recovery_data_summer, lead_time_observation_summer_test)
+        correlation_coefficient_recovery_autumn = correlation.get_correlation_coefficient_for_season_and_lead_time_recovery(
+            recovery_data_autumn, lead_time_observation_autumn_test)
+        correlation.print_correlation_coefficient('зимний', correlation_coefficient_recovery_winter)
+        correlation.print_correlation_coefficient('весенний', correlation_coefficient_recovery_spring)
+        correlation.print_correlation_coefficient('летний', correlation_coefficient_recovery_summer)
+        correlation.print_correlation_coefficient('осенний', correlation_coefficient_recovery_autumn)
+        #plotting.plotting_graph_for_error(correlation_coefficient_recovery_winter, 'Зимний период',
+                                          #'Коэффициент корреляции')
+        #plotting.plotting_graph_for_error(correlation_coefficient_recovery_spring, 'Весенний период',
+                                          #'Коэффициент корреляции')
+        #plotting.plotting_graph_for_error(correlation_coefficient_recovery_summer, 'Летний период',
+                                          #'Коэффициент корреляции')
+        #plotting.plotting_graph_for_error(correlation_coefficient_recovery_autumn, 'Осенний период',
+                                          #'Коэффициент корреляции')
+        #plt.show()
+        return correlation_coefficient_recovery_winter, correlation_coefficient_recovery_spring, \
+               correlation_coefficient_recovery_spring, correlation_coefficient_recovery_autumn
 
     plot_data(lead_time_forecast_winter_test, 'Зимний период. Модельные данные за 2018 год', 'blue')
     plot_data(lead_time_forecast_spring_test, 'Весенний период. Модельные данные за 2018 год', 'orange')
@@ -228,64 +285,7 @@ def main():
     plt.legend()
     plt.show()
 
-    abs_diff_recovery_winter = abs.get_diff_abs_for_season_and_lead_time_recovery(recovery_data_winter,
-                                                                              lead_time_observation_winter_test)
-    abs_diff_recovery_spring = abs.get_diff_abs_for_season_and_lead_time_recovery(recovery_data_spring,
-                                                                              lead_time_observation_spring_test)
-    abs_diff_recovery_summer = abs.get_diff_abs_for_season_and_lead_time_recovery(recovery_data_summer,
-                                                                              lead_time_observation_summer_test)
-    abs_diff_recovery_autumn = abs.get_diff_abs_for_season_and_lead_time_recovery(recovery_data_autumn,
-                                                                              lead_time_observation_autumn_test)
-
-    abs.print_average_diff_abs('зимний', abs_diff_recovery_winter)
-    abs.print_average_diff_abs('весенний', abs_diff_recovery_spring)
-    abs.print_average_diff_abs('летний', abs_diff_recovery_summer)
-    abs.print_average_diff_abs('осенний', abs_diff_recovery_autumn)
-    plotting.plotting_graph_for_error(abs_diff_recovery_winter, 'Зимний период', 'Абсолютная погрешность')
-    plotting.plotting_graph_for_error(abs_diff_recovery_spring, 'Весенний период', 'Абсолютная погрешность')
-    plotting.plotting_graph_for_error(abs_diff_recovery_summer, 'Летний период', 'Абсолютная погрешность')
-    plotting.plotting_graph_for_error(abs_diff_recovery_autumn, 'Осенний период', 'Абсолютная погрешность')
-    plt.show()
-
-    rmse_recovery_winter = rmse.get_rmse_for_season_and_lead_time_recovery(recovery_data_winter,
-                                                                              lead_time_observation_winter_test)
-    rmse_recovery_spring = rmse.get_rmse_for_season_and_lead_time_recovery(recovery_data_spring,
-                                                                              lead_time_observation_spring_test)
-    rmse_recovery_summer = rmse.get_rmse_for_season_and_lead_time_recovery(recovery_data_summer,
-                                                                              lead_time_observation_summer_test)
-    rmse_recovery_autumn = rmse.get_rmse_for_season_and_lead_time_recovery(recovery_data_autumn,
-                                                                              lead_time_observation_autumn_test)
-    rmse.print_average_rmse('зимний',   rmse_recovery_winter)
-    rmse.print_average_rmse('весенний', rmse_recovery_spring)
-    rmse.print_average_rmse('летний',   rmse_recovery_summer)
-    rmse.print_average_rmse('осенний',  rmse_recovery_autumn)
-    plotting.plotting_graph_for_error(rmse_recovery_winter, 'Зимний период', 'Среднеквадратичная погрешность')
-    plotting.plotting_graph_for_error(rmse_recovery_spring, 'Весенний период', 'Среднеквадратичная погрешность')
-    plotting.plotting_graph_for_error(rmse_recovery_summer, 'Летний период', 'Среднеквадратичная погрешность')
-    plotting.plotting_graph_for_error(rmse_recovery_autumn, 'Осенний период', 'Среднеквадратичная погрешность')
-    plt.show()
-
-    correlation_coefficient_recovery_winter = correlation.get_correlation_coefficient_for_season_and_lead_time_recovery(
-        recovery_data_winter, lead_time_observation_winter_test)
-    correlation_coefficient_recovery_spring = correlation.get_correlation_coefficient_for_season_and_lead_time_recovery(
-        recovery_data_spring, lead_time_observation_spring_test)
-    correlation_coefficient_recovery_summer = correlation.get_correlation_coefficient_for_season_and_lead_time_recovery(
-        recovery_data_summer, lead_time_observation_summer_test)
-    correlation_coefficient_recovery_autumn = correlation.get_correlation_coefficient_for_season_and_lead_time_recovery(
-        recovery_data_autumn, lead_time_observation_autumn_test)
-    correlation.print_correlation_coefficient('зимний', correlation_coefficient_recovery_winter)
-    correlation.print_correlation_coefficient('весенний', correlation_coefficient_recovery_spring)
-    correlation.print_correlation_coefficient('летний', correlation_coefficient_recovery_summer)
-    correlation.print_correlation_coefficient('осенний', correlation_coefficient_recovery_autumn)
-    plotting.plotting_graph_for_error(correlation_coefficient_recovery_winter, 'Зимний период',
-                                      'Коэффициент корреляции')
-    plotting.plotting_graph_for_error(correlation_coefficient_recovery_spring, 'Весенний период',
-                                      'Коэффициент корреляции')
-    plotting.plotting_graph_for_error(correlation_coefficient_recovery_summer, 'Летний период',
-                                      'Коэффициент корреляции')
-    plotting.plotting_graph_for_error(correlation_coefficient_recovery_autumn, 'Осенний период',
-                                      'Коэффициент корреляции')
-    plt.show()
+if __name__ == '__main__':
+    main()
 
 
-main()
