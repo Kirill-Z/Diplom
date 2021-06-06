@@ -1,5 +1,5 @@
-import wind_forecast
-import observation_wind
+import forecast
+import observation
 import pandas as pd
 
 
@@ -29,9 +29,11 @@ def forecast_data():
     choice_num = input(
         'Forecast data: If you need to calculate a point, press 1, if you need to calculate an area, press 2: ')
     if choice_num == '1':
-        speed_wind_forecast = get_data_from_file(wind_forecast, 'gfs', 'forecast_for_point_data', choice_num)
+        speed_wind_forecast = get_data_from_file(forecast, 'gfs', 'forecast_for_point_data', choice_num)
     elif choice_num == '2':
-        speed_wind_forecast = get_data_from_file(wind_forecast, 'gfs', 'forecast_for_area_data', choice_num)
+        speed_wind_forecast = get_data_from_file(forecast, 'gfs', 'forecast_for_area_data', choice_num)
+    elif choice_num == '3':
+        speed_wind_forecast = get_data_from_file(forecast, 'gfs', 'forecast_for_five_point_data', choice_num)
     else:
         print('Unknown command, please re-enter')
         speed_wind_forecast = forecast_data()
@@ -43,13 +45,13 @@ def observation_data():
     choice_num = input(
         'Observation data: If you need to calculate a point, press 1, if you need to calculate an area, press 2 or 3: ')
     if choice_num == '1':
-        speed_wind_observation = get_data_from_file(observation_wind, 'АВ6', 'observation_data_training_hour_by_hour',
+        speed_wind_observation = get_data_from_file(observation, 'АВ6', 'observation_data_training_hour_by_hour',
                                                     choice_num)
     elif choice_num == '2':
-        speed_wind_observation = get_data_from_file(observation_wind, 'АВ6', 'observation_data_training_time_range',
+        speed_wind_observation = get_data_from_file(observation, 'АВ6', 'observation_data_training_time_range',
                                                     choice_num)
     elif choice_num == '3':
-        speed_wind_observation = get_data_from_file(observation_wind, 'АВ6',
+        speed_wind_observation = get_data_from_file(observation, 'АВ6',
                                                     'observation_data_training_time_range_with_every_minute',
                                                     choice_num)
     else:

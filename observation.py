@@ -1,7 +1,7 @@
 import os
 import re
 import pandas as pd
-import forecast_data
+import forecast
 
 PATH = "/home/kirill/Downloads/Data/АВ6/"  # Path to files with observation data
 
@@ -121,8 +121,8 @@ def main(value: str):
                             data_from_file = file_reader.values.tolist()
                             speed_wind_test = get_data_hour_by_hour(file, data_from_file, speed_wind_test)
         print(speed_wind_training)
-        forecast_data.write_in_file(PATH, 'observation_data_training_hour_by_hour', speed_wind_training)
-        forecast_data.write_in_file(PATH, 'observation_data_test_hour_by_hour', speed_wind_test)
+        forecast.write_in_file(PATH, 'observation_data_training_hour_by_hour', speed_wind_training)
+        forecast.write_in_file(PATH, 'observation_data_test_hour_by_hour', speed_wind_test)
 
     if value == '2':
         for dirs1 in sorted(os.listdir(PATH)):
@@ -145,8 +145,8 @@ def main(value: str):
                             data_from_file = file_reader.values.tolist()
                             speed_wind_test = get_data_in_time_range(file, data_from_file, speed_wind_test, num_record)
 
-        forecast_data.write_in_file(PATH, 'observation_data_training_time_range', speed_wind_training)
-        forecast_data.write_in_file(PATH, 'observation_data_test_time_range', speed_wind_test)
+        forecast.write_in_file(PATH, 'observation_data_training_time_range', speed_wind_training)
+        forecast.write_in_file(PATH, 'observation_data_test_time_range', speed_wind_test)
 
     if value == '3':
         for dirs1 in sorted(os.listdir(PATH)):
@@ -170,7 +170,7 @@ def main(value: str):
                             data_from_file = file_reader.values.tolist()
                             speed_wind_test = get_data_for_a_range_with_every_minute(file, data_from_file,
                                                                                       speed_wind_test, num_record)
-        forecast_data.write_in_file(PATH, 'observation_data_training_time_range_with_every_minute', speed_wind_training)
-        forecast_data.write_in_file(PATH, 'observation_data_test_time_range_with_every_minute', speed_wind_test)
+        forecast.write_in_file(PATH, 'observation_data_training_time_range_with_every_minute', speed_wind_training)
+        forecast.write_in_file(PATH, 'observation_data_test_time_range_with_every_minute', speed_wind_test)
 
     return speed_wind_training, speed_wind_test
