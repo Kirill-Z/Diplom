@@ -15,8 +15,8 @@ def test_for_emptiness(diff, calc_func):
 
 
 def main():
-    speed_wind_forecast = get_data.forecast_data()
-    speed_wind_observation = get_data.observation_data()
+    speed_wind_observation, choice_num = get_data.observation_data()
+    speed_wind_forecast, choice_num = get_data.forecast_data()
 
     winter_forecast, spring_forecast, summer_forecast, autumn_forecast \
         = spdata.separation_of_data_by_seasons(speed_wind_forecast)
@@ -27,7 +27,7 @@ def main():
     lead_time_forecast_spring = spdata.separation_data_by_lead_time_forecast(spring_forecast)
     lead_time_forecast_summer = spdata.separation_data_by_lead_time_forecast(summer_forecast)
     lead_time_forecast_autumn = spdata.separation_data_by_lead_time_forecast(autumn_forecast)
-    
+
     lead_time_observation_winter = spdata.separation_data_by_lead_time_observation(winter_observation)
     lead_time_observation_spring = spdata.separation_data_by_lead_time_observation(spring_observation)
     lead_time_observation_summer = spdata.separation_data_by_lead_time_observation(summer_observation)
@@ -38,7 +38,7 @@ def main():
     print(10 * " " + "3. RMSE")
     print(10 * " " + "4. Correlation coefficient")
     estimate = int(input("Calculation number: "))
-    choice_display = input('Do you need to display graphs by errors? Write yes or no: ')
+    choice_display = input('Do you need to display graphs by errors? Write yes  or no: ')
     if estimate == 1:
         average_diff_winter = df.get_diff_for_season_and_lead_time(lead_time_forecast_winter,
                                                                    lead_time_observation_winter)
@@ -76,10 +76,10 @@ def main():
         abs_diff_autumn = abs_error.get_diff_abs_for_season_and_lead_time(lead_time_forecast_autumn,
                                                                           lead_time_observation_autumn)
 
-        abs_error.print_average_diff_abs('зимний',   abs_diff_winter)
-        abs_error.print_average_diff_abs('весенний', abs_diff_spring)
-        abs_error.print_average_diff_abs('летний',   abs_diff_summer)
-        abs_error.print_average_diff_abs('осенний',  abs_diff_autumn)
+        #abs_error.print_average_diff_abs('зимний',   abs_diff_winter)
+        #abs_error.print_average_diff_abs('весенний', abs_diff_spring)
+        #abs_error.print_average_diff_abs('летний',   abs_diff_summer)
+        #abs_error.print_average_diff_abs('осенний',  abs_diff_autumn)
 
         if choice_display in ('yes', 'y'):
             plotting.plotting_graph_for_error(abs_diff_winter, 'Зимний период', 'Средняя абсолютная погрешность', '-')
@@ -96,10 +96,10 @@ def main():
         rmse_summer = rmse.get_rmse_for_season_and_lead_time(lead_time_forecast_summer, lead_time_observation_summer)
         rmse_autumn = rmse.get_rmse_for_season_and_lead_time(lead_time_forecast_autumn, lead_time_observation_autumn)
 
-        rmse.print_average_rmse('зимний',   rmse_winter)
-        rmse.print_average_rmse('весенний', rmse_spring)
-        rmse.print_average_rmse('летний',   rmse_summer)
-        rmse.print_average_rmse('осенний',  rmse_autumn)
+        #rmse.print_average_rmse('зимний',   rmse_winter)
+        #rmse.print_average_rmse('весенний', rmse_spring)
+        #rmse.print_average_rmse('летний',   rmse_summer)
+        #rmse.print_average_rmse('осенний',  rmse_autumn)
 
         if choice_display in ('yes', 'y'):
             plotting.plotting_graph_for_error(rmse_winter, 'Зимний период', 'Средняя квадратическая погрешность', '-')
@@ -119,10 +119,10 @@ def main():
         correlation_coefficient_autumn = correlation.get_correlation_coefficient_for_season_and_lead_time(
             lead_time_forecast_autumn, lead_time_observation_autumn)
 
-        correlation.print_correlation_coefficient('зимний', correlation_coefficient_winter)
-        correlation.print_correlation_coefficient('весенний', correlation_coefficient_spring)
-        correlation.print_correlation_coefficient('летний', correlation_coefficient_summer)
-        correlation.print_correlation_coefficient('осенний', correlation_coefficient_autumn)
+        #correlation.print_correlation_coefficient('зимний', correlation_coefficient_winter)
+        #correlation.print_correlation_coefficient('весенний', correlation_coefficient_spring)
+        #correlation.print_correlation_coefficient('летний', correlation_coefficient_summer)
+        #correlation.print_correlation_coefficient('осенний', correlation_coefficient_autumn)
 
         if choice_display in ('yes', 'y'):
             plotting.plotting_graph_for_error(correlation_coefficient_winter, 'Зимний период', 'Коэффициент корреляции', '-')

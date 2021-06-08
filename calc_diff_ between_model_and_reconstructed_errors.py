@@ -5,8 +5,6 @@ import matplotlib.pyplot as plt
 
 def diff_error_for_season(error_model, error_recovery):
     diff = []
-    print(len(error_model))
-    print(len(error_recovery))
     for i in range(0, len(error_model)):
         diff_with_lead_time = [error_model[i][0]]
         diff_with_lead_time.append(error_model[i][1] - error_recovery[i][1])
@@ -20,10 +18,11 @@ def plot_error(error_data_season_model, error_data_season_recovery, label_model,
     for i in range(0, len(error_data_season_model)):
         x_data_model.append(error_data_season_model[i][0])
         y_data_model.append(error_data_season_model[i][1])
+    plt.subplots_adjust(bottom=0.24, top=0.95)
     plt.xticks(x_data_model, fontsize=28)
     plt.yticks(fontsize=28)
-    plt.scatter(x_data_model, y_data_model)
-    plt.plot(x_data_model, y_data_model, label=label_model)
+    plt.scatter(x_data_model, y_data_model, linewidths=8)
+    plt.plot(x_data_model, y_data_model, label=label_model, linewidth=6)
 
     x_data_recovery = []
     y_data_recovery = []
@@ -33,9 +32,12 @@ def plot_error(error_data_season_model, error_data_season_recovery, label_model,
     plt.xlabel('Заблаговременность', fontsize=32)
     plt.ylabel('Оценка', fontsize=32)
     plt.title('Коэффициент корреляции', fontsize=32)
-    plt.scatter(x_data_recovery, y_data_recovery, c='red')
-    plt.plot(x_data_recovery, y_data_recovery, label=label_recovery, linestyle='-.', c='red')
+    plt.scatter(x_data_recovery, y_data_recovery, c='red', linewidths=4)
+    plt.plot(x_data_recovery, y_data_recovery, label=label_recovery, linestyle='-.', linewidth=4, c='red')
     plt.legend(fontsize=28, loc='lower center', bbox_to_anchor=(0.5, -0.35))
+
+    mng = plt.get_current_fig_manager()
+    mng.resize(*mng.window.maxsize())
     plt.show()
 
 
@@ -62,11 +64,6 @@ def main():
     diff_spring = diff_error_for_season(error_model_data_spring, error_recovery_data_spring)
     diff_summer = diff_error_for_season(error_model_data_summer, error_recovery_data_summer)
     diff_autumn = diff_error_for_season(error_model_data_autumn, error_recovery_data_autumn)
-
-    print(diff_winter)
-    print(diff_spring)
-    print(diff_summer)
-    print(diff_autumn)
 
 
 main()

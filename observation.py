@@ -1,7 +1,7 @@
 import os
 import re
 import pandas as pd
-import forecast
+import write_in_file as write
 
 PATH = "/home/kirill/Downloads/Data/АВ6/"  # Path to files with observation data
 
@@ -14,12 +14,8 @@ def add_data_to_the_speed_list(file, data, i):
 
 def get_data_hour_by_hour(file, data_from_file, speed_wind):
     for i in range(0, len(data_from_file)):
-        hour1 = data_from_file[i][0][0]
-        hour2 = data_from_file[i][0][1]
-        hour = hour1 + hour2
-        minute1 = data_from_file[i][0][3]
-        minute2 = data_from_file[i][0][4]
-        minute = minute1 + minute2
+        hour = data_from_file[i][0][0] + data_from_file[i][0][1]
+        minute = data_from_file[i][0][3] + data_from_file[i][0][4]
         if int(hour) % 3 == 0 and int(minute) == 0:
             speed_wind.append(add_data_to_the_speed_list(file, data_from_file, i))
     return speed_wind
@@ -120,9 +116,8 @@ def main(value: str):
                             file_reader = pd.read_csv(current_file, sep=';', header=None, engine='python')
                             data_from_file = file_reader.values.tolist()
                             speed_wind_test = get_data_hour_by_hour(file, data_from_file, speed_wind_test)
-        print(speed_wind_training)
-        forecast.write_in_file(PATH, 'observation_data_training_hour_by_hour', speed_wind_training)
-        forecast.write_in_file(PATH, 'observation_data_test_hour_by_hour', speed_wind_test)
+        write.write_in_file(PATH, 'observation_data_training_hour_by_hour', speed_wind_training)
+        write.write_in_file(PATH, 'observation_data_test_hour_by_hour', speed_wind_test)
 
     if value == '2':
         for dirs1 in sorted(os.listdir(PATH)):
@@ -145,8 +140,8 @@ def main(value: str):
                             data_from_file = file_reader.values.tolist()
                             speed_wind_test = get_data_in_time_range(file, data_from_file, speed_wind_test, num_record)
 
-        forecast.write_in_file(PATH, 'observation_data_training_time_range', speed_wind_training)
-        forecast.write_in_file(PATH, 'observation_data_test_time_range', speed_wind_test)
+        write.write_in_file(PATH, 'observation_data_training_time_range', speed_wind_training)
+        write.write_in_file(PATH, 'observation_data_test_time_range', speed_wind_test)
 
     if value == '3':
         for dirs1 in sorted(os.listdir(PATH)):
@@ -169,8 +164,8 @@ def main(value: str):
                             file_reader = pd.read_csv(current_file, sep=';', header=None, engine='python')
                             data_from_file = file_reader.values.tolist()
                             speed_wind_test = get_data_for_a_range_with_every_minute(file, data_from_file,
-                                                                                      speed_wind_test, num_record)
-        forecast.write_in_file(PATH, 'observation_data_training_time_range_with_every_minute', speed_wind_training)
-        forecast.write_in_file(PATH, 'observation_data_test_time_range_with_every_minute', speed_wind_test)
+                                                                                     speed_wind_test, num_record)
+        write.write_in_file(PATH, 'observation_data_training_time_range_with_every_minute', speed_wind_training)
+        write.write_in_file(PATH, 'observation_data_test_time_range_with_every_minute', speed_wind_test)
 
     return speed_wind_training, speed_wind_test

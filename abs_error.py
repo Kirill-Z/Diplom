@@ -26,7 +26,7 @@ def get_diff_abs_for_season_and_lead_time(lead_time_forecast, lead_time_observat
 
 def print_average_diff_abs(season, average_diff):
     for i in range(0, len(average_diff)):
-        print(f'Абсолютная погрешность {season} за период и заблаговременность {average_diff[i][0]}: '
+        print(f'Средняя абсолютная погрешность {season} за период и заблаговременность {average_diff[i][0]}: '
               f'{average_diff[i][1]}')
     print('\n')
 
@@ -61,7 +61,7 @@ def calc_abs(forecast_data, observation_data):
 def calc_abs_diff_for_recovery_data(recovery_data_forecast, observation_data):
     diff = []
     for i in range(0, len(recovery_data_forecast)):
-        if math.isnan(float(observation_data[i])):
+        if float(recovery_data_forecast[i][0]) >= 50 or math.isnan(float(observation_data[i])):
             pass
         else:
             diff.append(math.fabs(observation_data[i] - recovery_data_forecast[i][0]))

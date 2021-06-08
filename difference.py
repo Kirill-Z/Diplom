@@ -27,12 +27,14 @@ def get_diff_for_season_and_lead_time(lead_time_forecast, lead_time_practical):
 
 def print_average_diff(season, average_diff):
     for i in range(0, len(average_diff)):
-        print(f'Средняя разность {season} за период и заблаговременность {average_diff[i][0]}: {average_diff[i][1]}')
+        print(f'Средняя арифметическая погрешность {season} за период и заблаговременность {average_diff[i][0]}: '
+              f'{average_diff[i][1]}')
     print('\n')
 
 
 def calc_diff(speed_wind_predictive, speed_wind_practical):
     diff = []
+
     if len(speed_wind_predictive) < len(speed_wind_practical):
         length = len(speed_wind_predictive)
     elif len(speed_wind_practical) < len(speed_wind_predictive):
@@ -51,7 +53,6 @@ def calc_diff(speed_wind_predictive, speed_wind_practical):
 def calc_the_average_diff(predictive_data, practical_data):
     diff_lead_time = calc_diff(predictive_data, practical_data)
     average_diff = 0
-
     for i in range(0, len(diff_lead_time)):
         average_diff += diff_lead_time[i]
     average_diff = average_diff / len(diff_lead_time)
@@ -61,7 +62,7 @@ def calc_the_average_diff(predictive_data, practical_data):
 def difference_for_recovery_data(recovery_data_forecast, observation_data):
     diff = []
     for i in range(0, len(recovery_data_forecast)):
-        if math.isnan(float(observation_data[i])):
+        if float(recovery_data_forecast[i][0]) >= 50 or math.isnan(float(observation_data[i])):
             pass
         else:
             diff.append(observation_data[i] - recovery_data_forecast[i][0])

@@ -26,7 +26,7 @@ def get_rmse_for_season_and_lead_time(lead_time_forecast, lead_time_practical):
 
 def print_average_rmse(season, rmse):
     for i in range(0, len(rmse)):
-        print(f'Среднеквадратичная погрешность {season} за период и заблаговременность {rmse[i][0]}: {rmse[i][1]}')
+        print(f'Средняя квадратическая погрешность {season} за период и заблаговременность {rmse[i][0]}: {rmse[i][1]}')
     print('\n')
 
 
@@ -41,7 +41,7 @@ def calc_squared_difference(speed_wind_predictive, speed_wind_practical):
         length = len(speed_wind_predictive)
 
     for i in range(0, length):
-        if float(speed_wind_predictive[i]) >= 9999 or math.isnan(float(speed_wind_practical[i])):
+        if float(speed_wind_predictive[i]) >= 50 or math.isnan(float(speed_wind_practical[i])):
             continue
         else:
             diff.append((speed_wind_practical[i] - speed_wind_predictive[i]) ** 2)
@@ -60,7 +60,7 @@ def calc_rmse(predictive_data, practical_data):
 def calc_squaared_diff_for_recovery_data(recovery_data_forecast, observation_data):
     diff = []
     for i in range(0, len(recovery_data_forecast)):
-        if math.isnan(float(observation_data[i])):
+        if float(recovery_data_forecast[i][0]) >= 50 or math.isnan(float(observation_data[i])):
             pass
         else:
             diff.append((observation_data[i] - recovery_data_forecast[i][0]) ** 2)

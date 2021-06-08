@@ -44,7 +44,7 @@ def calc_correlation_coefficient(speed_wind_forecast, speed_wind_observation):
         length = int(len(speed_wind_forecast))
 
     for i in range(0, length):
-        if float(speed_wind_forecast[i]) >= 9999 or math.isnan(float(speed_wind_observation[i])):
+        if float(speed_wind_forecast[i]) >= 50 or math.isnan(float(speed_wind_observation[i])):
             continue
         else:
             x_avg += speed_wind_observation[i]
@@ -72,8 +72,8 @@ def calc_correlation_coefficient_for_recovery_data(recovery_data_forecast, obser
     y_avg = 0
 
     for i in range(0, len(recovery_data_forecast)):
-        if math.isnan(float(observation_data[i])):
-            continue
+        if float(recovery_data_forecast[i][0]) >= 50 or math.isnan(float(observation_data[i])):
+            pass
         else:
             x_avg += observation_data[i]
             y_avg += recovery_data_forecast[i][0]
