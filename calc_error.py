@@ -49,10 +49,10 @@ def main():
         average_diff_autumn = df.get_diff_for_season_and_lead_time(lead_time_forecast_autumn,
                                                                    lead_time_observation_autumn)
 
-        df.print_average_diff('зимний', average_diff_winter)
-        df.print_average_diff('весенний', average_diff_spring)
-        df.print_average_diff('летний', average_diff_summer)
-        df.print_average_diff('осенний', average_diff_autumn)
+        #df.print_average_diff('зимний', average_diff_winter)
+        #df.print_average_diff('весенний', average_diff_spring)
+        #df.print_average_diff('летний', average_diff_summer)
+        #df.print_average_diff('осенний', average_diff_autumn)
 
         if choice_display in ('yes', 'y'):
             plotting.plotting_graph_for_error(average_diff_winter, 'Зимний период',

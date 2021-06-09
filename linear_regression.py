@@ -63,21 +63,21 @@ def plot_data(lead_time_forecast, label, color):
 def get_coefficient_regression_for_season(season, lead_time_observation, lead_time_forecast):
     b0_season = []
     b1_season = []
-    print(10 * ' ' + f'Коэффициенты для {season} периода')
+    #print(10 * ' ' + f'Коэффициенты для {season} периода')
     lead_time = 0
     for i in range(0, 8):
         b0, b1 = get_coefficient_for_linear_regression(lead_time_observation[i], lead_time_forecast[i])
         b0_season.append(b0)
         b1_season.append(b1)
-        print(f'Отрезок для заблаговременности {lead_time}: {b0}')
-        print(f'Наклон для заблаговременности {lead_time}: {b1}\n')
+        #print(f'Отрезок для заблаговременности {lead_time}: {b0}')
+        #print(f'Наклон для заблаговременности {lead_time}: {b1}\n')
         lead_time += 3
-    for i in range(8, 10):
+    for i in range(8, 16):
         b0, b1 = get_coefficient_for_linear_regression(lead_time_observation[i - 8], lead_time_forecast[i])
         b0_season.append(b0)
         b1_season.append(b1)
-        print(f'Отрезок для заблаговременности {lead_time}: {b0}')
-        print(f'Наклон для заблаговременности {lead_time}: {b1}\n')
+        #print(f'Отрезок для заблаговременности {lead_time}: {b0}')
+        #print(f'Наклон для заблаговременности {lead_time}: {b1}\n')
         lead_time += 3
 
     return b0_season, b1_season
@@ -86,35 +86,35 @@ def get_coefficient_regression_for_season(season, lead_time_observation, lead_ti
 def get_all_coefficient_regression_for_season(season, lead_time_observation, lead_time_forecast):
     b0_season = []
     b1_season = []
-    print(10 * ' ' + f'Коэффициенты для {season} периода')
+    #print(10 * ' ' + f'Коэффициенты для {season} периода')
     lead_time = 0
     for i in range(0, 8):
         b0, b1 = get_coefficient_for_linear_regression(lead_time_observation[i], lead_time_forecast[i])
         b0_season.append(b0)
         b1_season.append(b1)
-        print(f'Отрезок для заблаговременности {lead_time}: {b0}')
-        print(f'Наклон для заблаговременности {lead_time}: {b1}\n')
+        #print(f'Отрезок для заблаговременности {lead_time}: {b0}')
+        #print(f'Наклон для заблаговременности {lead_time}: {b1}\n')
         lead_time += 3
     for i in range(8, 16):
         b0, b1 = get_coefficient_for_linear_regression(lead_time_observation[i - 8], lead_time_forecast[i])
         b0_season.append(b0)
         b1_season.append(b1)
-        print(f'Отрезок для заблаговременности {lead_time}: {b0}')
-        print(f'Наклон для заблаговременности {lead_time}: {b1}\n')
+        #print(f'Отрезок для заблаговременности {lead_time}: {b0}')
+        #print(f'Наклон для заблаговременности {lead_time}: {b1}\n')
         lead_time += 3
     for i in range(16, 24):
         b0, b1 = get_coefficient_for_linear_regression(lead_time_observation[i - 16], lead_time_forecast[i])
         b0_season.append(b0)
         b1_season.append(b1)
-        print(f'Отрезок для заблаговременности {lead_time}: {b0}')
-        print(f'Наклон для заблаговременности {lead_time}: {b1}\n')
+        #print(f'Отрезок для заблаговременности {lead_time}: {b0}')
+        #print(f'Наклон для заблаговременности {lead_time}: {b1}\n')
         lead_time += 3
     for i in range(24, 27):
         b0, b1 = get_coefficient_for_linear_regression(lead_time_observation[i - 24], lead_time_forecast[i])
         b0_season.append(b0)
         b1_season.append(b1)
-        print(f'Отрезок для заблаговременности {lead_time}: {b0}')
-        print(f'Наклон для заблаговременности {lead_time}: {b1}\n')
+        #print(f'Отрезок для заблаговременности {lead_time}: {b0}')
+        #print(f'Наклон для заблаговременности {lead_time}: {b1}\n')
         lead_time += 3
 
     return b0_season, b1_season
@@ -136,20 +136,14 @@ def get_recovery_data_for_season(lead_time_forecast_season, b0, b1):
     for i in range(0, 8):
         recovery_data.append(linear_regression(lead_time_forecast_season[i], b0[i], b1[i]))
         lead_time += 3
-    for i in range(8, 10):
+    for i in range(8, 16):
         recovery_data.append(linear_regression(lead_time_forecast_season[i], b0[i], b1[i]))
         lead_time += 3
-    for i in range(10, 18):
-        recovery_data.append(linear_regression(lead_time_forecast_season[i], b0[i-10], b1[i-10]))
-        lead_time += 3
-    for i in range(18, 20):
-        recovery_data.append(linear_regression(lead_time_forecast_season[i], b0[i-10], b1[i-10]))
-        lead_time += 3
-    for i in range(20, 24):
-        recovery_data.append(linear_regression(lead_time_forecast_season[i], b0[i-20], b1[i-20]))
+    for i in range(16, 24):
+        recovery_data.append(linear_regression(lead_time_forecast_season[i], b0[i-8], b1[i-8]))
         lead_time += 3
     for i in range(24, 27):
-        recovery_data.append(linear_regression(lead_time_forecast_season[i], b0[i-20], b1[i-20]))
+        recovery_data.append(linear_regression(lead_time_forecast_season[i], b0[i-16], b1[i-16]))
         lead_time += 3
 
     return recovery_data

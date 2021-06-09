@@ -6,8 +6,7 @@ import matplotlib.pyplot as plt
 def diff_error_for_season(error_model, error_recovery):
     diff = []
     for i in range(0, len(error_model)):
-        diff_with_lead_time = [error_model[i][0]]
-        diff_with_lead_time.append(error_model[i][1] - error_recovery[i][1])
+        diff_with_lead_time = [error_model[i][0], error_model[i][1] - error_recovery[i][1]]
         diff.append(diff_with_lead_time)
     return diff
 
@@ -31,7 +30,7 @@ def plot_error(error_data_season_model, error_data_season_recovery, label_model,
         y_data_recovery.append(error_data_season_recovery[i][1])
     plt.xlabel('Заблаговременность', fontsize=32)
     plt.ylabel('Оценка', fontsize=32)
-    plt.title('Коэффициент корреляции', fontsize=32)
+    plt.title('', fontsize=32)
     plt.scatter(x_data_recovery, y_data_recovery, c='red', linewidths=4)
     plt.plot(x_data_recovery, y_data_recovery, label=label_recovery, linestyle='-.', linewidth=4, c='red')
     plt.legend(fontsize=28, loc='lower center', bbox_to_anchor=(0.5, -0.35))
